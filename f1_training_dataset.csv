@@ -1,0 +1,959 @@
+Year,Round,Driver,Team,Grid_Pos,Finish_Pos,Points,Status,Track_Similarity,Weighted_Score
+2021,Abu Dhabi,VER,Red Bull Racing,1.0,1.0,26.0,Finished,1.0,20.0
+2021,Abu Dhabi,HAM,Mercedes,2.0,2.0,18.0,Finished,1.0,19.0
+2021,Abu Dhabi,SAI,Ferrari,5.0,3.0,15.0,Finished,1.0,18.0
+2021,Abu Dhabi,TSU,AlphaTauri,8.0,4.0,12.0,Finished,1.0,17.0
+2021,Abu Dhabi,GAS,AlphaTauri,12.0,5.0,10.0,Finished,1.0,16.0
+2021,Abu Dhabi,BOT,Mercedes,6.0,6.0,8.0,Finished,1.0,15.0
+2021,Abu Dhabi,NOR,McLaren,3.0,7.0,6.0,Finished,1.0,14.0
+2021,Abu Dhabi,ALO,Alpine,11.0,8.0,4.0,Finished,1.0,13.0
+2021,Abu Dhabi,OCO,Alpine,9.0,9.0,2.0,Finished,1.0,12.0
+2021,Abu Dhabi,LEC,Ferrari,7.0,10.0,1.0,Finished,1.0,11.0
+2021,Abu Dhabi,VET,Aston Martin,15.0,11.0,0.0,Finished,1.0,10.0
+2021,Abu Dhabi,RIC,McLaren,10.0,12.0,0.0,+1 Lap,1.0,9.0
+2021,Abu Dhabi,STR,Aston Martin,13.0,13.0,0.0,+1 Lap,1.0,8.0
+2021,Abu Dhabi,MSC,Haas F1 Team,19.0,14.0,0.0,+1 Lap,1.0,7.0
+2021,Abu Dhabi,PER,Red Bull Racing,4.0,15.0,0.0,Engine,1.0,6.0
+2021,Abu Dhabi,LAT,Williams,16.0,16.0,0.0,Accident,1.0,5.0
+2021,Abu Dhabi,GIO,Alfa Romeo Racing,14.0,17.0,0.0,Gearbox,1.0,4.0
+2021,Abu Dhabi,RUS,Williams,17.0,18.0,0.0,Gearbox,1.0,3.0
+2021,Abu Dhabi,RAI,Alfa Romeo Racing,18.0,19.0,0.0,Brakes,1.0,2.0
+2021,Abu Dhabi,MAZ,Haas F1 Team,,20.0,0.0,Illness,1.0,1.0
+2022,Abu Dhabi,VER,Red Bull Racing,1.0,1.0,25.0,Finished,1.0,20.0
+2022,Abu Dhabi,LEC,Ferrari,3.0,2.0,18.0,Finished,1.0,19.0
+2022,Abu Dhabi,PER,Red Bull Racing,2.0,3.0,15.0,Finished,1.0,18.0
+2022,Abu Dhabi,SAI,Ferrari,4.0,4.0,12.0,Finished,1.0,17.0
+2022,Abu Dhabi,RUS,Mercedes,6.0,5.0,10.0,Finished,1.0,16.0
+2022,Abu Dhabi,NOR,McLaren,7.0,6.0,9.0,Finished,1.0,15.0
+2022,Abu Dhabi,OCO,Alpine,8.0,7.0,6.0,Finished,1.0,14.0
+2022,Abu Dhabi,STR,Aston Martin,14.0,8.0,4.0,Finished,1.0,13.0
+2022,Abu Dhabi,RIC,McLaren,13.0,9.0,2.0,Finished,1.0,12.0
+2022,Abu Dhabi,VET,Aston Martin,9.0,10.0,1.0,Finished,1.0,11.0
+2022,Abu Dhabi,TSU,AlphaTauri,11.0,11.0,0.0,Finished,1.0,10.0
+2022,Abu Dhabi,ZHO,Alfa Romeo,15.0,12.0,0.0,+1 Lap,1.0,9.0
+2022,Abu Dhabi,ALB,Williams,19.0,13.0,0.0,+1 Lap,1.0,8.0
+2022,Abu Dhabi,GAS,AlphaTauri,17.0,14.0,0.0,+1 Lap,1.0,7.0
+2022,Abu Dhabi,BOT,Alfa Romeo,18.0,15.0,0.0,+1 Lap,1.0,6.0
+2022,Abu Dhabi,MSC,Haas F1 Team,12.0,16.0,0.0,+1 Lap,1.0,5.0
+2022,Abu Dhabi,MAG,Haas F1 Team,16.0,17.0,0.0,+1 Lap,1.0,4.0
+2022,Abu Dhabi,HAM,Mercedes,5.0,18.0,0.0,Hydraulics,1.0,3.0
+2022,Abu Dhabi,LAT,Williams,20.0,19.0,0.0,Collision damage,1.0,2.0
+2022,Abu Dhabi,ALO,Alpine,10.0,20.0,0.0,Water leak,1.0,1.0
+2023,Abu Dhabi,VER,Red Bull Racing,1.0,1.0,26.0,Finished,1.0,20.0
+2023,Abu Dhabi,LEC,Ferrari,2.0,2.0,18.0,Finished,1.0,19.0
+2023,Abu Dhabi,RUS,Mercedes,4.0,3.0,15.0,Finished,1.0,18.0
+2023,Abu Dhabi,PER,Red Bull Racing,9.0,4.0,12.0,Finished,1.0,17.0
+2023,Abu Dhabi,NOR,McLaren,5.0,5.0,10.0,Finished,1.0,16.0
+2023,Abu Dhabi,PIA,McLaren,3.0,6.0,8.0,Finished,1.0,15.0
+2023,Abu Dhabi,ALO,Aston Martin,7.0,7.0,6.0,Finished,1.0,14.0
+2023,Abu Dhabi,TSU,AlphaTauri,6.0,8.0,4.0,Finished,1.0,13.0
+2023,Abu Dhabi,HAM,Mercedes,11.0,9.0,2.0,Finished,1.0,12.0
+2023,Abu Dhabi,STR,Aston Martin,13.0,10.0,1.0,Finished,1.0,11.0
+2023,Abu Dhabi,RIC,AlphaTauri,15.0,11.0,0.0,Finished,1.0,10.0
+2023,Abu Dhabi,OCO,Alpine,12.0,12.0,0.0,Finished,1.0,9.0
+2023,Abu Dhabi,GAS,Alpine,10.0,13.0,0.0,Finished,1.0,8.0
+2023,Abu Dhabi,ALB,Williams,14.0,14.0,0.0,Finished,1.0,7.0
+2023,Abu Dhabi,HUL,Haas F1 Team,8.0,15.0,0.0,Finished,1.0,6.0
+2023,Abu Dhabi,SAR,Williams,20.0,16.0,0.0,Finished,1.0,5.0
+2023,Abu Dhabi,ZHO,Alfa Romeo,19.0,17.0,0.0,Finished,1.0,4.0
+2023,Abu Dhabi,SAI,Ferrari,16.0,18.0,0.0,Retired,1.0,3.0
+2023,Abu Dhabi,BOT,Alfa Romeo,18.0,19.0,0.0,Lapped,1.0,2.0
+2023,Abu Dhabi,MAG,Haas F1 Team,17.0,20.0,0.0,Lapped,1.0,1.0
+2024,Bahrain,VER,Red Bull Racing,1.0,1.0,26.0,Finished,0.652141,13.042819999999999
+2024,Bahrain,PER,Red Bull Racing,5.0,2.0,18.0,Finished,0.652141,12.390678999999999
+2024,Bahrain,SAI,Ferrari,4.0,3.0,15.0,Finished,0.652141,11.738538
+2024,Bahrain,LEC,Ferrari,2.0,4.0,12.0,Finished,0.652141,11.086397
+2024,Bahrain,RUS,Mercedes,3.0,5.0,10.0,Finished,0.652141,10.434256
+2024,Bahrain,NOR,McLaren,7.0,6.0,8.0,Finished,0.652141,9.782115
+2024,Bahrain,HAM,Mercedes,9.0,7.0,6.0,Finished,0.652141,9.129973999999999
+2024,Bahrain,PIA,McLaren,8.0,8.0,4.0,Finished,0.652141,8.477833
+2024,Bahrain,ALO,Aston Martin,6.0,9.0,2.0,Finished,0.652141,7.825692
+2024,Bahrain,STR,Aston Martin,12.0,10.0,1.0,Finished,0.652141,7.173551
+2024,Bahrain,ZHO,Kick Sauber,17.0,11.0,0.0,Lapped,0.652141,6.5214099999999995
+2024,Bahrain,MAG,Haas F1 Team,15.0,12.0,0.0,Lapped,0.652141,5.869269
+2024,Bahrain,RIC,RB,14.0,13.0,0.0,Lapped,0.652141,5.217128
+2024,Bahrain,TSU,RB,11.0,14.0,0.0,Lapped,0.652141,4.5649869999999995
+2024,Bahrain,ALB,Williams,13.0,15.0,0.0,Lapped,0.652141,3.912846
+2024,Bahrain,HUL,Haas F1 Team,10.0,16.0,0.0,Lapped,0.652141,3.2607049999999997
+2024,Bahrain,OCO,Alpine,19.0,17.0,0.0,Lapped,0.652141,2.608564
+2024,Bahrain,GAS,Alpine,20.0,18.0,0.0,Lapped,0.652141,1.956423
+2024,Bahrain,BOT,Kick Sauber,16.0,19.0,0.0,Lapped,0.652141,1.304282
+2024,Bahrain,SAR,Williams,18.0,20.0,0.0,Lapped,0.652141,0.652141
+2024,Saudi Arabia,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.65545,13.109
+2024,Saudi Arabia,PER,Red Bull Racing,3.0,2.0,18.0,Finished,0.65545,12.45355
+2024,Saudi Arabia,LEC,Ferrari,2.0,3.0,16.0,Finished,0.65545,11.7981
+2024,Saudi Arabia,PIA,McLaren,5.0,4.0,12.0,Finished,0.65545,11.14265
+2024,Saudi Arabia,ALO,Aston Martin,4.0,5.0,10.0,Finished,0.65545,10.4872
+2024,Saudi Arabia,RUS,Mercedes,7.0,6.0,8.0,Finished,0.65545,9.83175
+2024,Saudi Arabia,BEA,Ferrari,11.0,7.0,6.0,Finished,0.65545,9.1763
+2024,Saudi Arabia,NOR,McLaren,6.0,8.0,4.0,Finished,0.65545,8.52085
+2024,Saudi Arabia,HAM,Mercedes,8.0,9.0,2.0,Finished,0.65545,7.865399999999999
+2024,Saudi Arabia,HUL,Haas F1 Team,15.0,10.0,1.0,Finished,0.65545,7.20995
+2024,Saudi Arabia,ALB,Williams,12.0,11.0,0.0,Finished,0.65545,6.5545
+2024,Saudi Arabia,MAG,Haas F1 Team,13.0,12.0,0.0,Finished,0.65545,5.89905
+2024,Saudi Arabia,OCO,Alpine,17.0,13.0,0.0,Lapped,0.65545,5.2436
+2024,Saudi Arabia,SAR,Williams,19.0,14.0,0.0,Lapped,0.65545,4.58815
+2024,Saudi Arabia,TSU,RB,9.0,15.0,0.0,Lapped,0.65545,3.9326999999999996
+2024,Saudi Arabia,RIC,RB,14.0,16.0,0.0,Lapped,0.65545,3.27725
+2024,Saudi Arabia,BOT,Kick Sauber,16.0,17.0,0.0,Lapped,0.65545,2.6218
+2024,Saudi Arabia,ZHO,Kick Sauber,20.0,18.0,0.0,Lapped,0.65545,1.9663499999999998
+2024,Saudi Arabia,STR,Aston Martin,10.0,19.0,0.0,Retired,0.65545,1.3109
+2024,Saudi Arabia,GAS,Alpine,18.0,20.0,0.0,Retired,0.65545,0.65545
+2024,Australia,SAI,Ferrari,2.0,1.0,25.0,Finished,0.692756,13.855120000000001
+2024,Australia,LEC,Ferrari,4.0,2.0,19.0,Finished,0.692756,13.162364
+2024,Australia,NOR,McLaren,3.0,3.0,15.0,Finished,0.692756,12.469608000000001
+2024,Australia,PIA,McLaren,5.0,4.0,12.0,Finished,0.692756,11.776852
+2024,Australia,PER,Red Bull Racing,6.0,5.0,10.0,Finished,0.692756,11.084096
+2024,Australia,STR,Aston Martin,9.0,6.0,8.0,Finished,0.692756,10.391340000000001
+2024,Australia,TSU,RB,8.0,7.0,6.0,Finished,0.692756,9.698584
+2024,Australia,ALO,Aston Martin,10.0,8.0,4.0,Finished,0.692756,9.005828000000001
+2024,Australia,HUL,Haas F1 Team,16.0,9.0,2.0,Finished,0.692756,8.313072
+2024,Australia,MAG,Haas F1 Team,14.0,10.0,1.0,Lapped,0.692756,7.620316000000001
+2024,Australia,ALB,Williams,12.0,11.0,0.0,Lapped,0.692756,6.927560000000001
+2024,Australia,RIC,RB,18.0,12.0,0.0,Lapped,0.692756,6.2348040000000005
+2024,Australia,GAS,Alpine,17.0,13.0,0.0,Lapped,0.692756,5.542048
+2024,Australia,BOT,Kick Sauber,13.0,14.0,0.0,Lapped,0.692756,4.849292
+2024,Australia,ZHO,Kick Sauber,19.0,15.0,0.0,Lapped,0.692756,4.156536
+2024,Australia,OCO,Alpine,15.0,16.0,0.0,Lapped,0.692756,3.4637800000000003
+2024,Australia,RUS,Mercedes,7.0,17.0,0.0,Retired,0.692756,2.771024
+2024,Australia,HAM,Mercedes,11.0,18.0,0.0,Retired,0.692756,2.078268
+2024,Australia,VER,Red Bull Racing,1.0,19.0,0.0,Retired,0.692756,1.385512
+2024,Japan,VER,Red Bull Racing,1.0,1.0,26.0,Finished,0.623925,12.478499999999999
+2024,Japan,PER,Red Bull Racing,2.0,2.0,18.0,Finished,0.623925,11.854574999999999
+2024,Japan,SAI,Ferrari,4.0,3.0,15.0,Finished,0.623925,11.230649999999999
+2024,Japan,LEC,Ferrari,8.0,4.0,12.0,Finished,0.623925,10.606724999999999
+2024,Japan,NOR,McLaren,3.0,5.0,10.0,Finished,0.623925,9.9828
+2024,Japan,ALO,Aston Martin,5.0,6.0,8.0,Finished,0.623925,9.358875
+2024,Japan,RUS,Mercedes,9.0,7.0,6.0,Finished,0.623925,8.73495
+2024,Japan,PIA,McLaren,6.0,8.0,4.0,Finished,0.623925,8.111025
+2024,Japan,HAM,Mercedes,7.0,9.0,2.0,Finished,0.623925,7.4871
+2024,Japan,TSU,RB,10.0,10.0,1.0,Lapped,0.623925,6.863174999999999
+2024,Japan,HUL,Haas F1 Team,12.0,11.0,0.0,Lapped,0.623925,6.239249999999999
+2024,Japan,STR,Aston Martin,16.0,12.0,0.0,Lapped,0.623925,5.6153249999999995
+2024,Japan,MAG,Haas F1 Team,18.0,13.0,0.0,Lapped,0.623925,4.9914
+2024,Japan,BOT,Kick Sauber,13.0,14.0,0.0,Lapped,0.623925,4.367475
+2024,Japan,OCO,Alpine,15.0,15.0,0.0,Lapped,0.623925,3.74355
+2024,Japan,GAS,Alpine,17.0,16.0,0.0,Lapped,0.623925,3.1196249999999996
+2024,Japan,SAR,Williams,19.0,17.0,0.0,Lapped,0.623925,2.4957
+2024,Japan,ZHO,Kick Sauber,20.0,18.0,0.0,Retired,0.623925,1.871775
+2024,Japan,RIC,RB,11.0,19.0,0.0,Retired,0.623925,1.24785
+2024,Japan,ALB,Williams,14.0,20.0,0.0,Retired,0.623925,0.623925
+2024,China,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.737874,14.757480000000001
+2024,China,NOR,McLaren,4.0,2.0,18.0,Finished,0.737874,14.019606000000001
+2024,China,PER,Red Bull Racing,2.0,3.0,15.0,Finished,0.737874,13.281732
+2024,China,LEC,Ferrari,6.0,4.0,12.0,Finished,0.737874,12.543858
+2024,China,SAI,Ferrari,7.0,5.0,10.0,Finished,0.737874,11.805984
+2024,China,RUS,Mercedes,8.0,6.0,8.0,Finished,0.737874,11.06811
+2024,China,ALO,Aston Martin,3.0,7.0,7.0,Finished,0.737874,10.330236000000001
+2024,China,PIA,McLaren,5.0,8.0,4.0,Finished,0.737874,9.592362
+2024,China,HAM,Mercedes,18.0,9.0,2.0,Finished,0.737874,8.854488
+2024,China,HUL,Haas F1 Team,9.0,10.0,1.0,Finished,0.737874,8.116614
+2024,China,OCO,Alpine,13.0,11.0,0.0,Finished,0.737874,7.3787400000000005
+2024,China,ALB,Williams,14.0,12.0,0.0,Finished,0.737874,6.640866
+2024,China,GAS,Alpine,15.0,13.0,0.0,Finished,0.737874,5.902992
+2024,China,ZHO,Kick Sauber,16.0,14.0,0.0,Finished,0.737874,5.1651180000000005
+2024,China,STR,Aston Martin,11.0,15.0,0.0,Finished,0.737874,4.427244
+2024,China,MAG,Haas F1 Team,17.0,16.0,0.0,Finished,0.737874,3.6893700000000003
+2024,China,SAR,Williams,20.0,17.0,0.0,Finished,0.737874,2.951496
+2024,China,RIC,RB,12.0,18.0,0.0,Retired,0.737874,2.213622
+2024,China,TSU,RB,19.0,19.0,0.0,Retired,0.737874,1.475748
+2024,China,BOT,Kick Sauber,10.0,20.0,0.0,Retired,0.737874,0.737874
+2024,Miami,NOR,McLaren,5.0,1.0,25.0,Finished,0.710065,14.2013
+2024,Miami,VER,Red Bull Racing,1.0,2.0,18.0,Finished,0.710065,13.491235
+2024,Miami,LEC,Ferrari,2.0,3.0,15.0,Finished,0.710065,12.78117
+2024,Miami,PER,Red Bull Racing,4.0,4.0,12.0,Finished,0.710065,12.071105
+2024,Miami,SAI,Ferrari,3.0,5.0,10.0,Finished,0.710065,11.36104
+2024,Miami,HAM,Mercedes,8.0,6.0,8.0,Finished,0.710065,10.650974999999999
+2024,Miami,TSU,RB,10.0,7.0,6.0,Finished,0.710065,9.940909999999999
+2024,Miami,RUS,Mercedes,7.0,8.0,4.0,Finished,0.710065,9.230844999999999
+2024,Miami,ALO,Aston Martin,15.0,9.0,2.0,Finished,0.710065,8.520779999999998
+2024,Miami,OCO,Alpine,13.0,10.0,1.0,Finished,0.710065,7.810714999999999
+2024,Miami,HUL,Haas F1 Team,9.0,11.0,0.0,Finished,0.710065,7.10065
+2024,Miami,GAS,Alpine,12.0,12.0,0.0,Finished,0.710065,6.390585
+2024,Miami,PIA,McLaren,6.0,13.0,0.0,Finished,0.710065,5.68052
+2024,Miami,ZHO,Kick Sauber,19.0,14.0,0.0,Finished,0.710065,4.970454999999999
+2024,Miami,RIC,RB,20.0,15.0,0.0,Finished,0.710065,4.260389999999999
+2024,Miami,BOT,Kick Sauber,16.0,16.0,0.0,Finished,0.710065,3.550325
+2024,Miami,STR,Aston Martin,11.0,17.0,0.0,Finished,0.710065,2.84026
+2024,Miami,ALB,Williams,14.0,18.0,0.0,Finished,0.710065,2.1301949999999996
+2024,Miami,MAG,Haas F1 Team,18.0,19.0,0.0,Finished,0.710065,1.42013
+2024,Miami,SAR,Williams,17.0,20.0,0.0,Retired,0.710065,0.710065
+2024,Emilia-Romagna,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.924791,18.495820000000002
+2024,Emilia-Romagna,NOR,McLaren,2.0,2.0,18.0,Finished,0.924791,17.571029
+2024,Emilia-Romagna,LEC,Ferrari,3.0,3.0,15.0,Finished,0.924791,16.646238
+2024,Emilia-Romagna,PIA,McLaren,5.0,4.0,12.0,Finished,0.924791,15.721447000000001
+2024,Emilia-Romagna,SAI,Ferrari,4.0,5.0,10.0,Finished,0.924791,14.796656
+2024,Emilia-Romagna,HAM,Mercedes,8.0,6.0,8.0,Finished,0.924791,13.871865
+2024,Emilia-Romagna,RUS,Mercedes,6.0,7.0,7.0,Finished,0.924791,12.947074
+2024,Emilia-Romagna,PER,Red Bull Racing,11.0,8.0,4.0,Finished,0.924791,12.022283
+2024,Emilia-Romagna,STR,Aston Martin,13.0,9.0,2.0,Finished,0.924791,11.097492
+2024,Emilia-Romagna,TSU,RB,7.0,10.0,1.0,Lapped,0.924791,10.172701
+2024,Emilia-Romagna,HUL,Haas F1 Team,10.0,11.0,0.0,Lapped,0.924791,9.247910000000001
+2024,Emilia-Romagna,MAG,Haas F1 Team,18.0,12.0,0.0,Lapped,0.924791,8.323119
+2024,Emilia-Romagna,RIC,RB,9.0,13.0,0.0,Lapped,0.924791,7.398328
+2024,Emilia-Romagna,OCO,Alpine,12.0,14.0,0.0,Lapped,0.924791,6.473537
+2024,Emilia-Romagna,ZHO,Kick Sauber,17.0,15.0,0.0,Lapped,0.924791,5.548746
+2024,Emilia-Romagna,GAS,Alpine,15.0,16.0,0.0,Lapped,0.924791,4.6239550000000005
+2024,Emilia-Romagna,SAR,Williams,19.0,17.0,0.0,Lapped,0.924791,3.699164
+2024,Emilia-Romagna,BOT,Kick Sauber,16.0,18.0,0.0,Lapped,0.924791,2.774373
+2024,Emilia-Romagna,ALO,Aston Martin,20.0,19.0,0.0,Lapped,0.924791,1.849582
+2024,Emilia-Romagna,ALB,Williams,14.0,20.0,0.0,Retired,0.924791,0.924791
+2024,Monaco,LEC,Ferrari,1.0,1.0,25.0,Finished,0.449348,8.98696
+2024,Monaco,PIA,McLaren,2.0,2.0,18.0,Finished,0.449348,8.537612000000001
+2024,Monaco,SAI,Ferrari,3.0,3.0,15.0,Finished,0.449348,8.088264
+2024,Monaco,NOR,McLaren,4.0,4.0,12.0,Finished,0.449348,7.638916
+2024,Monaco,RUS,Mercedes,5.0,5.0,10.0,Finished,0.449348,7.189568
+2024,Monaco,VER,Red Bull Racing,6.0,6.0,8.0,Finished,0.449348,6.740220000000001
+2024,Monaco,HAM,Mercedes,7.0,7.0,7.0,Finished,0.449348,6.290872
+2024,Monaco,TSU,RB,8.0,8.0,4.0,Lapped,0.449348,5.841524000000001
+2024,Monaco,ALB,Williams,9.0,9.0,2.0,Lapped,0.449348,5.392176
+2024,Monaco,GAS,Alpine,10.0,10.0,1.0,Lapped,0.449348,4.942828
+2024,Monaco,ALO,Aston Martin,14.0,11.0,0.0,Lapped,0.449348,4.49348
+2024,Monaco,RIC,RB,12.0,12.0,0.0,Lapped,0.449348,4.044132
+2024,Monaco,BOT,Kick Sauber,17.0,13.0,0.0,Lapped,0.449348,3.594784
+2024,Monaco,STR,Aston Martin,13.0,14.0,0.0,Lapped,0.449348,3.145436
+2024,Monaco,SAR,Williams,15.0,15.0,0.0,Lapped,0.449348,2.696088
+2024,Monaco,ZHO,Kick Sauber,18.0,16.0,0.0,Lapped,0.449348,2.24674
+2024,Monaco,OCO,Alpine,11.0,17.0,0.0,Retired,0.449348,1.797392
+2024,Monaco,PER,Red Bull Racing,16.0,18.0,0.0,Retired,0.449348,1.348044
+2024,Monaco,HUL,Haas F1 Team,19.0,19.0,0.0,Retired,0.449348,0.898696
+2024,Monaco,MAG,Haas F1 Team,20.0,20.0,0.0,Retired,0.449348,0.449348
+2024,Canada,VER,Red Bull Racing,2.0,1.0,25.0,Finished,0.671013,13.420259999999999
+2024,Canada,NOR,McLaren,3.0,2.0,18.0,Finished,0.671013,12.749246999999999
+2024,Canada,RUS,Mercedes,1.0,3.0,15.0,Finished,0.671013,12.078234
+2024,Canada,HAM,Mercedes,7.0,4.0,13.0,Finished,0.671013,11.407221
+2024,Canada,PIA,McLaren,4.0,5.0,10.0,Finished,0.671013,10.736208
+2024,Canada,ALO,Aston Martin,6.0,6.0,8.0,Finished,0.671013,10.065195
+2024,Canada,STR,Aston Martin,9.0,7.0,6.0,Finished,0.671013,9.394181999999999
+2024,Canada,RIC,RB,5.0,8.0,4.0,Finished,0.671013,8.723169
+2024,Canada,GAS,Alpine,15.0,9.0,2.0,Finished,0.671013,8.052156
+2024,Canada,OCO,Alpine,18.0,10.0,1.0,Finished,0.671013,7.381143
+2024,Canada,HUL,Haas F1 Team,17.0,11.0,0.0,Finished,0.671013,6.7101299999999995
+2024,Canada,MAG,Haas F1 Team,14.0,12.0,0.0,Finished,0.671013,6.039117
+2024,Canada,BOT,Kick Sauber,19.0,13.0,0.0,Finished,0.671013,5.368104
+2024,Canada,TSU,RB,8.0,14.0,0.0,Finished,0.671013,4.6970909999999995
+2024,Canada,ZHO,Kick Sauber,20.0,15.0,0.0,Lapped,0.671013,4.026078
+2024,Canada,SAI,Ferrari,12.0,16.0,0.0,Retired,0.671013,3.3550649999999997
+2024,Canada,ALB,Williams,10.0,17.0,0.0,Retired,0.671013,2.684052
+2024,Canada,PER,Red Bull Racing,16.0,18.0,0.0,Retired,0.671013,2.013039
+2024,Canada,LEC,Ferrari,11.0,19.0,0.0,Retired,0.671013,1.342026
+2024,Canada,SAR,Williams,13.0,20.0,0.0,Retired,0.671013,0.671013
+2024,Spain,VER,Red Bull Racing,2.0,1.0,25.0,Finished,0.833175,16.6635
+2024,Spain,NOR,McLaren,1.0,2.0,19.0,Finished,0.833175,15.830325
+2024,Spain,HAM,Mercedes,3.0,3.0,15.0,Finished,0.833175,14.99715
+2024,Spain,RUS,Mercedes,4.0,4.0,12.0,Finished,0.833175,14.163975
+2024,Spain,LEC,Ferrari,5.0,5.0,10.0,Finished,0.833175,13.3308
+2024,Spain,SAI,Ferrari,6.0,6.0,8.0,Finished,0.833175,12.497625
+2024,Spain,PIA,McLaren,9.0,7.0,6.0,Finished,0.833175,11.66445
+2024,Spain,PER,Red Bull Racing,11.0,8.0,4.0,Finished,0.833175,10.831275
+2024,Spain,GAS,Alpine,7.0,9.0,2.0,Finished,0.833175,9.9981
+2024,Spain,OCO,Alpine,8.0,10.0,1.0,Finished,0.833175,9.164925
+2024,Spain,HUL,Haas F1 Team,13.0,11.0,0.0,Finished,0.833175,8.33175
+2024,Spain,ALO,Aston Martin,10.0,12.0,0.0,Lapped,0.833175,7.498575
+2024,Spain,ZHO,Kick Sauber,15.0,13.0,0.0,Lapped,0.833175,6.6654
+2024,Spain,STR,Aston Martin,14.0,14.0,0.0,Lapped,0.833175,5.832225
+2024,Spain,RIC,RB,18.0,15.0,0.0,Lapped,0.833175,4.99905
+2024,Spain,BOT,Kick Sauber,12.0,16.0,0.0,Lapped,0.833175,4.165875
+2024,Spain,MAG,Haas F1 Team,16.0,17.0,0.0,Lapped,0.833175,3.3327
+2024,Spain,ALB,Williams,20.0,18.0,0.0,Lapped,0.833175,2.499525
+2024,Spain,TSU,RB,17.0,19.0,0.0,Lapped,0.833175,1.66635
+2024,Spain,SAR,Williams,19.0,20.0,0.0,Lapped,0.833175,0.833175
+2024,Austria,RUS,Mercedes,3.0,1.0,25.0,Finished,0.804746,16.09492
+2024,Austria,PIA,McLaren,7.0,2.0,18.0,Finished,0.804746,15.290173999999999
+2024,Austria,SAI,Ferrari,4.0,3.0,15.0,Finished,0.804746,14.485427999999999
+2024,Austria,HAM,Mercedes,5.0,4.0,12.0,Finished,0.804746,13.680682
+2024,Austria,VER,Red Bull Racing,1.0,5.0,10.0,Finished,0.804746,12.875936
+2024,Austria,HUL,Haas F1 Team,9.0,6.0,8.0,Finished,0.804746,12.07119
+2024,Austria,PER,Red Bull Racing,8.0,7.0,6.0,Finished,0.804746,11.266444
+2024,Austria,MAG,Haas F1 Team,12.0,8.0,4.0,Finished,0.804746,10.461698
+2024,Austria,RIC,RB,11.0,9.0,2.0,Finished,0.804746,9.656952
+2024,Austria,GAS,Alpine,13.0,10.0,1.0,Finished,0.804746,8.852205999999999
+2024,Austria,LEC,Ferrari,6.0,11.0,0.0,Finished,0.804746,8.04746
+2024,Austria,OCO,Alpine,10.0,12.0,0.0,Finished,0.804746,7.242713999999999
+2024,Austria,STR,Aston Martin,17.0,13.0,0.0,Lapped,0.804746,6.437968
+2024,Austria,TSU,RB,14.0,14.0,0.0,Lapped,0.804746,5.633222
+2024,Austria,ALB,Williams,16.0,15.0,0.0,Lapped,0.804746,4.828476
+2024,Austria,BOT,Kick Sauber,18.0,16.0,0.0,Lapped,0.804746,4.02373
+2024,Austria,ZHO,Kick Sauber,20.0,17.0,0.0,Lapped,0.804746,3.218984
+2024,Austria,ALO,Aston Martin,15.0,18.0,0.0,Lapped,0.804746,2.414238
+2024,Austria,SAR,Williams,19.0,19.0,0.0,Lapped,0.804746,1.609492
+2024,Austria,NOR,McLaren,2.0,20.0,0.0,Lapped,0.804746,0.804746
+2024,Great Britain,RUS,Mercedes,3.0,1.0,25.0,Finished,0.804746,16.09492
+2024,Great Britain,PIA,McLaren,7.0,2.0,18.0,Finished,0.804746,15.290173999999999
+2024,Great Britain,SAI,Ferrari,4.0,3.0,15.0,Finished,0.804746,14.485427999999999
+2024,Great Britain,HAM,Mercedes,5.0,4.0,12.0,Finished,0.804746,13.680682
+2024,Great Britain,VER,Red Bull Racing,1.0,5.0,10.0,Finished,0.804746,12.875936
+2024,Great Britain,HUL,Haas F1 Team,9.0,6.0,8.0,Finished,0.804746,12.07119
+2024,Great Britain,PER,Red Bull Racing,8.0,7.0,6.0,Finished,0.804746,11.266444
+2024,Great Britain,MAG,Haas F1 Team,12.0,8.0,4.0,Finished,0.804746,10.461698
+2024,Great Britain,RIC,RB,11.0,9.0,2.0,Finished,0.804746,9.656952
+2024,Great Britain,GAS,Alpine,13.0,10.0,1.0,Finished,0.804746,8.852205999999999
+2024,Great Britain,LEC,Ferrari,6.0,11.0,0.0,Finished,0.804746,8.04746
+2024,Great Britain,OCO,Alpine,10.0,12.0,0.0,Finished,0.804746,7.242713999999999
+2024,Great Britain,STR,Aston Martin,17.0,13.0,0.0,Lapped,0.804746,6.437968
+2024,Great Britain,TSU,RB,14.0,14.0,0.0,Lapped,0.804746,5.633222
+2024,Great Britain,ALB,Williams,16.0,15.0,0.0,Lapped,0.804746,4.828476
+2024,Great Britain,BOT,Kick Sauber,18.0,16.0,0.0,Lapped,0.804746,4.02373
+2024,Great Britain,ZHO,Kick Sauber,20.0,17.0,0.0,Lapped,0.804746,3.218984
+2024,Great Britain,ALO,Aston Martin,15.0,18.0,0.0,Lapped,0.804746,2.414238
+2024,Great Britain,SAR,Williams,19.0,19.0,0.0,Lapped,0.804746,1.609492
+2024,Great Britain,NOR,McLaren,2.0,20.0,0.0,Lapped,0.804746,0.804746
+2024,Belgium,HAM,Mercedes,3.0,1.0,25.0,Finished,0.741562,14.831240000000001
+2024,Belgium,PIA,McLaren,5.0,2.0,18.0,Finished,0.741562,14.089678000000001
+2024,Belgium,LEC,Ferrari,1.0,3.0,15.0,Finished,0.741562,13.348116000000001
+2024,Belgium,VER,Red Bull Racing,11.0,4.0,12.0,Finished,0.741562,12.606554000000001
+2024,Belgium,NOR,McLaren,4.0,5.0,10.0,Finished,0.741562,11.864992
+2024,Belgium,SAI,Ferrari,7.0,6.0,8.0,Finished,0.741562,11.12343
+2024,Belgium,PER,Red Bull Racing,2.0,7.0,7.0,Finished,0.741562,10.381868
+2024,Belgium,ALO,Aston Martin,8.0,8.0,4.0,Finished,0.741562,9.640306
+2024,Belgium,OCO,Alpine,9.0,9.0,2.0,Finished,0.741562,8.898744
+2024,Belgium,RIC,RB,13.0,10.0,1.0,Finished,0.741562,8.157182
+2024,Belgium,STR,Aston Martin,15.0,11.0,0.0,Finished,0.741562,7.4156200000000005
+2024,Belgium,ALB,Williams,10.0,12.0,0.0,Finished,0.741562,6.6740580000000005
+2024,Belgium,GAS,Alpine,12.0,13.0,0.0,Finished,0.741562,5.932496
+2024,Belgium,MAG,Haas F1 Team,17.0,14.0,0.0,Finished,0.741562,5.190934
+2024,Belgium,BOT,Kick Sauber,14.0,15.0,0.0,Finished,0.741562,4.449372
+2024,Belgium,TSU,RB,20.0,16.0,0.0,Finished,0.741562,3.7078100000000003
+2024,Belgium,SAR,Williams,18.0,17.0,0.0,Finished,0.741562,2.966248
+2024,Belgium,HUL,Haas F1 Team,16.0,18.0,0.0,Finished,0.741562,2.224686
+2024,Belgium,ZHO,Kick Sauber,19.0,19.0,0.0,Retired,0.741562,1.483124
+2024,Belgium,RUS,Mercedes,6.0,20.0,0.0,Disqualified,0.741562,0.741562
+2024,Netherlands,NOR,McLaren,1.0,1.0,26.0,Finished,0.751072,15.021439999999998
+2024,Netherlands,VER,Red Bull Racing,2.0,2.0,18.0,Finished,0.751072,14.270368
+2024,Netherlands,LEC,Ferrari,6.0,3.0,15.0,Finished,0.751072,13.519295999999999
+2024,Netherlands,PIA,McLaren,3.0,4.0,12.0,Finished,0.751072,12.768224
+2024,Netherlands,SAI,Ferrari,10.0,5.0,10.0,Finished,0.751072,12.017152
+2024,Netherlands,PER,Red Bull Racing,5.0,6.0,8.0,Finished,0.751072,11.266079999999999
+2024,Netherlands,RUS,Mercedes,4.0,7.0,6.0,Finished,0.751072,10.515008
+2024,Netherlands,HAM,Mercedes,14.0,8.0,4.0,Finished,0.751072,9.763936
+2024,Netherlands,GAS,Alpine,9.0,9.0,2.0,Lapped,0.751072,9.012864
+2024,Netherlands,ALO,Aston Martin,7.0,10.0,1.0,Lapped,0.751072,8.261792
+2024,Netherlands,HUL,Haas F1 Team,12.0,11.0,0.0,Lapped,0.751072,7.510719999999999
+2024,Netherlands,RIC,RB,13.0,12.0,0.0,Lapped,0.751072,6.759647999999999
+2024,Netherlands,STR,Aston Martin,8.0,13.0,0.0,Lapped,0.751072,6.008576
+2024,Netherlands,ALB,Williams,19.0,14.0,0.0,Lapped,0.751072,5.257504
+2024,Netherlands,OCO,Alpine,15.0,15.0,0.0,Lapped,0.751072,4.506432
+2024,Netherlands,SAR,Williams,18.0,16.0,0.0,Lapped,0.751072,3.7553599999999996
+2024,Netherlands,TSU,RB,11.0,17.0,0.0,Lapped,0.751072,3.004288
+2024,Netherlands,MAG,Haas F1 Team,20.0,18.0,0.0,Lapped,0.751072,2.253216
+2024,Netherlands,BOT,Kick Sauber,16.0,19.0,0.0,Lapped,0.751072,1.502144
+2024,Netherlands,ZHO,Kick Sauber,17.0,20.0,0.0,Lapped,0.751072,0.751072
+2024,Italy,LEC,Ferrari,4.0,1.0,25.0,Finished,0.64639,12.927800000000001
+2024,Italy,PIA,McLaren,2.0,2.0,18.0,Finished,0.64639,12.281410000000001
+2024,Italy,NOR,McLaren,1.0,3.0,16.0,Finished,0.64639,11.63502
+2024,Italy,SAI,Ferrari,5.0,4.0,12.0,Finished,0.64639,10.98863
+2024,Italy,HAM,Mercedes,6.0,5.0,10.0,Finished,0.64639,10.34224
+2024,Italy,VER,Red Bull Racing,7.0,6.0,8.0,Finished,0.64639,9.69585
+2024,Italy,RUS,Mercedes,3.0,7.0,6.0,Finished,0.64639,9.04946
+2024,Italy,PER,Red Bull Racing,8.0,8.0,4.0,Finished,0.64639,8.40307
+2024,Italy,ALB,Williams,9.0,9.0,2.0,Finished,0.64639,7.75668
+2024,Italy,MAG,Haas F1 Team,13.0,10.0,1.0,Finished,0.64639,7.11029
+2024,Italy,ALO,Aston Martin,11.0,11.0,0.0,Finished,0.64639,6.463900000000001
+2024,Italy,COL,Williams,18.0,12.0,0.0,Finished,0.64639,5.81751
+2024,Italy,RIC,RB,12.0,13.0,0.0,Finished,0.64639,5.17112
+2024,Italy,OCO,Alpine,15.0,14.0,0.0,Lapped,0.64639,4.52473
+2024,Italy,GAS,Alpine,14.0,15.0,0.0,Lapped,0.64639,3.87834
+2024,Italy,BOT,Kick Sauber,19.0,16.0,0.0,Lapped,0.64639,3.2319500000000003
+2024,Italy,HUL,Haas F1 Team,10.0,17.0,0.0,Lapped,0.64639,2.58556
+2024,Italy,ZHO,Kick Sauber,20.0,18.0,0.0,Lapped,0.64639,1.93917
+2024,Italy,STR,Aston Martin,17.0,19.0,0.0,Lapped,0.64639,1.29278
+2024,Italy,TSU,RB,16.0,20.0,0.0,Retired,0.64639,0.64639
+2024,Azerbaijan,PIA,McLaren,2.0,1.0,25.0,Finished,0.635056,12.70112
+2024,Azerbaijan,LEC,Ferrari,1.0,2.0,18.0,Finished,0.635056,12.066063999999999
+2024,Azerbaijan,RUS,Mercedes,5.0,3.0,15.0,Finished,0.635056,11.431007999999999
+2024,Azerbaijan,NOR,McLaren,15.0,4.0,13.0,Finished,0.635056,10.795952
+2024,Azerbaijan,VER,Red Bull Racing,6.0,5.0,10.0,Finished,0.635056,10.160896
+2024,Azerbaijan,ALO,Aston Martin,7.0,6.0,8.0,Finished,0.635056,9.525839999999999
+2024,Azerbaijan,ALB,Williams,9.0,7.0,6.0,Finished,0.635056,8.890784
+2024,Azerbaijan,COL,Williams,8.0,8.0,4.0,Finished,0.635056,8.255728
+2024,Azerbaijan,HAM,Mercedes,19.0,9.0,2.0,Finished,0.635056,7.620671999999999
+2024,Azerbaijan,BEA,Haas F1 Team,10.0,10.0,1.0,Finished,0.635056,6.985615999999999
+2024,Azerbaijan,HUL,Haas F1 Team,12.0,11.0,0.0,Finished,0.635056,6.35056
+2024,Azerbaijan,GAS,Alpine,18.0,12.0,0.0,Finished,0.635056,5.715503999999999
+2024,Azerbaijan,RIC,RB,14.0,13.0,0.0,Finished,0.635056,5.080448
+2024,Azerbaijan,ZHO,Kick Sauber,17.0,14.0,0.0,Finished,0.635056,4.445392
+2024,Azerbaijan,OCO,Alpine,20.0,15.0,0.0,Lapped,0.635056,3.8103359999999995
+2024,Azerbaijan,BOT,Kick Sauber,16.0,16.0,0.0,Lapped,0.635056,3.17528
+2024,Azerbaijan,PER,Red Bull Racing,4.0,17.0,0.0,Retired,0.635056,2.540224
+2024,Azerbaijan,SAI,Ferrari,3.0,18.0,0.0,Retired,0.635056,1.9051679999999998
+2024,Azerbaijan,STR,Aston Martin,13.0,19.0,0.0,Retired,0.635056,1.270112
+2024,Azerbaijan,TSU,RB,11.0,20.0,0.0,Retired,0.635056,0.635056
+2024,Singapore,NOR,McLaren,1.0,1.0,25.0,Finished,0.523445,10.468900000000001
+2024,Singapore,VER,Red Bull Racing,2.0,2.0,18.0,Finished,0.523445,9.945455
+2024,Singapore,PIA,McLaren,5.0,3.0,15.0,Finished,0.523445,9.42201
+2024,Singapore,RUS,Mercedes,4.0,4.0,12.0,Finished,0.523445,8.898565000000001
+2024,Singapore,LEC,Ferrari,9.0,5.0,10.0,Finished,0.523445,8.37512
+2024,Singapore,HAM,Mercedes,3.0,6.0,8.0,Finished,0.523445,7.851675000000001
+2024,Singapore,SAI,Ferrari,10.0,7.0,6.0,Finished,0.523445,7.3282300000000005
+2024,Singapore,ALO,Aston Martin,7.0,8.0,4.0,Lapped,0.523445,6.804785000000001
+2024,Singapore,HUL,Haas F1 Team,6.0,9.0,2.0,Lapped,0.523445,6.28134
+2024,Singapore,PER,Red Bull Racing,13.0,10.0,1.0,Lapped,0.523445,5.757895
+2024,Singapore,COL,Williams,12.0,11.0,0.0,Lapped,0.523445,5.234450000000001
+2024,Singapore,TSU,RB,8.0,12.0,0.0,Lapped,0.523445,4.711005
+2024,Singapore,OCO,Alpine,15.0,13.0,0.0,Lapped,0.523445,4.18756
+2024,Singapore,STR,Aston Martin,17.0,14.0,0.0,Lapped,0.523445,3.6641150000000002
+2024,Singapore,ZHO,Kick Sauber,20.0,15.0,0.0,Lapped,0.523445,3.14067
+2024,Singapore,BOT,Kick Sauber,19.0,16.0,0.0,Lapped,0.523445,2.6172250000000004
+2024,Singapore,GAS,Alpine,18.0,17.0,0.0,Lapped,0.523445,2.09378
+2024,Singapore,RIC,RB,16.0,18.0,0.0,Lapped,0.523445,1.570335
+2024,Singapore,MAG,Haas F1 Team,14.0,19.0,0.0,Retired,0.523445,1.04689
+2024,Singapore,ALB,Williams,11.0,20.0,0.0,Retired,0.523445,0.523445
+2024,United States,LEC,Ferrari,4.0,1.0,25.0,Finished,0.699448,13.988959999999999
+2024,United States,SAI,Ferrari,3.0,2.0,18.0,Finished,0.699448,13.289511999999998
+2024,United States,VER,Red Bull Racing,2.0,3.0,15.0,Finished,0.699448,12.590064
+2024,United States,NOR,McLaren,1.0,4.0,12.0,Finished,0.699448,11.890616
+2024,United States,PIA,McLaren,5.0,5.0,10.0,Finished,0.699448,11.191168
+2024,United States,RUS,Mercedes,20.0,6.0,8.0,Finished,0.699448,10.491719999999999
+2024,United States,PER,Red Bull Racing,9.0,7.0,6.0,Finished,0.699448,9.792271999999999
+2024,United States,HUL,Haas F1 Team,11.0,8.0,4.0,Finished,0.699448,9.092824
+2024,United States,LAW,RB,19.0,9.0,2.0,Finished,0.699448,8.393376
+2024,United States,COL,Williams,15.0,10.0,1.0,Finished,0.699448,7.693928
+2024,United States,MAG,Haas F1 Team,8.0,11.0,0.0,Finished,0.699448,6.994479999999999
+2024,United States,GAS,Alpine,6.0,12.0,0.0,Finished,0.699448,6.295032
+2024,United States,ALO,Aston Martin,7.0,13.0,0.0,Lapped,0.699448,5.595584
+2024,United States,TSU,RB,10.0,14.0,0.0,Lapped,0.699448,4.896135999999999
+2024,United States,STR,Aston Martin,13.0,15.0,0.0,Lapped,0.699448,4.196688
+2024,United States,ALB,Williams,14.0,16.0,0.0,Lapped,0.699448,3.4972399999999997
+2024,United States,BOT,Kick Sauber,16.0,17.0,0.0,Lapped,0.699448,2.797792
+2024,United States,OCO,Alpine,12.0,18.0,0.0,Lapped,0.699448,2.098344
+2024,United States,ZHO,Kick Sauber,18.0,19.0,0.0,Lapped,0.699448,1.398896
+2024,United States,HAM,Mercedes,17.0,20.0,0.0,Retired,0.699448,0.699448
+2024,Mexico,SAI,Ferrari,1.0,1.0,25.0,Finished,0.562857,11.257140000000001
+2024,Mexico,NOR,McLaren,3.0,2.0,18.0,Finished,0.562857,10.694283
+2024,Mexico,LEC,Ferrari,4.0,3.0,16.0,Finished,0.562857,10.131426000000001
+2024,Mexico,HAM,Mercedes,6.0,4.0,12.0,Finished,0.562857,9.568569
+2024,Mexico,RUS,Mercedes,5.0,5.0,10.0,Finished,0.562857,9.005712
+2024,Mexico,VER,Red Bull Racing,2.0,6.0,8.0,Finished,0.562857,8.442855000000002
+2024,Mexico,MAG,Haas F1 Team,7.0,7.0,6.0,Finished,0.562857,7.8799980000000005
+2024,Mexico,PIA,McLaren,17.0,8.0,4.0,Finished,0.562857,7.317141
+2024,Mexico,HUL,Haas F1 Team,10.0,9.0,2.0,Lapped,0.562857,6.754284
+2024,Mexico,GAS,Alpine,8.0,10.0,1.0,Lapped,0.562857,6.191427000000001
+2024,Mexico,STR,Aston Martin,14.0,11.0,0.0,Lapped,0.562857,5.628570000000001
+2024,Mexico,COL,Williams,16.0,12.0,0.0,Lapped,0.562857,5.065713000000001
+2024,Mexico,OCO,Alpine,20.0,13.0,0.0,Lapped,0.562857,4.502856
+2024,Mexico,BOT,Kick Sauber,15.0,14.0,0.0,Lapped,0.562857,3.9399990000000003
+2024,Mexico,ZHO,Kick Sauber,19.0,15.0,0.0,Lapped,0.562857,3.377142
+2024,Mexico,LAW,RB,12.0,16.0,0.0,Lapped,0.562857,2.8142850000000004
+2024,Mexico,PER,Red Bull Racing,18.0,17.0,0.0,Lapped,0.562857,2.251428
+2024,Mexico,ALO,Aston Martin,13.0,18.0,0.0,Retired,0.562857,1.688571
+2024,Mexico,ALB,Williams,9.0,19.0,0.0,Retired,0.562857,1.125714
+2024,Mexico,TSU,RB,11.0,20.0,0.0,Retired,0.562857,0.562857
+2024,Brazil,VER,Red Bull Racing,17.0,1.0,26.0,Finished,0.710713,14.214260000000001
+2024,Brazil,OCO,Alpine,4.0,2.0,18.0,Finished,0.710713,13.503547000000001
+2024,Brazil,GAS,Alpine,13.0,3.0,15.0,Finished,0.710713,12.792834000000001
+2024,Brazil,RUS,Mercedes,2.0,4.0,12.0,Finished,0.710713,12.082121
+2024,Brazil,LEC,Ferrari,6.0,5.0,10.0,Finished,0.710713,11.371408
+2024,Brazil,NOR,McLaren,1.0,6.0,8.0,Finished,0.710713,10.660695
+2024,Brazil,TSU,RB,3.0,7.0,6.0,Finished,0.710713,9.949982
+2024,Brazil,PIA,McLaren,8.0,8.0,4.0,Finished,0.710713,9.239269
+2024,Brazil,LAW,RB,5.0,9.0,2.0,Finished,0.710713,8.528556
+2024,Brazil,HAM,Mercedes,14.0,10.0,1.0,Finished,0.710713,7.817843000000001
+2024,Brazil,PER,Red Bull Racing,12.0,11.0,0.0,Finished,0.710713,7.107130000000001
+2024,Brazil,BEA,Haas F1 Team,15.0,12.0,0.0,Finished,0.710713,6.3964170000000005
+2024,Brazil,BOT,Kick Sauber,11.0,13.0,0.0,Finished,0.710713,5.685704
+2024,Brazil,ALO,Aston Martin,9.0,14.0,0.0,Finished,0.710713,4.974991
+2024,Brazil,ZHO,Kick Sauber,19.0,15.0,0.0,Finished,0.710713,4.264278
+2024,Brazil,SAI,Ferrari,20.0,16.0,0.0,Retired,0.710713,3.5535650000000003
+2024,Brazil,COL,Williams,16.0,17.0,0.0,Retired,0.710713,2.842852
+2024,Brazil,ALB,Williams,7.0,18.0,0.0,Did not start,0.710713,2.132139
+2024,Brazil,STR,Aston Martin,10.0,19.0,0.0,Did not start,0.710713,1.421426
+2024,Brazil,HUL,Haas F1 Team,18.0,20.0,0.0,Disqualified,0.710713,0.710713
+2024,Las Vegas,RUS,Mercedes,1.0,1.0,25.0,Finished,0.780231,15.60462
+2024,Las Vegas,HAM,Mercedes,10.0,2.0,18.0,Finished,0.780231,14.824389
+2024,Las Vegas,SAI,Ferrari,2.0,3.0,15.0,Finished,0.780231,14.044158
+2024,Las Vegas,LEC,Ferrari,4.0,4.0,12.0,Finished,0.780231,13.263927
+2024,Las Vegas,VER,Red Bull Racing,5.0,5.0,10.0,Finished,0.780231,12.483696
+2024,Las Vegas,NOR,McLaren,6.0,6.0,9.0,Finished,0.780231,11.703465
+2024,Las Vegas,PIA,McLaren,8.0,7.0,6.0,Finished,0.780231,10.923234
+2024,Las Vegas,HUL,Haas F1 Team,9.0,8.0,4.0,Finished,0.780231,10.143003
+2024,Las Vegas,TSU,RB,7.0,9.0,2.0,Finished,0.780231,9.362772
+2024,Las Vegas,PER,Red Bull Racing,15.0,10.0,1.0,Finished,0.780231,8.582541
+2024,Las Vegas,ALO,Aston Martin,16.0,11.0,0.0,Finished,0.780231,7.80231
+2024,Las Vegas,MAG,Haas F1 Team,12.0,12.0,0.0,Finished,0.780231,7.022079
+2024,Las Vegas,ZHO,Kick Sauber,13.0,13.0,0.0,Finished,0.780231,6.241848
+2024,Las Vegas,COL,Williams,20.0,14.0,0.0,Finished,0.780231,5.461617
+2024,Las Vegas,STR,Aston Martin,18.0,15.0,0.0,Finished,0.780231,4.681386
+2024,Las Vegas,LAW,RB,14.0,16.0,0.0,Finished,0.780231,3.901155
+2024,Las Vegas,OCO,Alpine,11.0,17.0,0.0,Lapped,0.780231,3.120924
+2024,Las Vegas,BOT,Kick Sauber,19.0,18.0,0.0,Lapped,0.780231,2.340693
+2024,Las Vegas,ALB,Williams,17.0,19.0,0.0,Retired,0.780231,1.560462
+2024,Las Vegas,GAS,Alpine,3.0,20.0,0.0,Retired,0.780231,0.780231
+2024,Qatar,VER,Red Bull Racing,2.0,1.0,25.0,Finished,0.713642,14.27284
+2024,Qatar,LEC,Ferrari,5.0,2.0,18.0,Finished,0.713642,13.559198
+2024,Qatar,PIA,McLaren,4.0,3.0,15.0,Finished,0.713642,12.845556
+2024,Qatar,RUS,Mercedes,1.0,4.0,12.0,Finished,0.713642,12.131914
+2024,Qatar,GAS,Alpine,11.0,5.0,10.0,Finished,0.713642,11.418272
+2024,Qatar,SAI,Ferrari,7.0,6.0,8.0,Finished,0.713642,10.70463
+2024,Qatar,ALO,Aston Martin,8.0,7.0,6.0,Finished,0.713642,9.990988
+2024,Qatar,ZHO,Kick Sauber,12.0,8.0,4.0,Finished,0.713642,9.277346
+2024,Qatar,MAG,Haas F1 Team,10.0,9.0,2.0,Finished,0.713642,8.563704
+2024,Qatar,NOR,McLaren,3.0,10.0,2.0,Finished,0.713642,7.850062
+2024,Qatar,BOT,Kick Sauber,13.0,11.0,0.0,Finished,0.713642,7.13642
+2024,Qatar,HAM,Mercedes,6.0,12.0,0.0,Finished,0.713642,6.422778
+2024,Qatar,TSU,RB,14.0,13.0,0.0,Finished,0.713642,5.709136
+2024,Qatar,LAW,RB,17.0,14.0,0.0,Finished,0.713642,4.995494
+2024,Qatar,ALB,Williams,16.0,15.0,0.0,Lapped,0.713642,4.281852
+2024,Qatar,HUL,Haas F1 Team,18.0,16.0,0.0,Retired,0.713642,3.56821
+2024,Qatar,PER,Red Bull Racing,9.0,17.0,0.0,Retired,0.713642,2.854568
+2024,Qatar,STR,Aston Martin,15.0,18.0,0.0,Retired,0.713642,2.140926
+2024,Qatar,COL,Williams,19.0,19.0,0.0,Retired,0.713642,1.427284
+2024,Qatar,OCO,Alpine,20.0,20.0,0.0,Retired,0.713642,0.713642
+2024,Abu Dhabi,NOR,McLaren,1.0,1.0,25.0,Finished,1.0,20.0
+2024,Abu Dhabi,SAI,Ferrari,3.0,2.0,18.0,Finished,1.0,19.0
+2024,Abu Dhabi,LEC,Ferrari,19.0,3.0,15.0,Finished,1.0,18.0
+2024,Abu Dhabi,HAM,Mercedes,16.0,4.0,12.0,Finished,1.0,17.0
+2024,Abu Dhabi,RUS,Mercedes,6.0,5.0,10.0,Finished,1.0,16.0
+2024,Abu Dhabi,VER,Red Bull Racing,4.0,6.0,8.0,Finished,1.0,15.0
+2024,Abu Dhabi,GAS,Alpine,5.0,7.0,6.0,Finished,1.0,14.0
+2024,Abu Dhabi,HUL,Haas F1 Team,7.0,8.0,4.0,Finished,1.0,13.0
+2024,Abu Dhabi,ALO,Aston Martin,8.0,9.0,2.0,Finished,1.0,12.0
+2024,Abu Dhabi,PIA,McLaren,2.0,10.0,1.0,Finished,1.0,11.0
+2024,Abu Dhabi,ALB,Williams,18.0,11.0,0.0,Lapped,1.0,10.0
+2024,Abu Dhabi,TSU,RB,11.0,12.0,0.0,Lapped,1.0,9.0
+2024,Abu Dhabi,ZHO,Kick Sauber,15.0,13.0,0.0,Lapped,1.0,8.0
+2024,Abu Dhabi,STR,Aston Martin,13.0,14.0,0.0,Lapped,1.0,7.0
+2024,Abu Dhabi,DOO,Alpine,17.0,15.0,0.0,Lapped,1.0,6.0
+2024,Abu Dhabi,MAG,Haas F1 Team,14.0,16.0,0.0,Lapped,1.0,5.0
+2024,Abu Dhabi,LAW,RB,12.0,17.0,0.0,Retired,1.0,4.0
+2024,Abu Dhabi,BOT,Kick Sauber,9.0,18.0,0.0,Retired,1.0,3.0
+2024,Abu Dhabi,COL,Williams,20.0,19.0,0.0,Retired,1.0,2.0
+2024,Abu Dhabi,PER,Red Bull Racing,10.0,20.0,0.0,Retired,1.0,1.0
+2025,Bahrain,PIA,McLaren,1.0,1.0,25.0,Finished,0.652141,13.042819999999999
+2025,Bahrain,RUS,Mercedes,3.0,2.0,18.0,Finished,0.652141,12.390678999999999
+2025,Bahrain,NOR,McLaren,6.0,3.0,15.0,Finished,0.652141,11.738538
+2025,Bahrain,LEC,Ferrari,2.0,4.0,12.0,Finished,0.652141,11.086397
+2025,Bahrain,HAM,Ferrari,9.0,5.0,10.0,Finished,0.652141,10.434256
+2025,Bahrain,VER,Red Bull Racing,7.0,6.0,8.0,Finished,0.652141,9.782115
+2025,Bahrain,GAS,Alpine,4.0,7.0,6.0,Finished,0.652141,9.129973999999999
+2025,Bahrain,OCO,Haas F1 Team,14.0,8.0,4.0,Finished,0.652141,8.477833
+2025,Bahrain,TSU,Red Bull Racing,10.0,9.0,2.0,Finished,0.652141,7.825692
+2025,Bahrain,BEA,Haas F1 Team,20.0,10.0,1.0,Finished,0.652141,7.173551
+2025,Bahrain,ANT,Mercedes,5.0,11.0,0.0,Finished,0.652141,6.5214099999999995
+2025,Bahrain,ALB,Williams,15.0,12.0,0.0,Finished,0.652141,5.869269
+2025,Bahrain,HAD,Racing Bulls,12.0,13.0,0.0,Finished,0.652141,5.217128
+2025,Bahrain,DOO,Alpine,11.0,14.0,0.0,Finished,0.652141,4.5649869999999995
+2025,Bahrain,ALO,Aston Martin,13.0,15.0,0.0,Finished,0.652141,3.912846
+2025,Bahrain,LAW,Racing Bulls,17.0,16.0,0.0,Finished,0.652141,3.2607049999999997
+2025,Bahrain,STR,Aston Martin,19.0,17.0,0.0,Finished,0.652141,2.608564
+2025,Bahrain,BOR,Kick Sauber,18.0,18.0,0.0,Finished,0.652141,1.956423
+2025,Bahrain,SAI,Williams,8.0,19.0,0.0,Retired,0.652141,1.304282
+2025,Bahrain,HUL,Kick Sauber,16.0,20.0,0.0,Disqualified,0.652141,0.652141
+2025,Saudi Arabia,PIA,McLaren,2.0,1.0,25.0,Finished,0.65545,13.109
+2025,Saudi Arabia,VER,Red Bull Racing,1.0,2.0,18.0,Finished,0.65545,12.45355
+2025,Saudi Arabia,LEC,Ferrari,4.0,3.0,15.0,Finished,0.65545,11.7981
+2025,Saudi Arabia,NOR,McLaren,10.0,4.0,12.0,Finished,0.65545,11.14265
+2025,Saudi Arabia,RUS,Mercedes,3.0,5.0,10.0,Finished,0.65545,10.4872
+2025,Saudi Arabia,ANT,Mercedes,5.0,6.0,8.0,Finished,0.65545,9.83175
+2025,Saudi Arabia,HAM,Ferrari,7.0,7.0,6.0,Finished,0.65545,9.1763
+2025,Saudi Arabia,SAI,Williams,6.0,8.0,4.0,Finished,0.65545,8.52085
+2025,Saudi Arabia,ALB,Williams,11.0,9.0,2.0,Finished,0.65545,7.865399999999999
+2025,Saudi Arabia,HAD,Racing Bulls,14.0,10.0,1.0,Finished,0.65545,7.20995
+2025,Saudi Arabia,ALO,Aston Martin,13.0,11.0,0.0,Finished,0.65545,6.5545
+2025,Saudi Arabia,LAW,Racing Bulls,12.0,12.0,0.0,Finished,0.65545,5.89905
+2025,Saudi Arabia,BEA,Haas F1 Team,15.0,13.0,0.0,Finished,0.65545,5.2436
+2025,Saudi Arabia,OCO,Haas F1 Team,19.0,14.0,0.0,Finished,0.65545,4.58815
+2025,Saudi Arabia,HUL,Kick Sauber,18.0,15.0,0.0,Lapped,0.65545,3.9326999999999996
+2025,Saudi Arabia,STR,Aston Martin,16.0,16.0,0.0,Lapped,0.65545,3.27725
+2025,Saudi Arabia,DOO,Alpine,17.0,17.0,0.0,Lapped,0.65545,2.6218
+2025,Saudi Arabia,BOR,Kick Sauber,20.0,18.0,0.0,Lapped,0.65545,1.9663499999999998
+2025,Saudi Arabia,TSU,Red Bull Racing,8.0,19.0,0.0,Retired,0.65545,1.3109
+2025,Saudi Arabia,GAS,Alpine,9.0,20.0,0.0,Retired,0.65545,0.65545
+2025,Australia,NOR,McLaren,1.0,1.0,25.0,Finished,0.692756,13.855120000000001
+2025,Australia,VER,Red Bull Racing,3.0,2.0,18.0,Finished,0.692756,13.162364
+2025,Australia,RUS,Mercedes,4.0,3.0,15.0,Finished,0.692756,12.469608000000001
+2025,Australia,ANT,Mercedes,16.0,4.0,12.0,Finished,0.692756,11.776852
+2025,Australia,ALB,Williams,6.0,5.0,10.0,Finished,0.692756,11.084096
+2025,Australia,STR,Aston Martin,13.0,6.0,8.0,Finished,0.692756,10.391340000000001
+2025,Australia,HUL,Kick Sauber,17.0,7.0,6.0,Finished,0.692756,9.698584
+2025,Australia,LEC,Ferrari,7.0,8.0,4.0,Finished,0.692756,9.005828000000001
+2025,Australia,PIA,McLaren,2.0,9.0,2.0,Finished,0.692756,8.313072
+2025,Australia,HAM,Ferrari,8.0,10.0,1.0,Finished,0.692756,7.620316000000001
+2025,Australia,GAS,Alpine,9.0,11.0,0.0,Finished,0.692756,6.927560000000001
+2025,Australia,TSU,Racing Bulls,5.0,12.0,0.0,Finished,0.692756,6.2348040000000005
+2025,Australia,OCO,Haas F1 Team,19.0,13.0,0.0,Finished,0.692756,5.542048
+2025,Australia,BEA,Haas F1 Team,20.0,14.0,0.0,Finished,0.692756,4.849292
+2025,Australia,LAW,Red Bull Racing,18.0,15.0,0.0,Retired,0.692756,4.156536
+2025,Australia,BOR,Kick Sauber,15.0,16.0,0.0,Retired,0.692756,3.4637800000000003
+2025,Australia,ALO,Aston Martin,12.0,17.0,0.0,Retired,0.692756,2.771024
+2025,Australia,SAI,Williams,10.0,18.0,0.0,Retired,0.692756,2.078268
+2025,Australia,DOO,Alpine,14.0,19.0,0.0,Retired,0.692756,1.385512
+2025,Australia,HAD,Racing Bulls,11.0,20.0,0.0,Retired,0.692756,0.692756
+2025,Japan,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.623925,12.478499999999999
+2025,Japan,NOR,McLaren,2.0,2.0,18.0,Finished,0.623925,11.854574999999999
+2025,Japan,PIA,McLaren,3.0,3.0,15.0,Finished,0.623925,11.230649999999999
+2025,Japan,LEC,Ferrari,4.0,4.0,12.0,Finished,0.623925,10.606724999999999
+2025,Japan,RUS,Mercedes,5.0,5.0,10.0,Finished,0.623925,9.9828
+2025,Japan,ANT,Mercedes,6.0,6.0,8.0,Finished,0.623925,9.358875
+2025,Japan,HAM,Ferrari,8.0,7.0,6.0,Finished,0.623925,8.73495
+2025,Japan,HAD,Racing Bulls,7.0,8.0,4.0,Finished,0.623925,8.111025
+2025,Japan,ALB,Williams,9.0,9.0,2.0,Finished,0.623925,7.4871
+2025,Japan,BEA,Haas F1 Team,10.0,10.0,1.0,Finished,0.623925,6.863174999999999
+2025,Japan,ALO,Aston Martin,12.0,11.0,0.0,Finished,0.623925,6.239249999999999
+2025,Japan,TSU,Red Bull Racing,14.0,12.0,0.0,Finished,0.623925,5.6153249999999995
+2025,Japan,GAS,Alpine,11.0,13.0,0.0,Finished,0.623925,4.9914
+2025,Japan,SAI,Williams,15.0,14.0,0.0,Finished,0.623925,4.367475
+2025,Japan,DOO,Alpine,19.0,15.0,0.0,Finished,0.623925,3.74355
+2025,Japan,HUL,Kick Sauber,16.0,16.0,0.0,Finished,0.623925,3.1196249999999996
+2025,Japan,LAW,Racing Bulls,13.0,17.0,0.0,Finished,0.623925,2.4957
+2025,Japan,OCO,Haas F1 Team,18.0,18.0,0.0,Finished,0.623925,1.871775
+2025,Japan,BOR,Kick Sauber,17.0,19.0,0.0,Finished,0.623925,1.24785
+2025,Japan,STR,Aston Martin,20.0,20.0,0.0,Lapped,0.623925,0.623925
+2025,China,PIA,McLaren,1.0,1.0,25.0,Finished,0.737874,14.757480000000001
+2025,China,NOR,McLaren,3.0,2.0,18.0,Finished,0.737874,14.019606000000001
+2025,China,RUS,Mercedes,2.0,3.0,15.0,Finished,0.737874,13.281732
+2025,China,VER,Red Bull Racing,4.0,4.0,12.0,Finished,0.737874,12.543858
+2025,China,OCO,Haas F1 Team,11.0,5.0,10.0,Finished,0.737874,11.805984
+2025,China,ANT,Mercedes,8.0,6.0,8.0,Finished,0.737874,11.06811
+2025,China,ALB,Williams,10.0,7.0,6.0,Finished,0.737874,10.330236000000001
+2025,China,BEA,Haas F1 Team,17.0,8.0,4.0,Finished,0.737874,9.592362
+2025,China,STR,Aston Martin,14.0,9.0,2.0,Finished,0.737874,8.854488
+2025,China,SAI,Williams,15.0,10.0,1.0,Finished,0.737874,8.116614
+2025,China,HAD,Racing Bulls,7.0,11.0,0.0,Finished,0.737874,7.3787400000000005
+2025,China,LAW,Red Bull Racing,20.0,12.0,0.0,Finished,0.737874,6.640866
+2025,China,DOO,Alpine,18.0,13.0,0.0,Finished,0.737874,5.902992
+2025,China,BOR,Kick Sauber,19.0,14.0,0.0,Lapped,0.737874,5.1651180000000005
+2025,China,HUL,Kick Sauber,12.0,15.0,0.0,Lapped,0.737874,4.427244
+2025,China,TSU,Racing Bulls,9.0,16.0,0.0,Lapped,0.737874,3.6893700000000003
+2025,China,ALO,Aston Martin,13.0,17.0,0.0,Retired,0.737874,2.951496
+2025,China,LEC,Ferrari,6.0,18.0,0.0,Disqualified,0.737874,2.213622
+2025,China,HAM,Ferrari,5.0,19.0,0.0,Disqualified,0.737874,1.475748
+2025,China,GAS,Alpine,16.0,20.0,0.0,Disqualified,0.737874,0.737874
+2025,Miami,PIA,McLaren,4.0,1.0,25.0,Finished,0.710065,14.2013
+2025,Miami,NOR,McLaren,2.0,2.0,18.0,Finished,0.710065,13.491235
+2025,Miami,RUS,Mercedes,5.0,3.0,15.0,Finished,0.710065,12.78117
+2025,Miami,VER,Red Bull Racing,1.0,4.0,12.0,Finished,0.710065,12.071105
+2025,Miami,ALB,Williams,7.0,5.0,10.0,Finished,0.710065,11.36104
+2025,Miami,ANT,Mercedes,3.0,6.0,8.0,Finished,0.710065,10.650974999999999
+2025,Miami,LEC,Ferrari,8.0,7.0,6.0,Finished,0.710065,9.940909999999999
+2025,Miami,HAM,Ferrari,12.0,8.0,4.0,Finished,0.710065,9.230844999999999
+2025,Miami,SAI,Williams,6.0,9.0,2.0,Finished,0.710065,8.520779999999998
+2025,Miami,TSU,Red Bull Racing,10.0,10.0,1.0,Finished,0.710065,7.810714999999999
+2025,Miami,HAD,Racing Bulls,11.0,11.0,0.0,Finished,0.710065,7.10065
+2025,Miami,OCO,Haas F1 Team,9.0,12.0,0.0,Finished,0.710065,6.390585
+2025,Miami,GAS,Alpine,20.0,13.0,0.0,Finished,0.710065,5.68052
+2025,Miami,HUL,Kick Sauber,16.0,14.0,0.0,Lapped,0.710065,4.970454999999999
+2025,Miami,ALO,Aston Martin,17.0,15.0,0.0,Lapped,0.710065,4.260389999999999
+2025,Miami,STR,Aston Martin,18.0,16.0,0.0,Lapped,0.710065,3.550325
+2025,Miami,LAW,Racing Bulls,15.0,17.0,0.0,Retired,0.710065,2.84026
+2025,Miami,BOR,Kick Sauber,13.0,18.0,0.0,Retired,0.710065,2.1301949999999996
+2025,Miami,BEA,Haas F1 Team,19.0,19.0,0.0,Retired,0.710065,1.42013
+2025,Miami,DOO,Alpine,14.0,20.0,0.0,Retired,0.710065,0.710065
+2025,Emilia-Romagna,VER,Red Bull Racing,2.0,1.0,25.0,Finished,0.924791,18.495820000000002
+2025,Emilia-Romagna,NOR,McLaren,4.0,2.0,18.0,Finished,0.924791,17.571029
+2025,Emilia-Romagna,PIA,McLaren,1.0,3.0,15.0,Finished,0.924791,16.646238
+2025,Emilia-Romagna,HAM,Ferrari,12.0,4.0,12.0,Finished,0.924791,15.721447000000001
+2025,Emilia-Romagna,ALB,Williams,7.0,5.0,10.0,Finished,0.924791,14.796656
+2025,Emilia-Romagna,LEC,Ferrari,11.0,6.0,8.0,Finished,0.924791,13.871865
+2025,Emilia-Romagna,RUS,Mercedes,3.0,7.0,6.0,Finished,0.924791,12.947074
+2025,Emilia-Romagna,SAI,Williams,6.0,8.0,4.0,Finished,0.924791,12.022283
+2025,Emilia-Romagna,HAD,Racing Bulls,9.0,9.0,2.0,Finished,0.924791,11.097492
+2025,Emilia-Romagna,TSU,Red Bull Racing,20.0,10.0,1.0,Finished,0.924791,10.172701
+2025,Emilia-Romagna,ALO,Aston Martin,5.0,11.0,0.0,Finished,0.924791,9.247910000000001
+2025,Emilia-Romagna,HUL,Kick Sauber,17.0,12.0,0.0,Finished,0.924791,8.323119
+2025,Emilia-Romagna,GAS,Alpine,10.0,13.0,0.0,Finished,0.924791,7.398328
+2025,Emilia-Romagna,LAW,Racing Bulls,15.0,14.0,0.0,Finished,0.924791,6.473537
+2025,Emilia-Romagna,STR,Aston Martin,8.0,15.0,0.0,Finished,0.924791,5.548746
+2025,Emilia-Romagna,COL,Alpine,16.0,16.0,0.0,Finished,0.924791,4.6239550000000005
+2025,Emilia-Romagna,BEA,Haas F1 Team,19.0,17.0,0.0,Finished,0.924791,3.699164
+2025,Emilia-Romagna,BOR,Kick Sauber,14.0,18.0,0.0,Finished,0.924791,2.774373
+2025,Emilia-Romagna,ANT,Mercedes,13.0,19.0,0.0,Retired,0.924791,1.849582
+2025,Emilia-Romagna,OCO,Haas F1 Team,18.0,20.0,0.0,Retired,0.924791,0.924791
+2025,Monaco,NOR,McLaren,1.0,1.0,25.0,Finished,0.449348,8.98696
+2025,Monaco,LEC,Ferrari,2.0,2.0,18.0,Finished,0.449348,8.537612000000001
+2025,Monaco,PIA,McLaren,3.0,3.0,15.0,Finished,0.449348,8.088264
+2025,Monaco,VER,Red Bull Racing,4.0,4.0,12.0,Finished,0.449348,7.638916
+2025,Monaco,HAM,Ferrari,7.0,5.0,10.0,Finished,0.449348,7.189568
+2025,Monaco,HAD,Racing Bulls,5.0,6.0,8.0,Lapped,0.449348,6.740220000000001
+2025,Monaco,OCO,Haas F1 Team,8.0,7.0,6.0,Lapped,0.449348,6.290872
+2025,Monaco,LAW,Racing Bulls,9.0,8.0,4.0,Lapped,0.449348,5.841524000000001
+2025,Monaco,ALB,Williams,10.0,9.0,2.0,Lapped,0.449348,5.392176
+2025,Monaco,SAI,Williams,11.0,10.0,1.0,Lapped,0.449348,4.942828
+2025,Monaco,RUS,Mercedes,14.0,11.0,0.0,Lapped,0.449348,4.49348
+2025,Monaco,BEA,Haas F1 Team,20.0,12.0,0.0,Lapped,0.449348,4.044132
+2025,Monaco,COL,Alpine,18.0,13.0,0.0,Lapped,0.449348,3.594784
+2025,Monaco,BOR,Kick Sauber,16.0,14.0,0.0,Lapped,0.449348,3.145436
+2025,Monaco,STR,Aston Martin,19.0,15.0,0.0,Lapped,0.449348,2.696088
+2025,Monaco,HUL,Kick Sauber,13.0,16.0,0.0,Lapped,0.449348,2.24674
+2025,Monaco,TSU,Red Bull Racing,12.0,17.0,0.0,Lapped,0.449348,1.797392
+2025,Monaco,ANT,Mercedes,15.0,18.0,0.0,Lapped,0.449348,1.348044
+2025,Monaco,ALO,Aston Martin,6.0,19.0,0.0,Retired,0.449348,0.898696
+2025,Monaco,GAS,Alpine,17.0,20.0,0.0,Retired,0.449348,0.449348
+2025,Canada,RUS,Mercedes,1.0,1.0,25.0,Finished,0.671013,13.420259999999999
+2025,Canada,VER,Red Bull Racing,2.0,2.0,18.0,Finished,0.671013,12.749246999999999
+2025,Canada,ANT,Mercedes,4.0,3.0,15.0,Finished,0.671013,12.078234
+2025,Canada,PIA,McLaren,3.0,4.0,12.0,Finished,0.671013,11.407221
+2025,Canada,LEC,Ferrari,8.0,5.0,10.0,Finished,0.671013,10.736208
+2025,Canada,HAM,Ferrari,5.0,6.0,8.0,Finished,0.671013,10.065195
+2025,Canada,ALO,Aston Martin,6.0,7.0,6.0,Finished,0.671013,9.394181999999999
+2025,Canada,HUL,Kick Sauber,11.0,8.0,4.0,Finished,0.671013,8.723169
+2025,Canada,OCO,Haas F1 Team,14.0,9.0,2.0,Lapped,0.671013,8.052156
+2025,Canada,SAI,Williams,16.0,10.0,1.0,Lapped,0.671013,7.381143
+2025,Canada,BEA,Haas F1 Team,13.0,11.0,0.0,Lapped,0.671013,6.7101299999999995
+2025,Canada,TSU,Red Bull Racing,18.0,12.0,0.0,Lapped,0.671013,6.039117
+2025,Canada,COL,Alpine,10.0,13.0,0.0,Lapped,0.671013,5.368104
+2025,Canada,BOR,Kick Sauber,15.0,14.0,0.0,Lapped,0.671013,4.6970909999999995
+2025,Canada,GAS,Alpine,20.0,15.0,0.0,Lapped,0.671013,4.026078
+2025,Canada,HAD,Racing Bulls,12.0,16.0,0.0,Lapped,0.671013,3.3550649999999997
+2025,Canada,STR,Aston Martin,17.0,17.0,0.0,Lapped,0.671013,2.684052
+2025,Canada,NOR,McLaren,7.0,18.0,0.0,Retired,0.671013,2.013039
+2025,Canada,LAW,Racing Bulls,19.0,19.0,0.0,Retired,0.671013,1.342026
+2025,Canada,ALB,Williams,9.0,20.0,0.0,Retired,0.671013,0.671013
+2025,Spain,PIA,McLaren,1.0,1.0,25.0,Finished,0.833175,16.6635
+2025,Spain,NOR,McLaren,2.0,2.0,18.0,Finished,0.833175,15.830325
+2025,Spain,LEC,Ferrari,7.0,3.0,15.0,Finished,0.833175,14.99715
+2025,Spain,RUS,Mercedes,4.0,4.0,12.0,Finished,0.833175,14.163975
+2025,Spain,HUL,Kick Sauber,15.0,5.0,10.0,Finished,0.833175,13.3308
+2025,Spain,HAM,Ferrari,5.0,6.0,8.0,Finished,0.833175,12.497625
+2025,Spain,HAD,Racing Bulls,9.0,7.0,6.0,Finished,0.833175,11.66445
+2025,Spain,GAS,Alpine,8.0,8.0,4.0,Finished,0.833175,10.831275
+2025,Spain,ALO,Aston Martin,10.0,9.0,2.0,Finished,0.833175,9.9981
+2025,Spain,VER,Red Bull Racing,3.0,10.0,1.0,Finished,0.833175,9.164925
+2025,Spain,LAW,Racing Bulls,13.0,11.0,0.0,Finished,0.833175,8.33175
+2025,Spain,BOR,Kick Sauber,12.0,12.0,0.0,Finished,0.833175,7.498575
+2025,Spain,TSU,Red Bull Racing,19.0,13.0,0.0,Finished,0.833175,6.6654
+2025,Spain,SAI,Williams,17.0,14.0,0.0,Finished,0.833175,5.832225
+2025,Spain,COL,Alpine,18.0,15.0,0.0,Finished,0.833175,4.99905
+2025,Spain,OCO,Haas F1 Team,16.0,16.0,0.0,Finished,0.833175,4.165875
+2025,Spain,BEA,Haas F1 Team,14.0,17.0,0.0,Finished,0.833175,3.3327
+2025,Spain,ANT,Mercedes,6.0,18.0,0.0,Retired,0.833175,2.499525
+2025,Spain,ALB,Williams,11.0,19.0,0.0,Retired,0.833175,1.66635
+2025,Austria,NOR,McLaren,1.0,1.0,25.0,Finished,0.804746,16.09492
+2025,Austria,PIA,McLaren,3.0,2.0,18.0,Finished,0.804746,15.290173999999999
+2025,Austria,LEC,Ferrari,2.0,3.0,15.0,Finished,0.804746,14.485427999999999
+2025,Austria,HAM,Ferrari,4.0,4.0,12.0,Finished,0.804746,13.680682
+2025,Austria,RUS,Mercedes,5.0,5.0,10.0,Finished,0.804746,12.875936
+2025,Austria,LAW,Racing Bulls,6.0,6.0,8.0,Finished,0.804746,12.07119
+2025,Austria,ALO,Aston Martin,11.0,7.0,6.0,Lapped,0.804746,11.266444
+2025,Austria,BOR,Kick Sauber,8.0,8.0,4.0,Lapped,0.804746,10.461698
+2025,Austria,HUL,Kick Sauber,20.0,9.0,2.0,Lapped,0.804746,9.656952
+2025,Austria,OCO,Haas F1 Team,17.0,10.0,1.0,Lapped,0.804746,8.852205999999999
+2025,Austria,BEA,Haas F1 Team,15.0,11.0,0.0,Lapped,0.804746,8.04746
+2025,Austria,HAD,Racing Bulls,13.0,12.0,0.0,Lapped,0.804746,7.242713999999999
+2025,Austria,GAS,Alpine,10.0,13.0,0.0,Lapped,0.804746,6.437968
+2025,Austria,STR,Aston Martin,16.0,14.0,0.0,Lapped,0.804746,5.633222
+2025,Austria,COL,Alpine,14.0,15.0,0.0,Lapped,0.804746,4.828476
+2025,Austria,TSU,Red Bull Racing,18.0,16.0,0.0,Lapped,0.804746,4.02373
+2025,Austria,ALB,Williams,12.0,17.0,0.0,Retired,0.804746,3.218984
+2025,Austria,VER,Red Bull Racing,7.0,18.0,0.0,Retired,0.804746,2.414238
+2025,Austria,ANT,Mercedes,9.0,19.0,0.0,Retired,0.804746,1.609492
+2025,Austria,SAI,Williams,19.0,20.0,0.0,Did not start,0.804746,0.804746
+2025,Great Britain,NOR,McLaren,1.0,1.0,25.0,Finished,0.804746,16.09492
+2025,Great Britain,PIA,McLaren,3.0,2.0,18.0,Finished,0.804746,15.290173999999999
+2025,Great Britain,LEC,Ferrari,2.0,3.0,15.0,Finished,0.804746,14.485427999999999
+2025,Great Britain,HAM,Ferrari,4.0,4.0,12.0,Finished,0.804746,13.680682
+2025,Great Britain,RUS,Mercedes,5.0,5.0,10.0,Finished,0.804746,12.875936
+2025,Great Britain,LAW,Racing Bulls,6.0,6.0,8.0,Finished,0.804746,12.07119
+2025,Great Britain,ALO,Aston Martin,11.0,7.0,6.0,Lapped,0.804746,11.266444
+2025,Great Britain,BOR,Kick Sauber,8.0,8.0,4.0,Lapped,0.804746,10.461698
+2025,Great Britain,HUL,Kick Sauber,20.0,9.0,2.0,Lapped,0.804746,9.656952
+2025,Great Britain,OCO,Haas F1 Team,17.0,10.0,1.0,Lapped,0.804746,8.852205999999999
+2025,Great Britain,BEA,Haas F1 Team,15.0,11.0,0.0,Lapped,0.804746,8.04746
+2025,Great Britain,HAD,Racing Bulls,13.0,12.0,0.0,Lapped,0.804746,7.242713999999999
+2025,Great Britain,GAS,Alpine,10.0,13.0,0.0,Lapped,0.804746,6.437968
+2025,Great Britain,STR,Aston Martin,16.0,14.0,0.0,Lapped,0.804746,5.633222
+2025,Great Britain,COL,Alpine,14.0,15.0,0.0,Lapped,0.804746,4.828476
+2025,Great Britain,TSU,Red Bull Racing,18.0,16.0,0.0,Lapped,0.804746,4.02373
+2025,Great Britain,ALB,Williams,12.0,17.0,0.0,Retired,0.804746,3.218984
+2025,Great Britain,VER,Red Bull Racing,7.0,18.0,0.0,Retired,0.804746,2.414238
+2025,Great Britain,ANT,Mercedes,9.0,19.0,0.0,Retired,0.804746,1.609492
+2025,Great Britain,SAI,Williams,19.0,20.0,0.0,Did not start,0.804746,0.804746
+2025,Belgium,PIA,McLaren,2.0,1.0,25.0,Finished,0.741562,14.831240000000001
+2025,Belgium,NOR,McLaren,1.0,2.0,18.0,Finished,0.741562,14.089678000000001
+2025,Belgium,LEC,Ferrari,3.0,3.0,15.0,Finished,0.741562,13.348116000000001
+2025,Belgium,VER,Red Bull Racing,4.0,4.0,12.0,Finished,0.741562,12.606554000000001
+2025,Belgium,RUS,Mercedes,6.0,5.0,10.0,Finished,0.741562,11.864992
+2025,Belgium,ALB,Williams,5.0,6.0,8.0,Finished,0.741562,11.12343
+2025,Belgium,HAM,Ferrari,18.0,7.0,6.0,Finished,0.741562,10.381868
+2025,Belgium,LAW,Racing Bulls,9.0,8.0,4.0,Finished,0.741562,9.640306
+2025,Belgium,BOR,Kick Sauber,10.0,9.0,2.0,Finished,0.741562,8.898744
+2025,Belgium,GAS,Alpine,13.0,10.0,1.0,Finished,0.741562,8.157182
+2025,Belgium,BEA,Haas F1 Team,12.0,11.0,0.0,Finished,0.741562,7.4156200000000005
+2025,Belgium,HUL,Kick Sauber,14.0,12.0,0.0,Finished,0.741562,6.6740580000000005
+2025,Belgium,TSU,Red Bull Racing,7.0,13.0,0.0,Finished,0.741562,5.932496
+2025,Belgium,STR,Aston Martin,16.0,14.0,0.0,Finished,0.741562,5.190934
+2025,Belgium,OCO,Haas F1 Team,11.0,15.0,0.0,Finished,0.741562,4.449372
+2025,Belgium,ANT,Mercedes,19.0,16.0,0.0,Finished,0.741562,3.7078100000000003
+2025,Belgium,ALO,Aston Martin,20.0,17.0,0.0,Finished,0.741562,2.966248
+2025,Belgium,SAI,Williams,17.0,18.0,0.0,Finished,0.741562,2.224686
+2025,Belgium,COL,Alpine,15.0,19.0,0.0,Finished,0.741562,1.483124
+2025,Belgium,HAD,Racing Bulls,8.0,20.0,0.0,Lapped,0.741562,0.741562
+2025,Netherlands,PIA,McLaren,1.0,1.0,25.0,Finished,0.751072,15.021439999999998
+2025,Netherlands,VER,Red Bull Racing,3.0,2.0,18.0,Finished,0.751072,14.270368
+2025,Netherlands,HAD,Racing Bulls,4.0,3.0,15.0,Finished,0.751072,13.519295999999999
+2025,Netherlands,RUS,Mercedes,5.0,4.0,12.0,Finished,0.751072,12.768224
+2025,Netherlands,ALB,Williams,15.0,5.0,10.0,Finished,0.751072,12.017152
+2025,Netherlands,BEA,Haas F1 Team,20.0,6.0,8.0,Finished,0.751072,11.266079999999999
+2025,Netherlands,STR,Aston Martin,19.0,7.0,6.0,Finished,0.751072,10.515008
+2025,Netherlands,ALO,Aston Martin,10.0,8.0,4.0,Finished,0.751072,9.763936
+2025,Netherlands,TSU,Red Bull Racing,12.0,9.0,2.0,Finished,0.751072,9.012864
+2025,Netherlands,OCO,Haas F1 Team,18.0,10.0,1.0,Finished,0.751072,8.261792
+2025,Netherlands,COL,Alpine,16.0,11.0,0.0,Finished,0.751072,7.510719999999999
+2025,Netherlands,LAW,Racing Bulls,8.0,12.0,0.0,Finished,0.751072,6.759647999999999
+2025,Netherlands,SAI,Williams,9.0,13.0,0.0,Finished,0.751072,6.008576
+2025,Netherlands,HUL,Kick Sauber,17.0,14.0,0.0,Finished,0.751072,5.257504
+2025,Netherlands,BOR,Kick Sauber,13.0,15.0,0.0,Finished,0.751072,4.506432
+2025,Netherlands,ANT,Mercedes,11.0,16.0,0.0,Finished,0.751072,3.7553599999999996
+2025,Netherlands,GAS,Alpine,14.0,17.0,0.0,Finished,0.751072,3.004288
+2025,Netherlands,NOR,McLaren,2.0,18.0,0.0,Retired,0.751072,2.253216
+2025,Netherlands,LEC,Ferrari,6.0,19.0,0.0,Retired,0.751072,1.502144
+2025,Netherlands,HAM,Ferrari,7.0,20.0,0.0,Retired,0.751072,0.751072
+2025,Italy,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.64639,12.927800000000001
+2025,Italy,NOR,McLaren,2.0,2.0,18.0,Finished,0.64639,12.281410000000001
+2025,Italy,PIA,McLaren,3.0,3.0,15.0,Finished,0.64639,11.63502
+2025,Italy,LEC,Ferrari,4.0,4.0,12.0,Finished,0.64639,10.98863
+2025,Italy,RUS,Mercedes,5.0,5.0,10.0,Finished,0.64639,10.34224
+2025,Italy,HAM,Ferrari,10.0,6.0,8.0,Finished,0.64639,9.69585
+2025,Italy,ALB,Williams,14.0,7.0,6.0,Finished,0.64639,9.04946
+2025,Italy,BOR,Kick Sauber,7.0,8.0,4.0,Finished,0.64639,8.40307
+2025,Italy,ANT,Mercedes,6.0,9.0,2.0,Finished,0.64639,7.75668
+2025,Italy,HAD,Racing Bulls,19.0,10.0,1.0,Finished,0.64639,7.11029
+2025,Italy,SAI,Williams,13.0,11.0,0.0,Finished,0.64639,6.463900000000001
+2025,Italy,BEA,Haas F1 Team,11.0,12.0,0.0,Finished,0.64639,5.81751
+2025,Italy,TSU,Red Bull Racing,9.0,13.0,0.0,Finished,0.64639,5.17112
+2025,Italy,LAW,Racing Bulls,18.0,14.0,0.0,Finished,0.64639,4.52473
+2025,Italy,OCO,Haas F1 Team,15.0,15.0,0.0,Lapped,0.64639,3.87834
+2025,Italy,GAS,Alpine,20.0,16.0,0.0,Lapped,0.64639,3.2319500000000003
+2025,Italy,COL,Alpine,17.0,17.0,0.0,Lapped,0.64639,2.58556
+2025,Italy,STR,Aston Martin,16.0,18.0,0.0,Lapped,0.64639,1.93917
+2025,Italy,ALO,Aston Martin,8.0,19.0,0.0,Retired,0.64639,1.29278
+2025,Italy,HUL,Kick Sauber,12.0,20.0,0.0,Did not start,0.64639,0.64639
+2025,Azerbaijan,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.635056,12.70112
+2025,Azerbaijan,RUS,Mercedes,5.0,2.0,18.0,Finished,0.635056,12.066063999999999
+2025,Azerbaijan,SAI,Williams,2.0,3.0,15.0,Finished,0.635056,11.431007999999999
+2025,Azerbaijan,ANT,Mercedes,4.0,4.0,12.0,Finished,0.635056,10.795952
+2025,Azerbaijan,LAW,Racing Bulls,3.0,5.0,10.0,Finished,0.635056,10.160896
+2025,Azerbaijan,TSU,Red Bull Racing,6.0,6.0,8.0,Finished,0.635056,9.525839999999999
+2025,Azerbaijan,NOR,McLaren,7.0,7.0,6.0,Finished,0.635056,8.890784
+2025,Azerbaijan,HAM,Ferrari,12.0,8.0,4.0,Finished,0.635056,8.255728
+2025,Azerbaijan,LEC,Ferrari,10.0,9.0,2.0,Finished,0.635056,7.620671999999999
+2025,Azerbaijan,HAD,Racing Bulls,8.0,10.0,1.0,Finished,0.635056,6.985615999999999
+2025,Azerbaijan,BOR,Kick Sauber,13.0,11.0,0.0,Finished,0.635056,6.35056
+2025,Azerbaijan,BEA,Haas F1 Team,15.0,12.0,0.0,Finished,0.635056,5.715503999999999
+2025,Azerbaijan,ALB,Williams,19.0,13.0,0.0,Finished,0.635056,5.080448
+2025,Azerbaijan,OCO,Haas F1 Team,20.0,14.0,0.0,Finished,0.635056,4.445392
+2025,Azerbaijan,ALO,Aston Martin,11.0,15.0,0.0,Finished,0.635056,3.8103359999999995
+2025,Azerbaijan,HUL,Kick Sauber,17.0,16.0,0.0,Finished,0.635056,3.17528
+2025,Azerbaijan,STR,Aston Martin,14.0,17.0,0.0,Finished,0.635056,2.540224
+2025,Azerbaijan,GAS,Alpine,18.0,18.0,0.0,Lapped,0.635056,1.9051679999999998
+2025,Azerbaijan,COL,Alpine,16.0,19.0,0.0,Lapped,0.635056,1.270112
+2025,Azerbaijan,PIA,McLaren,9.0,20.0,0.0,Retired,0.635056,0.635056
+2025,Singapore,RUS,Mercedes,1.0,1.0,25.0,Finished,0.523445,10.468900000000001
+2025,Singapore,VER,Red Bull Racing,2.0,2.0,18.0,Finished,0.523445,9.945455
+2025,Singapore,NOR,McLaren,5.0,3.0,15.0,Finished,0.523445,9.42201
+2025,Singapore,PIA,McLaren,3.0,4.0,12.0,Finished,0.523445,8.898565000000001
+2025,Singapore,ANT,Mercedes,4.0,5.0,10.0,Finished,0.523445,8.37512
+2025,Singapore,LEC,Ferrari,7.0,6.0,8.0,Finished,0.523445,7.851675000000001
+2025,Singapore,ALO,Aston Martin,10.0,7.0,6.0,Finished,0.523445,7.3282300000000005
+2025,Singapore,HAM,Ferrari,6.0,8.0,4.0,Finished,0.523445,6.804785000000001
+2025,Singapore,BEA,Haas F1 Team,9.0,9.0,2.0,Finished,0.523445,6.28134
+2025,Singapore,SAI,Williams,18.0,10.0,1.0,Lapped,0.523445,5.757895
+2025,Singapore,HAD,Racing Bulls,8.0,11.0,0.0,Lapped,0.523445,5.234450000000001
+2025,Singapore,TSU,Red Bull Racing,13.0,12.0,0.0,Lapped,0.523445,4.711005
+2025,Singapore,STR,Aston Martin,15.0,13.0,0.0,Lapped,0.523445,4.18756
+2025,Singapore,ALB,Williams,20.0,14.0,0.0,Lapped,0.523445,3.6641150000000002
+2025,Singapore,LAW,Racing Bulls,12.0,15.0,0.0,Lapped,0.523445,3.14067
+2025,Singapore,COL,Alpine,16.0,16.0,0.0,Lapped,0.523445,2.6172250000000004
+2025,Singapore,BOR,Kick Sauber,14.0,17.0,0.0,Lapped,0.523445,2.09378
+2025,Singapore,OCO,Haas F1 Team,17.0,18.0,0.0,Lapped,0.523445,1.570335
+2025,Singapore,GAS,Alpine,19.0,19.0,0.0,Lapped,0.523445,1.04689
+2025,Singapore,HUL,Kick Sauber,11.0,20.0,0.0,Lapped,0.523445,0.523445
+2025,United States,VER,Red Bull Racing,1.0,1.0,25.0,Finished,0.699448,13.988959999999999
+2025,United States,NOR,McLaren,2.0,2.0,18.0,Finished,0.699448,13.289511999999998
+2025,United States,LEC,Ferrari,3.0,3.0,15.0,Finished,0.699448,12.590064
+2025,United States,HAM,Ferrari,5.0,4.0,12.0,Finished,0.699448,11.890616
+2025,United States,PIA,McLaren,6.0,5.0,10.0,Finished,0.699448,11.191168
+2025,United States,RUS,Mercedes,4.0,6.0,8.0,Finished,0.699448,10.491719999999999
+2025,United States,TSU,Red Bull Racing,13.0,7.0,6.0,Finished,0.699448,9.792271999999999
+2025,United States,HUL,Kick Sauber,11.0,8.0,4.0,Finished,0.699448,9.092824
+2025,United States,BEA,Haas F1 Team,8.0,9.0,2.0,Finished,0.699448,8.393376
+2025,United States,ALO,Aston Martin,10.0,10.0,1.0,Finished,0.699448,7.693928
+2025,United States,LAW,Racing Bulls,12.0,11.0,0.0,Finished,0.699448,6.994479999999999
+2025,United States,STR,Aston Martin,19.0,12.0,0.0,Finished,0.699448,6.295032
+2025,United States,ANT,Mercedes,7.0,13.0,0.0,Finished,0.699448,5.595584
+2025,United States,ALB,Williams,18.0,14.0,0.0,Finished,0.699448,4.896135999999999
+2025,United States,OCO,Haas F1 Team,17.0,15.0,0.0,Finished,0.699448,4.196688
+2025,United States,HAD,Racing Bulls,20.0,16.0,0.0,Finished,0.699448,3.4972399999999997
+2025,United States,COL,Alpine,15.0,17.0,0.0,Lapped,0.699448,2.797792
+2025,United States,BOR,Kick Sauber,16.0,18.0,0.0,Lapped,0.699448,2.098344
+2025,United States,GAS,Alpine,14.0,19.0,0.0,Lapped,0.699448,1.398896
+2025,United States,SAI,Williams,9.0,20.0,0.0,Retired,0.699448,0.699448
+2025,Mexico,NOR,McLaren,1.0,1.0,25.0,Finished,0.562857,11.257140000000001
+2025,Mexico,LEC,Ferrari,2.0,2.0,18.0,Finished,0.562857,10.694283
+2025,Mexico,VER,Red Bull Racing,5.0,3.0,15.0,Finished,0.562857,10.131426000000001
+2025,Mexico,BEA,Haas F1 Team,9.0,4.0,12.0,Finished,0.562857,9.568569
+2025,Mexico,PIA,McLaren,7.0,5.0,10.0,Finished,0.562857,9.005712
+2025,Mexico,ANT,Mercedes,6.0,6.0,8.0,Finished,0.562857,8.442855000000002
+2025,Mexico,RUS,Mercedes,4.0,7.0,6.0,Finished,0.562857,7.8799980000000005
+2025,Mexico,HAM,Ferrari,3.0,8.0,4.0,Finished,0.562857,7.317141
+2025,Mexico,OCO,Haas F1 Team,11.0,9.0,2.0,Finished,0.562857,6.754284
+2025,Mexico,BOR,Kick Sauber,16.0,10.0,1.0,Finished,0.562857,6.191427000000001
+2025,Mexico,TSU,Red Bull Racing,10.0,11.0,0.0,Finished,0.562857,5.628570000000001
+2025,Mexico,ALB,Williams,17.0,12.0,0.0,Lapped,0.562857,5.065713000000001
+2025,Mexico,HAD,Racing Bulls,8.0,13.0,0.0,Lapped,0.562857,4.502856
+2025,Mexico,STR,Aston Martin,19.0,14.0,0.0,Lapped,0.562857,3.9399990000000003
+2025,Mexico,GAS,Alpine,18.0,15.0,0.0,Lapped,0.562857,3.377142
+2025,Mexico,COL,Alpine,20.0,16.0,0.0,Lapped,0.562857,2.8142850000000004
+2025,Mexico,SAI,Williams,12.0,17.0,0.0,Retired,0.562857,2.251428
+2025,Mexico,ALO,Aston Martin,14.0,18.0,0.0,Retired,0.562857,1.688571
+2025,Mexico,HUL,Kick Sauber,13.0,19.0,0.0,Retired,0.562857,1.125714
+2025,Mexico,LAW,Racing Bulls,15.0,20.0,0.0,Retired,0.562857,0.562857
+2025,Brazil,NOR,McLaren,1.0,1.0,25.0,Finished,0.710713,14.214260000000001
+2025,Brazil,ANT,Mercedes,2.0,2.0,18.0,Finished,0.710713,13.503547000000001
+2025,Brazil,VER,Red Bull Racing,19.0,3.0,15.0,Finished,0.710713,12.792834000000001
+2025,Brazil,RUS,Mercedes,6.0,4.0,12.0,Finished,0.710713,12.082121
+2025,Brazil,PIA,McLaren,4.0,5.0,10.0,Finished,0.710713,11.371408
+2025,Brazil,BEA,Haas F1 Team,8.0,6.0,8.0,Finished,0.710713,10.660695
+2025,Brazil,LAW,Racing Bulls,7.0,7.0,6.0,Finished,0.710713,9.949982
+2025,Brazil,HAD,Racing Bulls,5.0,8.0,4.0,Finished,0.710713,9.239269
+2025,Brazil,HUL,Kick Sauber,10.0,9.0,2.0,Finished,0.710713,8.528556
+2025,Brazil,GAS,Alpine,9.0,10.0,1.0,Finished,0.710713,7.817843000000001
+2025,Brazil,ALB,Williams,12.0,11.0,0.0,Finished,0.710713,7.107130000000001
+2025,Brazil,OCO,Haas F1 Team,20.0,12.0,0.0,Finished,0.710713,6.3964170000000005
+2025,Brazil,SAI,Williams,15.0,13.0,0.0,Finished,0.710713,5.685704
+2025,Brazil,ALO,Aston Martin,11.0,14.0,0.0,Finished,0.710713,4.974991
+2025,Brazil,COL,Alpine,16.0,15.0,0.0,Finished,0.710713,4.264278
+2025,Brazil,STR,Aston Martin,14.0,16.0,0.0,Finished,0.710713,3.5535650000000003
+2025,Brazil,TSU,Red Bull Racing,17.0,17.0,0.0,Finished,0.710713,2.842852
+2025,Brazil,HAM,Ferrari,13.0,18.0,0.0,Retired,0.710713,2.132139
+2025,Brazil,LEC,Ferrari,3.0,19.0,0.0,Retired,0.710713,1.421426
+2025,Brazil,BOR,Kick Sauber,18.0,20.0,0.0,Retired,0.710713,0.710713
+2025,Las Vegas,VER,Red Bull Racing,2.0,1.0,25.0,Finished,0.780231,15.60462
+2025,Las Vegas,RUS,Mercedes,4.0,2.0,18.0,Finished,0.780231,14.824389
+2025,Las Vegas,ANT,Mercedes,17.0,3.0,15.0,Finished,0.780231,14.044158
+2025,Las Vegas,LEC,Ferrari,9.0,4.0,12.0,Finished,0.780231,13.263927
+2025,Las Vegas,SAI,Williams,3.0,5.0,10.0,Finished,0.780231,12.483696
+2025,Las Vegas,HAD,Racing Bulls,8.0,6.0,8.0,Finished,0.780231,11.703465
+2025,Las Vegas,HUL,Kick Sauber,11.0,7.0,6.0,Finished,0.780231,10.923234
+2025,Las Vegas,HAM,Ferrari,19.0,8.0,4.0,Finished,0.780231,10.143003
+2025,Las Vegas,OCO,Haas F1 Team,13.0,9.0,2.0,Finished,0.780231,9.362772
+2025,Las Vegas,BEA,Haas F1 Team,14.0,10.0,1.0,Finished,0.780231,8.582541
+2025,Las Vegas,ALO,Aston Martin,7.0,11.0,0.0,Finished,0.780231,7.80231
+2025,Las Vegas,TSU,Red Bull Racing,20.0,12.0,0.0,Finished,0.780231,7.022079
+2025,Las Vegas,GAS,Alpine,10.0,13.0,0.0,Finished,0.780231,6.241848
+2025,Las Vegas,LAW,Racing Bulls,6.0,14.0,0.0,Lapped,0.780231,5.461617
+2025,Las Vegas,COL,Alpine,15.0,15.0,0.0,Lapped,0.780231,4.681386
+2025,Las Vegas,ALB,Williams,16.0,16.0,0.0,Retired,0.780231,3.901155
+2025,Las Vegas,BOR,Kick Sauber,18.0,17.0,0.0,Retired,0.780231,3.120924
+2025,Las Vegas,STR,Aston Martin,12.0,18.0,0.0,Retired,0.780231,2.340693
+2025,Las Vegas,NOR,McLaren,1.0,19.0,0.0,Disqualified,0.780231,1.560462
+2025,Las Vegas,PIA,McLaren,5.0,20.0,0.0,Disqualified,0.780231,0.780231
+2025,Qatar,VER,Red Bull Racing,3.0,1.0,25.0,Finished,0.713642,14.27284
+2025,Qatar,PIA,McLaren,1.0,2.0,18.0,Finished,0.713642,13.559198
+2025,Qatar,SAI,Williams,7.0,3.0,15.0,Finished,0.713642,12.845556
+2025,Qatar,NOR,McLaren,2.0,4.0,12.0,Finished,0.713642,12.131914
+2025,Qatar,ANT,Mercedes,5.0,5.0,10.0,Finished,0.713642,11.418272
+2025,Qatar,RUS,Mercedes,4.0,6.0,8.0,Finished,0.713642,10.70463
+2025,Qatar,ALO,Aston Martin,8.0,7.0,6.0,Finished,0.713642,9.990988
+2025,Qatar,LEC,Ferrari,10.0,8.0,4.0,Finished,0.713642,9.277346
+2025,Qatar,LAW,Racing Bulls,12.0,9.0,2.0,Finished,0.713642,8.563704
+2025,Qatar,TSU,Red Bull Racing,15.0,10.0,1.0,Finished,0.713642,7.850062
+2025,Qatar,ALB,Williams,14.0,11.0,0.0,Finished,0.713642,7.13642
+2025,Qatar,HAM,Ferrari,17.0,12.0,0.0,Finished,0.713642,6.422778
+2025,Qatar,BOR,Kick Sauber,19.0,13.0,0.0,Finished,0.713642,5.709136
+2025,Qatar,COL,Alpine,20.0,14.0,0.0,Lapped,0.713642,4.995494
+2025,Qatar,OCO,Haas F1 Team,16.0,15.0,0.0,Lapped,0.713642,4.281852
+2025,Qatar,GAS,Alpine,9.0,16.0,0.0,Lapped,0.713642,3.56821
+2025,Qatar,STR,Aston Martin,18.0,17.0,0.0,Retired,0.713642,2.854568
+2025,Qatar,HAD,Racing Bulls,6.0,18.0,0.0,Retired,0.713642,2.140926
+2025,Qatar,BEA,Haas F1 Team,13.0,19.0,0.0,Retired,0.713642,1.427284
+2025,Qatar,HUL,Kick Sauber,11.0,20.0,0.0,Retired,0.713642,0.713642
