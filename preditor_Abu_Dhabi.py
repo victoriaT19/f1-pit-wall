@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import joblib
 
-df_history = pd.read_csv('f1_training_dataset.csv')
+df_history = pd.read_csv(r'results\f1_training_dataset.csv')
 
 GRID_DE_LARGADA_2025 = {
     'VER': 1,
@@ -75,7 +75,7 @@ def prepare_driver_stats(df):
 print("Calculando estatísticas dos pilotos...")
 stats_df = prepare_driver_stats(df_history)
 
-stats_df.to_csv('driver_stats_2025.csv', index=False)
+stats_df.to_csv(r'results\driver_stats_2025.csv', index=False)
 
 print("Treinando o modelo...")
 
@@ -133,7 +133,7 @@ final_grid['Predicted_Finish'] = final_grid['Predicted_Finish'].round(2)
 print("\nPrevisão GP Abu Dhabi 2025:")
 print(final_grid[['Driver', 'Grid_Pos', 'Predicted_Pos']].to_string(index=False))
 
-final_grid.to_csv('resultado_previsao_abu_dhabi.csv', index=False)
+final_grid.to_csv(r'results\resultado_previsao_abu_dhabi.csv', index=False)
 print("\nArquivo 'resultado_previsao_abu_dhabi.csv' gerado com sucesso!")
 
 importances = pd.Series(model.feature_importances_, index=features)

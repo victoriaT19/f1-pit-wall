@@ -114,7 +114,7 @@ def build_training_dataset():
 
 df_train = build_training_dataset()
 
-df_train.to_csv('f1_training_dataset.csv', index=False)
+df_train.to_csv(r'results\f1_training_dataset.csv', index=False)
 print("\nDataset salvo em 'f1_training_dataset.csv'")
 print(df_train.head())
         
