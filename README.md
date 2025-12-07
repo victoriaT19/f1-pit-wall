@@ -1,7 +1,8 @@
 
 # 🏎️ F1 Predictor - Abu Dhabi Grand Prix 2025
 
-Este projeto utiliza Machine Learning para prever os resultados do Grande Prêmio de Abu Dhabi de Fórmula 1 na temporada de 2025. O sistema analisa estatísticas de pilotos, similaridade de pistas e dados históricos para gerar insights, tabelas de classificação e visualizações gráficas sobre o desempenho esperado.
+Este projeto utiliza Machine Learning para prever os resultados do Grande Prêmio de Abu Dhabi de Fórmula 1 na temporada de 2025. O sistema analisa estatísticas de pilotos, similaridade de pistas e dados históricos para gerar insights, tabelas de classificação e visualizações gráficas sobre o desempenho esperado. 
+- *Feito no dia 06/12/25*
 
 ## 📂 Estrutura do Projeto
 
