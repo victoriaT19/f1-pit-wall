@@ -1,0 +1,12 @@
+[project]
+name = "f1agent"
+version = "0.2.0"
+description = "F1 race prediction with a leakage-free walk-forward backtest"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["f1agent"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
