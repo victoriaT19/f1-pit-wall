@@ -1397,3 +1397,69 @@ year,round,event,date,driver,team,grid,quali_time_s,position,status,points,laps
 2025,24,Abu Dhabi Grand Prix,2025-12-07,LAW,RB F1 Team,13.0,83.077,18.0,Lapped,0.0,57.0
 2025,24,Abu Dhabi Grand Prix,2025-12-07,GAS,Alpine F1 Team,19.0,83.468,19.0,Lapped,0.0,57.0
 2025,24,Abu Dhabi Grand Prix,2025-12-07,COL,Alpine F1 Team,20.0,83.89,20.0,Lapped,0.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,RUS,Mercedes,1.0,78.518,1.0,Finished,25.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,ANT,Mercedes,2.0,78.811,2.0,Finished,18.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,LEC,Ferrari,4.0,79.327,3.0,Finished,15.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,HAM,Ferrari,7.0,79.478,4.0,Finished,12.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,NOR,McLaren,6.0,79.475,5.0,Finished,10.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,VER,Red Bull,20.0,,6.0,Finished,8.0,58.0
+2026,1,Australian Grand Prix,2026-03-08,BEA,Haas F1 Team,12.0,80.311,7.0,Lapped,6.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,LIN,RB F1 Team,9.0,79.971,8.0,Lapped,4.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,BOR,Audi,10.0,80.221,9.0,Lapped,2.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,GAS,Alpine F1 Team,14.0,80.501,10.0,Lapped,1.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,OCO,Haas F1 Team,13.0,80.491,11.0,Lapped,0.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,ALB,Williams,15.0,80.941,12.0,Lapped,0.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,LAW,RB F1 Team,8.0,79.994,13.0,Lapped,0.0,57.0
+2026,1,Australian Grand Prix,2026-03-08,COL,Alpine F1 Team,16.0,81.2,14.0,Lapped,0.0,56.0
+2026,1,Australian Grand Prix,2026-03-08,SAI,Williams,21.0,,15.0,Lapped,0.0,56.0
+2026,1,Australian Grand Prix,2026-03-08,PER,Cadillac F1 Team,18.0,82.605,16.0,Lapped,0.0,55.0
+2026,1,Australian Grand Prix,2026-03-08,STR,Aston Martin,22.0,,17.0,Lapped,0.0,43.0
+2026,1,Australian Grand Prix,2026-03-08,ALO,Aston Martin,17.0,81.969,18.0,Retired,0.0,21.0
+2026,1,Australian Grand Prix,2026-03-08,BOT,Cadillac F1 Team,19.0,83.244,19.0,Retired,0.0,15.0
+2026,1,Australian Grand Prix,2026-03-08,HAD,Red Bull,3.0,79.303,20.0,Retired,0.0,10.0
+2026,1,Australian Grand Prix,2026-03-08,PIA,McLaren,5.0,79.38,21.0,Did not start,0.0,0.0
+2026,1,Australian Grand Prix,2026-03-08,HUL,Audi,11.0,80.303,22.0,Did not start,0.0,0.0
+2026,2,Chinese Grand Prix,2026-03-15,ANT,Mercedes,1.0,92.064,1.0,Finished,25.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,RUS,Mercedes,2.0,92.286,2.0,Finished,18.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,HAM,Ferrari,3.0,92.415,3.0,Finished,15.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,LEC,Ferrari,4.0,92.428,4.0,Finished,12.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,BEA,Haas F1 Team,10.0,93.197,5.0,Finished,10.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,GAS,Alpine F1 Team,7.0,92.873,6.0,Finished,8.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,LAW,RB F1 Team,14.0,93.765,7.0,Finished,6.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,HAD,Red Bull,9.0,93.121,8.0,Finished,4.0,56.0
+2026,2,Chinese Grand Prix,2026-03-15,SAI,Williams,17.0,94.317,9.0,Lapped,2.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,COL,Alpine F1 Team,12.0,93.357,10.0,Lapped,1.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,HUL,Audi,11.0,93.354,11.0,Lapped,0.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,LIN,RB F1 Team,15.0,93.784,12.0,Lapped,0.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,BOT,Cadillac F1 Team,19.0,95.436,13.0,Lapped,0.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,OCO,Haas F1 Team,13.0,93.538,14.0,Lapped,0.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,PER,Cadillac F1 Team,21.0,96.906,15.0,Lapped,0.0,55.0
+2026,2,Chinese Grand Prix,2026-03-15,VER,Red Bull,8.0,93.002,16.0,Retired,0.0,45.0
+2026,2,Chinese Grand Prix,2026-03-15,ALO,Aston Martin,18.0,95.203,17.0,Retired,0.0,32.0
+2026,2,Chinese Grand Prix,2026-03-15,STR,Aston Martin,20.0,95.995,18.0,Retired,0.0,9.0
+2026,2,Chinese Grand Prix,2026-03-15,PIA,McLaren,5.0,92.55,19.0,Did not start,0.0,0.0
+2026,2,Chinese Grand Prix,2026-03-15,NOR,McLaren,6.0,92.608,20.0,Did not start,0.0,0.0
+2026,2,Chinese Grand Prix,2026-03-15,BOR,Audi,16.0,93.549,21.0,Did not start,0.0,0.0
+2026,2,Chinese Grand Prix,2026-03-15,ALB,Williams,22.0,94.772,22.0,Did not start,0.0,0.0
+2026,3,Japanese Grand Prix,2026-03-29,ANT,Mercedes,1.0,88.778,1.0,Finished,25.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,PIA,McLaren,3.0,89.132,2.0,Finished,18.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,LEC,Ferrari,4.0,89.303,3.0,Finished,15.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,RUS,Mercedes,2.0,89.076,4.0,Finished,12.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,NOR,McLaren,5.0,89.409,5.0,Finished,10.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,HAM,Ferrari,6.0,89.567,6.0,Finished,8.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,GAS,Alpine F1 Team,7.0,89.691,7.0,Finished,6.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,VER,Red Bull,11.0,90.262,8.0,Finished,4.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,LAW,RB F1 Team,14.0,90.495,9.0,Finished,2.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,OCO,Haas F1 Team,12.0,90.309,10.0,Finished,1.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,HUL,Audi,13.0,90.358,11.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,HAD,Red Bull,8.0,89.978,12.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,BOR,Audi,9.0,89.99,13.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,LIN,RB F1 Team,10.0,90.109,14.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,SAI,Williams,16.0,90.927,15.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,COL,Alpine F1 Team,15.0,90.627,16.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,PER,Cadillac F1 Team,19.0,92.206,17.0,Finished,0.0,53.0
+2026,3,Japanese Grand Prix,2026-03-29,ALO,Aston Martin,21.0,92.646,18.0,Lapped,0.0,52.0
+2026,3,Japanese Grand Prix,2026-03-29,BOT,Cadillac F1 Team,20.0,92.33,19.0,Lapped,0.0,52.0
+2026,3,Japanese Grand Prix,2026-03-29,ALB,Williams,17.0,91.088,20.0,Lapped,0.0,51.0
+2026,3,Japanese Grand Prix,2026-03-29,STR,Aston Martin,22.0,92.92,21.0,Retired,0.0,30.0
+2026,3,Japanese Grand Prix,2026-03-29,BEA,Haas F1 Team,18.0,91.09,22.0,Retired,0.0,20.0
