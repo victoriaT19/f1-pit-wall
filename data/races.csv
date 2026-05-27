@@ -1463,3 +1463,47 @@ year,round,event,date,driver,team,grid,quali_time_s,position,status,points,laps
 2026,3,Japanese Grand Prix,2026-03-29,ALB,Williams,17.0,91.088,20.0,Lapped,0.0,51.0
 2026,3,Japanese Grand Prix,2026-03-29,STR,Aston Martin,22.0,92.92,21.0,Retired,0.0,30.0
 2026,3,Japanese Grand Prix,2026-03-29,BEA,Haas F1 Team,18.0,91.09,22.0,Retired,0.0,20.0
+2026,4,Miami Grand Prix,2026-05-03,ANT,Mercedes,1.0,87.798,1.0,Finished,25.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,NOR,McLaren,4.0,88.183,2.0,Finished,18.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,PIA,McLaren,7.0,88.332,3.0,Finished,15.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,RUS,Mercedes,5.0,88.197,4.0,Finished,12.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,VER,Red Bull,2.0,87.964,5.0,Finished,10.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,HAM,Ferrari,6.0,88.319,6.0,Finished,8.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,COL,Alpine F1 Team,8.0,88.762,7.0,Finished,6.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,LEC,Ferrari,3.0,88.143,8.0,Finished,4.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,SAI,Williams,13.0,89.54,9.0,Finished,2.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,ALB,Williams,15.0,89.72,10.0,Finished,1.0,57.0
+2026,4,Miami Grand Prix,2026-05-03,BEA,Haas F1 Team,12.0,89.34,11.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,BOR,Audi,21.0,93.737,12.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,OCO,Haas F1 Team,14.0,89.772,13.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,LIN,RB F1 Team,16.0,90.133,14.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,ALO,Aston Martin,17.0,91.098,15.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,PER,Cadillac F1 Team,20.0,91.967,16.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,STR,Aston Martin,18.0,91.164,17.0,Lapped,0.0,56.0
+2026,4,Miami Grand Prix,2026-05-03,BOT,Cadillac F1 Team,19.0,91.629,18.0,Lapped,0.0,55.0
+2026,4,Miami Grand Prix,2026-05-03,HUL,Audi,10.0,89.439,19.0,Retired,0.0,7.0
+2026,4,Miami Grand Prix,2026-05-03,LAW,RB F1 Team,11.0,89.499,20.0,Retired,0.0,6.0
+2026,4,Miami Grand Prix,2026-05-03,GAS,Alpine F1 Team,9.0,88.81,21.0,Retired,0.0,4.0
+2026,4,Miami Grand Prix,2026-05-03,HAD,Red Bull,22.0,,22.0,Retired,0.0,4.0
+2026,5,Canadian Grand Prix,2026-05-24,ANT,Mercedes,2.0,72.646,1.0,Finished,25.0,68.0
+2026,5,Canadian Grand Prix,2026-05-24,HAM,Ferrari,5.0,72.868,2.0,Finished,18.0,68.0
+2026,5,Canadian Grand Prix,2026-05-24,VER,Red Bull,6.0,72.907,3.0,Finished,15.0,68.0
+2026,5,Canadian Grand Prix,2026-05-24,LEC,Ferrari,8.0,72.976,4.0,Finished,12.0,68.0
+2026,5,Canadian Grand Prix,2026-05-24,HAD,Red Bull,7.0,72.935,5.0,Lapped,10.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,COL,Alpine F1 Team,10.0,73.697,6.0,Lapped,8.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,LAW,RB F1 Team,12.0,73.897,7.0,Lapped,6.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,GAS,Alpine F1 Team,14.0,74.187,8.0,Lapped,4.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,SAI,Williams,15.0,74.273,9.0,Lapped,2.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,BEA,Haas F1 Team,16.0,74.416,10.0,Lapped,1.0,67.0
+2026,5,Canadian Grand Prix,2026-05-24,PIA,McLaren,4.0,72.781,11.0,Lapped,0.0,66.0
+2026,5,Canadian Grand Prix,2026-05-24,HUL,Audi,11.0,73.886,12.0,Lapped,0.0,66.0
+2026,5,Canadian Grand Prix,2026-05-24,BOR,Audi,13.0,74.071,13.0,Lapped,0.0,66.0
+2026,5,Canadian Grand Prix,2026-05-24,OCO,Haas F1 Team,17.0,74.845,14.0,Lapped,0.0,66.0
+2026,5,Canadian Grand Prix,2026-05-24,STR,Aston Martin,22.0,76.195,15.0,Lapped,0.0,64.0
+2026,5,Canadian Grand Prix,2026-05-24,BOT,Cadillac F1 Team,21.0,76.272,16.0,Lapped,0.0,64.0
+2026,5,Canadian Grand Prix,2026-05-24,PER,Cadillac F1 Team,20.0,75.429,17.0,Retired,0.0,39.0
+2026,5,Canadian Grand Prix,2026-05-24,NOR,McLaren,3.0,72.729,18.0,Retired,0.0,38.0
+2026,5,Canadian Grand Prix,2026-05-24,RUS,Mercedes,1.0,72.578,19.0,Retired,0.0,29.0
+2026,5,Canadian Grand Prix,2026-05-24,ALO,Aston Martin,19.0,75.196,20.0,Retired,0.0,23.0
+2026,5,Canadian Grand Prix,2026-05-24,ALB,Williams,18.0,74.851,21.0,Retired,0.0,11.0
+2026,5,Canadian Grand Prix,2026-05-24,LIN,RB F1 Team,9.0,73.28,22.0,Did not start,0.0,0.0
