@@ -1,0 +1,24 @@
+.rp { position: relative; font-family: 'Titillium Web', system-ui, sans-serif; color: #d6dbe4; }
+.rp-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.rp-title { font-size: 15px; font-weight: 600; color: #d6dbe4; }
+.rp-controls { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 260px; justify-content: flex-end; }
+.rp-controls button { background: #e10600; color: #fff; border: 0; border-radius: 6px; padding: 6px 12px; font-weight: 700;
+  font-family: inherit; cursor: pointer; min-width: 84px; }
+.rp-controls .rp-speed { background: #232a38; min-width: 48px; }
+.rp-scrub { flex: 1; max-width: 360px; accent-color: #e10600; }
+.rp-lap { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 92px; text-align: right; color: #ffffff; }
+.rp-body { display: flex; gap: 12px; align-items: stretch; }
+.rp-canvas { flex: 1; min-width: 0; position: relative; background: #0d1119; border-radius: 10px; }
+.rp-board { width: 176px; flex: none; background: #0d1119; border-radius: 10px; padding: 6px; overflow-y: auto; max-height: 560px; }
+.rp-row { display: grid; grid-template-columns: 22px 6px 1fr auto; gap: 6px; align-items: center; font-size: 12.5px;
+  padding: 3px 6px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.rp-row:nth-child(odd) { background: rgba(255,255,255,0.025); }
+.rp-focus { background: rgba(225,6,0,0.22) !important; color: #fff; font-weight: 700; }
+.rp-pos { color: #9aa3b2; text-align: right; }
+.rp-chip { width: 4px; height: 14px; border-radius: 2px; }
+.rp-gap { color: #9aa3b2; }
+.rp-empty { display: none; height: 220px; align-items: center; justify-content: center; color: #9aa3b2;
+  background: #0d1119; border-radius: 10px; }
+.rp-tip { position: absolute; display: none; pointer-events: none; background: #05070b; color: #fff; padding: 4px 8px;
+  border-radius: 4px; font-size: 12px; font-weight: 600; white-space: pre; border: 1px solid #232a38; }
+@media (max-width: 700px) { .rp-body { flex-direction: column; } .rp-board { width: auto; max-height: 220px; } }

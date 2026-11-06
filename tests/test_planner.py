@@ -81,3 +81,23 @@ def test_on_track_puts_the_leader_at_the_line_and_wraps_lapped_cars():
     last = m.iloc[-1]
     assert (pos.iloc[0]["x"], pos.iloc[0]["y"]) == (last["x"], last["y"])  # leader at the end of the lap
     assert (pos.iloc[1]["x"], pos.iloc[1]["y"]) == (pos.iloc[2]["x"], pos.iloc[2]["y"])  # one lap down: same spot
+
+
+def test_smooth_track_is_closed_rotated_and_ordered_by_lap_fraction():
+    tr = P.smooth_track(NEXT)
+    x, y, f = np.array(tr["x"]), np.array(tr["y"]), np.array(tr["f"])
+    assert np.all(np.diff(f) > 0) and f[0] < 0.01 and f[-1] > 0.99
+    assert np.abs(np.r_[x, y]).max() <= 1.0 + 1e-9
+    assert np.ptp(x) >= np.ptp(y)  # long side horizontal
+    step = np.hypot(np.diff(x), np.diff(y))
+    assert np.hypot(x[0] - x[-1], y[0] - y[-1]) < 5 * np.median(step)  # closes on itself
+
+
+def test_replay_data_has_lap_times_for_every_car_and_stops_retired_cars():
+    import pandas as pd
+    gaps = pd.DataFrame({"AAA": [0.0, 0.0, 0.0], "BBB": [1.0, 2.0, np.nan]}, index=[1, 2, 3])
+    d = P.replay_data(NEXT, gaps, "BBB", "test")
+    cars = {c["name"]: c["cum"] for c in d["cars"]}
+    T = d["lap_time"]
+    assert len(cars["AAA"]) == 4 and cars["AAA"][3] == pytest.approx(3 * T, abs=0.01)
+    assert cars["BBB"][2] == pytest.approx(2 * T + 2.0, abs=0.01) and cars["BBB"][3] is None

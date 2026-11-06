@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 FILES = [
     "app.py",
+    "assets/replay.js",
+    "assets/replay.css",
     "docs/methodology.md",
     "docs/test-log.md",
     "data/laps_clean.csv.gz",

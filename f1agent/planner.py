@@ -276,3 +276,65 @@ def on_track(gaps: pd.Series, tmap: pd.DataFrame) -> pd.DataFrame:
 
 __all__ = ["track_map", "on_track", "store", "race_choices", "race_row", "plan", "degradation_curves", "parse_strategy", "real_stints",
            "real_trace", "field", "scenario", "describe", "pit_laps"]
+
+
+# ── Smoothed track and replay data (dashboard drawing) ──────────────────────
+
+
+@lru_cache(maxsize=32)
+def smooth_track(key: str, n: int = 900) -> dict | None:
+    """Track outline as a smooth closed curve, rotated so its long side is horizontal and scaled
+    to fit [-1, 1]. Points are indexed by lap fraction f (0 = start/finish line), so a car's
+    progress through the lap maps straight to a point. Telemetry samples (~4 per second, with
+    noise and gaps) are fitted with a periodic smoothing spline in time."""
+    from scipy.interpolate import splev, splprep
+
+    m = track_map(key)
+    if m is None:
+        return None
+    T = float(m["lap_duration"].iloc[0])
+    f = (m["t"] / T).to_numpy()
+    x, y = m["x"].to_numpy(float), m["y"].to_numpy(float)
+    xs, ys, fs = np.r_[x, x[0]], np.r_[y, y[0]], np.r_[f, f[0] + 1.0]
+    tck, _ = splprep([xs, ys], u=fs, s=len(xs) * 25.0 ** 2, per=1, quiet=2)
+    uu = np.linspace(fs[0], fs[0] + 1.0, n, endpoint=False)
+    px, py = splev(uu, tck)
+    frac = np.mod(uu, 1.0)
+    order = np.argsort(frac)
+    frac, px, py = frac[order], np.asarray(px)[order], np.asarray(py)[order]
+    # rotate (no mirroring) so the principal axis is horizontal
+    c = np.c_[px - px.mean(), py - py.mean()]
+    w, v = np.linalg.eigh(np.cov(c.T))
+    ang = np.arctan2(v[1, -1], v[0, -1])
+    rot = np.array([[np.cos(-ang), -np.sin(-ang)], [np.sin(-ang), np.cos(-ang)]])
+    r = c @ rot.T
+    r /= np.abs(r).max()
+    # speed along the curve: periodic interpolation of the samples, lightly smoothed
+    sp = np.interp(frac, np.r_[f - 1, f, f + 1], np.tile(m["speed"].to_numpy(float), 3))
+    k = 7
+    sp = np.convolve(np.r_[sp[-k:], sp, sp[:k]], np.ones(2 * k + 1) / (2 * k + 1), mode="same")[k:-k]
+    s1, s2 = m["s1"].iloc[0], m["s2"].iloc[0]
+    return {"f": frac.round(5).tolist(), "x": r[:, 0].round(4).tolist(), "y": r[:, 1].round(4).tolist(),
+            "speed": sp.round(0).tolist(), "lap_time": T, "driver": m["driver"].iloc[0],
+            "sectors": [round(float(s1) / T, 4) if pd.notna(s1) else None,
+                        round(float(s1 + s2) / T, 4) if pd.notna(s1) and pd.notna(s2) else None]}
+
+
+def replay_data(key: str, gaps: pd.DataFrame, focus: str, title: str) -> dict | None:
+    """Everything the on-track replay needs: the smooth track and, per car, the race time at the
+    end of every lap (leader at a constant reference lap time plus the car's gap; None after a
+    car stops). Cars start spread by their order on the first lap."""
+    tr = smooth_track(key)
+    if tr is None:
+        return None
+    T = tr["lap_time"]
+    laps = np.asarray(gaps.index, dtype=int)
+    first = gaps.iloc[0].rank(method="first")
+    colours = store().colours
+    cars = []
+    for d in gaps.columns:
+        g = gaps[d].to_numpy(float)
+        cum = [float((first[d] - 1) * 0.25)] + [None if np.isnan(v) else round(float(l * T + v), 2)
+                                                  for l, v in zip(laps, g)]
+        cars.append({"name": d, "colour": colours.get(d, "#9AA3B2"), "cum": cum})
+    return {"title": title, "track": tr, "laps": int(laps.max()), "lap_time": T, "cars": cars, "focus": focus}
