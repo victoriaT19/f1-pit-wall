@@ -29,7 +29,12 @@ function setup() {
   const tr = data.track, T = data.lap_time, L = data.laps;
   const F = tr.f, X = tr.x, Y = tr.y, N = F.length;
   const cars = data.cars;
-  const end = Math.max(...cars.map(c => Math.max(...c.cum.filter(v => v !== null))));
+  // The replay ends at the chequered flag: the moment the winner completes the last lap.
+  // Then every car is frozen where it was at that instant, so the distances on track show
+  // the finishing gaps (a car g seconds behind sits g seconds of the lap before the line).
+  const finalTime = c => c.cum[c.cum.length - 1];
+  const flag = Math.min(...cars.map(finalTime).filter(v => v !== null));
+  const end = flag;
   let tau = 0, playing = false, speedIx = 1, last = null, raf = null, screen = [], lastBoard = 0;
   scrub.max = end.toFixed(1);
 
@@ -68,17 +73,33 @@ function setup() {
       let i = 0;
       while (i + 1 < cum.length && cum[i + 1] !== null && cum[i + 1] <= tau) i++;
       let progress, out_ = false, done = false;
-      if (i + 1 >= cum.length) { progress = L; done = true; }
+      if (tau >= flag - 1e-6 && finalTime(c) !== null) {  // chequered flag: frozen at the finishing gap
+        progress = L - (finalTime(c) - flag) / T;
+        done = true;
+      }
+      else if (i + 1 >= cum.length) { progress = L; done = true; }
       else if (cum[i + 1] === null) { progress = i; out_ = true; }
       else if (tau < cum[0]) { progress = (tau - cum[0]) / T; }
       else { progress = i + (tau - cum[i]) / (cum[i + 1] - cum[i]); }
-      out.push({ c, progress, out: out_, done });
+      // last lap completed (index into cum) and when: the timing line reference
+      const k = done ? cum.length - 1 : Math.max(0, Math.min(i, cum.length - 1));  // done: final time
+      out.push({ c, progress, out: out_, done, k, crossed: cum[k] });
     }
-    const running = out.filter(s => !s.out).sort((a, b) => b.progress - a.progress);
-    const lead = running.length ? running[0].progress : 0;
-    running.forEach((s, k) => { s.pos = k + 1; s.gap = (lead - s.progress) * T; });
+    // order by distance covered; cars on the same lap fraction (e.g. all finished) by who crossed first
+    const running = out.filter(s => !s.out).sort((a, b) =>
+      (a.done && b.done) ? (a.crossed - b.crossed) : ((b.progress - a.progress) || (a.crossed - b.crossed)));
+    const leader = running.length ? running[0] : null;
+    const lead = leader ? leader.progress : 0;
+    running.forEach((s, ix) => {
+      s.pos = ix + 1;
+      // gap as on a timing screen: time between the leader and this car at the last line both crossed
+      const lc = leader.c.cum[s.k];
+      s.gap = lc !== null && lc !== undefined ? Math.max(0, s.crossed - lc) : (lead - s.progress) * T;
+      s.lapsDown = Math.floor(lead - s.progress + 1e-9);
+      if (s.done && leader.done) s.lapsDown = Math.floor(s.gap / T);  // finished: lapped if a lap or more behind
+    });
     const outs = out.filter(s => s.out);
-    return { order: running.concat(outs), lead };
+    return { order: running.concat(outs), lead, finished: !!(leader && leader.done) };
   }
 
   // ── drawing ──
@@ -129,7 +150,7 @@ function setup() {
         ctx.textAlign = "center";
       }
     });
-    canvas._drawn = drawn;
+    canvas._drawn = drawn; canvas._st = st;
     const lap = Math.min(L, Math.max(1, Math.floor(st.lead) + 1));
     lapLabel.textContent = (st.lead >= L ? "Finish" : "Lap " + lap) + " / " + L;
     if (!scrub._dragging) scrub.value = tau.toFixed(1);
@@ -137,10 +158,18 @@ function setup() {
     if (now - lastBoard > 120) { lastBoard = now; renderBoard(st); }
   }
 
+  function gapText(s, st) {
+    if (s.out) return "OUT";
+    if (s.pos === 1) return st.finished ? "Winner" : "Leader";
+    if (s.lapsDown >= 1) return "+" + s.lapsDown + " lap" + (s.lapsDown > 1 ? "s" : "");
+    if (st.finished && !s.done) return "running";
+    return "+" + s.gap.toFixed(1);
+  }
+
   function renderBoard(st) {
     board.innerHTML = st.order.map(s => {
       const focus = s.c.name === data.focus ? " rp-focus" : "";
-      const gap = s.out ? "OUT" : s.pos === 1 ? "Leader" : s.gap >= T ? "+" + Math.floor(s.gap / T) + " lap" : "+" + s.gap.toFixed(1);
+      const gap = gapText(s, st);
       return `<div class="rp-row${focus}"><span class="rp-pos">${s.out ? "–" : s.pos}</span>` +
         `<span class="rp-chip" style="background:${s.c.colour}"></span><span class="rp-name">${s.c.name}</span>` +
         `<span class="rp-gap">${gap}</span></div>`;
@@ -170,7 +199,7 @@ function setup() {
     let best = null, bd = 14;
     (canvas._drawn || []).forEach(d => { const dd = Math.hypot(d.x - mx, d.y - my); if (dd < bd) { bd = dd; best = d; } });
     if (best) {
-      const s = best.s, gap = s.pos === 1 ? "leader" : s.gap >= T ? "+" + Math.floor(s.gap / T) + " lap" : "+" + s.gap.toFixed(1) + " s";
+      const s = best.s, gap = gapText(s, canvas._st || { finished: false });
       tip.textContent = `${s.c.name}  P${s.pos}  ${gap}`;
       tip.style.left = (best.x + 12) + "px"; tip.style.top = (best.y + 12) + "px"; tip.style.display = "block";
     } else tip.style.display = "none";
