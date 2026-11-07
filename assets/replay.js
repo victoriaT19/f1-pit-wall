@@ -43,7 +43,11 @@ function setup() {
   function resize() {
     const r = canvas.parentElement.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    W = Math.max(300, r.width); H = Math.max(260, Math.min(560, W * 0.62));
+    W = Math.max(280, r.width);
+    // tall enough for the track and level with the live order beside it
+    const boardH = W > 0 && getComputedStyle(box.querySelector(".rp-body")).flexDirection === "row"
+      ? cars.length * 25 + 12 : 0;  // the live order's height (one row per car), when it sits beside the track
+    H = Math.min(640, Math.max(boardH ? 340 : 240, W * 0.62, boardH));
     canvas.width = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + "px"; canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

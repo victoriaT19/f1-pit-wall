@@ -361,7 +361,7 @@ def scoreboard():
 # ── App ─────────────────────────────────────────────────────────────────────
 
 CSS = """
-.gradio-container {max-width: 1360px !important; margin: 0 auto !important}
+.gradio-container {width: 100% !important; max-width: 1680px !important; margin: 0 auto !important; padding: 12px 16px !important}
 .block:focus-within, .form:focus-within {z-index: 1000 !important; position: relative}
 #hero h1 {font-size: 30px; margin: 0; letter-spacing: .5px}
 #hero h1 span {color: #e10600}
@@ -434,11 +434,11 @@ def build() -> gr.Blocks:
     h, m, s, t, pl, sc = race_defaults(first)
     replay_js = (ROOT / "assets/replay.js").read_text(encoding="utf-8")
     replay_css = (ROOT / "assets/replay.css").read_text(encoding="utf-8")
-    with gr.Blocks(title="Pit wall — F1 strategy") as demo:
+    with gr.Blocks(title="Pit wall — F1 strategy", fill_width=True) as demo:
         gr.HTML('<div id="hero"><h1>PIT <span>WALL</span></h1><p>Race strategy for the rest of the 2026 season '
                 "from public timing data (OpenF1) and Pirelli's compound nominations.</p></div>")
         with gr.Row(equal_height=False):
-            with gr.Column(scale=1, min_width=270, elem_id="sidebar"):
+            with gr.Column(scale=1, min_width=230, elem_id="sidebar"):
                 race = gr.Dropdown(choices, value=first, label="Race")
                 with gr.Row():
                     hard = gr.Dropdown(C_CHOICES, value=h, label="Hard", min_width=70)
@@ -449,7 +449,7 @@ def build() -> gr.Blocks:
                     pit = gr.Slider(15, 35, value=pl, step=0.5, label="Pit-stop time loss (s)")
                     scp = gr.Slider(0, 0.08, value=sc, step=0.005, label="Safety-car start chance per lap")
                 go_btn = gr.Button("Run strategy", variant="primary")
-            with gr.Column(scale=4):
+            with gr.Column(scale=5):
                 with gr.Tabs():
                     with gr.Tab("Strategy"):
                         kpi_plan = gr.HTML()
