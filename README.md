@@ -62,6 +62,24 @@ data/                                  dados processados (data/upcoming.csv: pr�
 results/                               saídas dos backtests
 ```
 
+## Atualizar a cada sessão
+
+Depois de cada treino livre, classificação ou corrida:
+
+```bash
+python -m f1agent.update --publish
+```
+
+Baixa as sessões novas do OpenF1, os resultados novos, o grid real depois da
+classificação, refaz as voltas, registra a previsão atual de cada próxima corrida em
+`results/live/predictions.jsonl` (só quando ela muda) e, com `--publish`, roda os testes,
+faz o commit, o push e o deploy do Space (`HF_TOKEN` no `.env`). Quando a Pirelli anunciar
+os compostos de uma corrida:
+
+```bash
+python -m f1agent.update --compounds "Las Vegas Grand Prix=C3,C4,C5" --publish
+```
+
 ## Reproduzir
 
 ```bash

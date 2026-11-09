@@ -33,6 +33,7 @@ FILES = [
     "results/backtest/per_race.csv",
     "results/racesim/summary.json",
 ]
+OPTIONAL = ["data/upcoming_grid.csv", "results/live/predictions.jsonl"]  # exist once updates have run
 
 SPACE_README = """---
 title: Pit wall — F1 race strategy
@@ -61,7 +62,7 @@ Race strategy for the rest of the 2026 Formula 1 season, built from public timin
   better than simple baselines.
 
 Code, data pipeline, backtests and methodology:
-[github.com/victoriaT19/f1_pre-abu_dhabi](https://github.com/victoriaT19/f1_pre-abu_dhabi).
+[github.com/victoriaT19/f1-pit-wall](https://github.com/victoriaT19/f1-pit-wall).
 
 Unofficial fan project, not associated with Formula 1 or Pirelli. Data from OpenF1
 (non-commercial use).
@@ -76,7 +77,7 @@ plotly>=5.20
 
 
 def build(out: Path) -> None:
-    for f in FILES:
+    for f in FILES + [f for f in OPTIONAL if (ROOT / f).exists()]:
         dst = out / f
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(ROOT / f, dst)

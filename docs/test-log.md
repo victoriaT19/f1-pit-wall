@@ -450,3 +450,20 @@ Layout width (same day): Gradio capped the page at ~1100 px with side margins, s
 1440 px screen the charts had 758 px. Now full width (up to 1680 px), slimmer sidebar:
 1083 px for the charts at 1440 px; the replay canvas is 879×562 and as tall as the live
 order. In narrow areas (< 720 px) the live order moves under the track in columns.
+
+## 2026-11-09: session update command
+
+`python -m f1agent.update`: new OpenF1 sessions, new results, qualifying starting grid
+for upcoming races (OpenF1 `starting_grid`; checked on São Paulo 2026: 22 cars, NOR on
+pole), laps rebuilt (rewritten only if the content changed, fixed gzip timestamp), and the
+current plan of every upcoming race appended to `results/live/predictions.jsonl` (skipped
+when identical to the previous one). `--compounds RACE=H,M,S` records Pirelli's
+nomination; `--publish` tests, commits, pushes and redeploys.
+
+First run (no new sessions since São Paulo): 35 s; Las Vegas S42 → M8, Qatar S42 → M15,
+Abu Dhabi S12 → M46, all with estimated grids; second run logged nothing new.
+
+### Unit tests: 3 passed (56 in total)
+
+Compound override marks the nomination official and rejects unknown races; sessions seen
+are listed with qualifying; a saved qualifying grid replaces the estimated one.

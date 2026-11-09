@@ -42,6 +42,7 @@ class Store:
     laps: pd.DataFrame
     races: pd.DataFrame
     upcoming: pd.DataFrame
+    grids: pd.DataFrame
     rates_all: pd.DataFrame
     fp: pd.DataFrame
     paces: pd.DataFrame
@@ -55,6 +56,12 @@ def store(root: str = str(ROOT)) -> Store:
     laps = pd.read_csv(r / "data/laps_clean.csv.gz")
     races = pd.read_csv(r / "data/races.csv")
     upcoming = pd.read_csv(r / "data/upcoming.csv")
+    # races already run leave the "next" list (they appear among past races once their laps exist)
+    run = set(zip(races["year"], races["event"]))
+    upcoming = upcoming[[(y, m) not in run for y, m in zip(upcoming["year"], upcoming["meeting_name"])]]
+    grid_path = r / "data/upcoming_grid.csv"
+    grids = pd.read_csv(grid_path) if grid_path.exists() else pd.DataFrame(
+        columns=["year", "meeting_name", "driver", "grid", "quali_time_s"])
     colours = {}
     drv = r / "data/openf1/drivers.csv.gz"
     if drv.exists():
@@ -62,7 +69,7 @@ def store(root: str = str(ROOT)) -> Store:
         colours = {a: f"#{c}" for a, c in zip(d["name_acronym"], d["team_colour"])}
     summ = r / "results/racesim/summary.json"
     params = json.loads(summ.read_text(encoding="utf-8")).get("params", DEFAULT_PARAMS) if summ.exists() else DEFAULT_PARAMS
-    return Store(laps, races, upcoming, measure(laps, FUEL_S_PER_LAP), practice_rates(laps), pace_table(laps),
+    return Store(laps, races, upcoming, grids, measure(laps, FUEL_S_PER_LAP), practice_rates(laps), pace_table(laps),
                  colours, params)
 
 
@@ -201,6 +208,14 @@ def field(key: str) -> tuple[list[str], list[float], bool]:
         pole = r["quali_time_s"].min()
         gaps = (r["quali_time_s"] - pole).fillna((r["quali_time_s"] - pole).max() + 1.0).tolist()
         drivers = r["driver"].tolist()
+        return drivers, pre_race_pace(s.paces, int(row["year"]), row["date"], drivers, gaps), True
+    # Upcoming race after qualifying: the real starting grid (update.py saves it).
+    g = s.grids[(s.grids["year"] == row["year"]) & (s.grids["meeting_name"] == row["meeting_name"])]
+    if len(g):
+        g = g.sort_values("grid")
+        pole = g["quali_time_s"].min()
+        gaps = (g["quali_time_s"] - pole).fillna((g["quali_time_s"] - pole).max() + 1.0).tolist()
+        drivers = g["driver"].tolist()
         return drivers, pre_race_pace(s.paces, int(row["year"]), row["date"], drivers, gaps), True
     # Upcoming race before qualifying: the field of the latest race, grid ordered by recent race pace.
     last = s.races[s.races["date"] == s.races["date"].max()]

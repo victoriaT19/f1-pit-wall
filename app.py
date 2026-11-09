@@ -358,6 +358,23 @@ def scoreboard():
     return order_cards, b26, stop_cards
 
 
+def prediction_log() -> pd.DataFrame:
+    """Forecasts saved before each race by `python -m f1agent.update`, latest first."""
+    path = ROOT / "results/live/predictions.jsonl"
+    if not path.exists():
+        return pd.DataFrame(columns=["logged (UTC)", "race", "sessions seen", "recommended", "first stop", "grid"])
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    df = pd.DataFrame([{
+        "logged (UTC)": r["logged_at"][:16].replace("T", " "), "race": r["race"],
+        "sessions seen": ", ".join(r["sessions_seen"]) or "none", "recommended": r["recommended"],
+        "first stop": f"L{r['first_stop_window'][0]}–L{r['first_stop_window'][1]}",
+        "grid": r["grid"] + (f" ({' / '.join(r['front_row'])})" if r["grid"] == "real" else ""),
+        "tyres": f"{r['compounds']['hard']}/{r['compounds']['medium']}/{r['compounds']['soft']} "
+                 f"{'' if r['compounds']['status'] == 'official' else '(provisional)'}".strip(),
+    } for r in rows])
+    return df.iloc[::-1].reset_index(drop=True)
+
+
 # ── App ─────────────────────────────────────────────────────────────────────
 
 CSS = """
@@ -491,6 +508,10 @@ def build() -> gr.Blocks:
                                     "A quarter of real first stops were made under a safety car, which no pre-race "
                                     "plan can foresee.")
                         gr.HTML(stop_cards)
+                        gr.Markdown("### Prediction log\nThe plan for each upcoming race as saved after every "
+                                    "session (practice, qualifying), before the race, so it can be checked against "
+                                    "the real race afterwards.")
+                        gr.Dataframe(prediction_log(), interactive=False, wrap=True)
                     with gr.Tab("Method"):
                         gr.Markdown((ROOT / "docs/methodology.md").read_text(encoding="utf-8"),
                                     latex_delimiters=[{"left": "$$", "right": "$$", "display": True},
