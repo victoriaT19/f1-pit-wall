@@ -1,93 +1,84 @@
+# 🏁 Pit wall: estratégia de F1 com dados públicos
 
-# 🏎️ F1 Predictor - Abu Dhabi Grand Prix 2025
+Engenheiro de estratégia de Fórmula 1 feito com dados abertos de cronometragem
+([OpenF1](https://openf1.org), [FastF1](https://github.com/theOehrly/Fast-F1)) e as
+nominações de compostos da Pirelli. Mede a degradação dos pneus nas corridas anteriores,
+compara estratégias de pit stop, simula a corrida inteira com todos os carros e mostra
+tudo num dashboard.
 
-Este projeto utiliza Machine Learning para prever os resultados do Grande Prêmio de Abu Dhabi de Fórmula 1 na temporada de 2025. O sistema analisa estatísticas de pilotos, similaridade de pistas e dados históricos para gerar insights, tabelas de classificação e visualizações gráficas sobre o desempenho esperado. 
-- *Feito no dia 06/12/25*
+Começou como um preditor do GP de Abu Dhabi de 2025 (dezembro de 2025, scripts originais
+na raiz do repositório) e virou, ao longo da temporada de 2026, o pacote `f1agent`.
 
-## 📂 Estrutura do Projeto
+## O dashboard
 
-O projeto está organizado de forma modular, separando scripts, dados e resultados visuais:
+No ar em [huggingface.co/spaces/vtaua/f1-pit-wall](https://huggingface.co/spaces/vtaua/f1-pit-wall).
+Para rodar localmente:
+
+```bash
+pip install -r requirements.txt
+python app.py        # http://127.0.0.1:7860
+```
+
+- **Strategy**: estratégia recomendada para a corrida escolhida, faixa de incerteza de
+  cada opção, stints comparados com o que o top 10 fez de verdade, curvas de degradação e
+  mapa da pista colorido por velocidade. Compostos, temperatura da pista, perda no pit e
+  chance de safety car são editáveis.
+- **Race simulation**: o grid inteiro volta a volta (tráfego, ultrapassagem, ar sujo,
+  safety car, undercut), distribuição da posição final para duas estratégias e replay dos
+  carros no mapa.
+- **Scoreboard**: todos os backtests em 2026, inclusive onde o modelo não supera
+  referências simples.
+- **Method**: a matemática ([docs/methodology.md](docs/methodology.md)).
+
+## Resultados (backtests walk-forward, sem vazamento de dados)
+
+| | resultado |
+|---|---|
+| Ordem de chegada, Spearman médio (68 corridas de 2024 a 2026) | modelo 0,691 vs grid 0,677 |
+| Degradação prevista, erro médio (s/volta por volta de idade) | histórico 0,030; long runs dos treinos 0,088 |
+| Primeira parada, erro mediano (17 corridas de 2026, top 5) | simulação 8–9,5 voltas, referência histórica 8 |
+
+Os long runs dos treinos livres pioraram a estimativa de degradação e a estratégia, então o
+dashboard usa só o modelo ajustado nas corridas anteriores.
+
+A simulação não acerta o momento da parada melhor que a referência histórica: um quarto
+das primeiras paradas reais acontece sob safety car, que nenhum plano pré-corrida prevê.
+Ela serve para comparar opções, não como previsão. Detalhes e todas as execuções em
+[docs/test-log.md](docs/test-log.md).
+
+## Estrutura
 
 ```text
-F1_PRE-ABU_DHABI/
-│
-├── graficos/                            # Armazena os gráficos gerados pelos scripts
-│   ├── feature_importance_abu_dhabi.png # Gráfico: Variáveis que mais impactaram a previsão
-│   └── previsao_ganhos_perdas.png       # Gráfico: Comparativo de Posição de Largada vs. Chegada
-│
-├── results/                          # Armazena datasets de entrada e tabelas de saída
-│   ├── driver_stats_2025.csv         # Estatísticas atualizadas dos pilotos (Input)
-│   ├── f1_training_dataset.csv       # Dataset processado para treino do modelo (Input)
-│   └── resultado_previsao_abu_dhabi  # Tabela final com a classificação prevista (Output)
-│
-├── f1_predictor_model.pkl     # Modelo de Machine Learning treinado
-├── gerador_dataset.py         # Script: Processa dados brutos e gera o dataset de treino
-├── preditor_Abu_Dhabi.py      # Script: Carrega o modelo e executa a previsão da corrida
-├── similarity_score.py        # Script: Calcula similaridade entre Yas Marina e outras pistas
-└── vizualização.py            # Script: Gera os gráficos baseados nos resultados
+f1agent/
+  data.py, features.py, backtest.py    resultados (FastF1), features e backtest da ordem de chegada
+  openf1.py, laps.py, trackmap.py      voltas, stints, clima e telemetria do OpenF1
+  tyres.py, practice.py                degradação dos pneus (corridas e long runs dos treinos)
+  strategy.py, strategy_backtest.py    simulador de estratégia de um carro (Monte Carlo)
+  racesim.py, racepace.py, racesim_backtest.py   simulação com todos os carros
+  agent.py, tools.py, agent_eval.py    agente LLM com ferramentas sobre os dados
+  planner.py                           camada de dados do dashboard
+app.py                                 dashboard (Gradio + Plotly)
+data/                                  dados processados (data/upcoming.csv: próximas corridas)
+results/                               saídas dos backtests
 ```
 
-## 🛠️ Tecnologias Utilizadas
-
-  * **Python 3.x**
-  * **Pandas** (Manipulação de dados)
-  * **Scikit-Learn** (Machine Learning e Random Forest)
-  * **Matplotlib & Seaborn** (Visualização de dados)
-  * **FastF1** (Extração de dados de telemetria e cronometragem)
-
-## 🚀 Como Executar
-
-Siga a ordem abaixo para garantir que os arquivos sejam gerados corretamente nas pastas.
-
-### 1\. Instalação das Dependências
-
-Certifique-se de ter as bibliotecas instaladas:
+## Reproduzir
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib seaborn fastf1
+python -m f1agent.data --years 2023 2024 2025 2026     # resultados e grids
+python -m f1agent.openf1 --years 2024 2025 2026 --practice
+python -m f1agent.laps                                 # data/laps_clean.csv.gz
+python -m f1agent.trackmap                             # mapas das pistas
+python -m f1agent.backtest
+python -m f1agent.tyres
+python -m f1agent.strategy_backtest
+python -m f1agent.racesim_backtest
+python -m pytest
 ```
 
-### 2\. Configuração Avançada (Similaridade de Pista)
+O agente usa a API do Gemini (`GEMINI_API_KEY` num arquivo `.env`, fora do git).
 
-O arquivo `similarity_score.py` define como o modelo compara a pista alvo (Yas Marina) com as outras do calendário.
+---
 
-  * **Se precisar ajustar:** Abra o arquivo `similarity_score.py` e altere os dicionários `target_track_features` (para mudar as características da pista alvo) ou `feature_weights` (para mudar o peso dado a curvas, retas, etc.).
-
-### 3\. Geração do Dataset
-
-Caso precise processar novos dados ou recriar a base de treino na pasta `results`:
-
-```bash
-python gerador_dataset.py
-```
-
-### 4\. Executar a Previsão
-
-Este script carrega o modelo `f1_predictor_model.pkl` e os dados de `results/`, gerando a previsão final:
-
-```bash
-python preditor_Abu_Dhabi.py
-```
-
-*O resultado será salvo em: `results/resultado_previsao_abu_dhabi.csv`*
-
-### 5\. Gerar Gráficos e Insights
-
-Para visualizar a Importância das Features e a Previsão de Ganhos/Perdas:
-
-```bash
-python vizualização.py
-```
-
-*As imagens serão salvas automaticamente na pasta `graficos/`.*
-
-## 📊 Análises Disponíveis
-
-O projeto gera duas análises visuais principais:
-
-1.  **Feature Importance:** Mostra quais estatísticas (ex: pontos na temporada, vitórias, grid de largada) foram decisivas para o modelo escolher o vencedor.
-2.  **Ganho/Perda de Posições:** Um gráfico comparativo que ilustra a diferença prevista entre a posição de largada e a posição final prevista.
-
------
-
-*Desenvolvido para fins acadêmicos, análise de dados esportivos e por diversão😏.*
+Projeto de fã, sem ligação com a Fórmula 1 ou a Pirelli. Os dados do OpenF1 são para uso
+não comercial.

@@ -1,0 +1,23 @@
+[
+  {
+    "fuel_s_per_lap": 0.055,
+    "races_evaluated": 56,
+    "rows": 135,
+    "rate_mae_s_per_lap": {
+      "model": 0.0333,
+      "label_average": 0.0337,
+      "compound_average": 0.0349,
+      "circuit_history": 0.0413
+    },
+    "rate_mae_2026": {
+      "model": 0.0315,
+      "label_average": 0.0376,
+      "compound_average": 0.0353,
+      "circuit_history": 0.0349
+    },
+    "model_vs_label_average_rows": {
+      "model_better": 64,
+      "label_better": 71
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "model": "gemma-4-31b-it",
+  "cases": 16,
+  "correct": 16,
+  "tool_ok": 16,
+  "errors": 0,
+  "mean_llm_calls": 1.94,
+  "mean_prompt_tokens": 1994,
+  "mean_output_tokens": 55,
+  "median_seconds": 58.83
+}

@@ -1793,3 +1793,47 @@ year,round,event,date,driver,team,grid,quali_time_s,position,status,points,laps
 2026,18,United States Grand Prix,2026-10-25,BOT,Cadillac F1 Team,19.0,97.523,20.0,Retired,0.0,48.0
 2026,18,United States Grand Prix,2026-10-25,COL,Alpine F1 Team,20.0,95.722,21.0,Retired,0.0,35.0
 2026,18,United States Grand Prix,2026-10-25,BEA,Haas F1 Team,13.0,96.031,22.0,Retired,0.0,24.0
+2026,19,Mexico City Grand Prix,2026-11-01,VER,Red Bull,5.0,76.692,1.0,Finished,25.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,HAM,Ferrari,1.0,76.514,2.0,Finished,18.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,ANT,Mercedes,4.0,76.707,3.0,Finished,15.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,LEC,Ferrari,3.0,76.633,4.0,Finished,12.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,NOR,McLaren,6.0,76.728,5.0,Finished,10.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,RUS,Mercedes,2.0,76.523,6.0,Finished,8.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,LAW,RB F1 Team,22.0,77.029,7.0,Finished,6.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,BOR,Audi,13.0,77.68,8.0,Finished,4.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,HAD,Red Bull,7.0,76.9,9.0,Finished,2.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,HIR,Haas F1 Team,18.0,78.958,10.0,Finished,1.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,ALB,Williams,16.0,78.63,11.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,SAI,Williams,15.0,78.521,12.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,PIA,McLaren,12.0,77.646,13.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,HUL,Audi,10.0,77.306,14.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,COL,Alpine F1 Team,11.0,77.64,15.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,PER,Cadillac F1 Team,20.0,79.105,16.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,GAS,Alpine F1 Team,9.0,77.153,17.0,Finished,0.0,71.0
+2026,19,Mexico City Grand Prix,2026-11-01,LIN,RB F1 Team,8.0,77.117,18.0,Retired,0.0,58.0
+2026,19,Mexico City Grand Prix,2026-11-01,BEA,Haas F1 Team,14.0,78.083,19.0,Retired,0.0,47.0
+2026,19,Mexico City Grand Prix,2026-11-01,BOT,Cadillac F1 Team,21.0,79.852,20.0,Retired,0.0,42.0
+2026,19,Mexico City Grand Prix,2026-11-01,STR,Aston Martin,19.0,79.072,21.0,Retired,0.0,5.0
+2026,19,Mexico City Grand Prix,2026-11-01,ALO,Aston Martin,17.0,78.908,22.0,Retired,0.0,5.0
+2026,20,São Paulo Grand Prix,2026-11-08,NOR,McLaren,1.0,87.47,1.0,Finished,25.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,VER,Red Bull,21.0,91.238,2.0,Finished,18.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,HAD,Red Bull,5.0,87.218,3.0,Finished,15.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,RUS,Mercedes,7.0,86.745,4.0,Finished,12.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,ANT,Mercedes,2.0,88.095,5.0,Finished,10.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,PIA,McLaren,10.0,90.369,6.0,Finished,8.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,LAW,RB F1 Team,3.0,87.049,7.0,Finished,6.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,LEC,Ferrari,14.0,88.082,8.0,Finished,4.0,71.0
+2026,20,São Paulo Grand Prix,2026-11-08,HAM,Ferrari,20.0,90.001,9.0,Lapped,2.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,HUL,Audi,4.0,88.361,10.0,Lapped,1.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,LIN,RB F1 Team,18.0,91.687,11.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,ALO,Aston Martin,8.0,89.072,12.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,COL,Alpine F1 Team,13.0,93.327,13.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,GAS,Alpine F1 Team,15.0,93.449,14.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,ALB,Williams,9.0,88.918,15.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,BOR,Audi,19.0,101.564,16.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,BEA,Haas F1 Team,6.0,89.13,17.0,Lapped,0.0,70.0
+2026,20,São Paulo Grand Prix,2026-11-08,PER,Cadillac F1 Team,22.0,94.509,18.0,Lapped,0.0,69.0
+2026,20,São Paulo Grand Prix,2026-11-08,SAI,Williams,12.0,91.785,19.0,Lapped,0.0,69.0
+2026,20,São Paulo Grand Prix,2026-11-08,CAM,Haas F1 Team,11.0,91.515,20.0,Lapped,0.0,69.0
+2026,20,São Paulo Grand Prix,2026-11-08,STR,Aston Martin,16.0,93.653,21.0,Retired,0.0,30.0
+2026,20,São Paulo Grand Prix,2026-11-08,BOT,Cadillac F1 Team,17.0,93.774,22.0,Did not start,0.0,0.0

@@ -1,0 +1,16 @@
+{
+  "race_compounds": 43,
+  "races": 19,
+  "median_fp_laps": 81.0,
+  "mae_s_per_lap": {
+    "prior_only": 0.0296,
+    "practice_only": 0.0881,
+    "blend_n0_10": 0.0762,
+    "blend_n0_30": 0.063,
+    "blend_n0_100": 0.0447
+  },
+  "blend30_vs_prior_rows": {
+    "blend_better": 10,
+    "prior_better": 33
+  }
+}

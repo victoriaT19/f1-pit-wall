@@ -1,0 +1,14 @@
+{
+  "model": "gemma-4-31b-it (thinking=minimal)",
+  "cases": 16,
+  "correct": 16,
+  "tool_ok": 16,
+  "errors": 0,
+  "mean_llm_calls": 1.94,
+  "mean_prompt_tokens": 1994,
+  "mean_output_tokens": 55,
+  "mean_thought_tokens": 0,
+  "api_retries_total": 24,
+  "questions_with_retries": 14,
+  "median_seconds": 74.35
+}
