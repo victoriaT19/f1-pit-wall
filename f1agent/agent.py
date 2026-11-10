@@ -20,12 +20,31 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .tools import TOOL_SCHEMAS, TOOLS, latest_race
+from . import strategy_tools
+from .tools import TOOL_SCHEMAS as RESULT_SCHEMAS
+from .tools import TOOLS as RESULT_TOOLS
+from .tools import latest_race
+
+# Results and finishing-order tools (tools.py) plus strategy and simulation (strategy_tools.py).
+TOOLS = {**RESULT_TOOLS, **strategy_tools.TOOLS}
+TOOL_SCHEMAS = RESULT_SCHEMAS + strategy_tools.TOOL_SCHEMAS
 
 API = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 DEFAULT_MODEL = "gemma-4-31b-it"
 
-SYSTEM = """Você é um analista de Fórmula 1. Responda em português, de forma direta.
+SYSTEM = """Você é o engenheiro de estratégia de um time de Fórmula 1 no pit wall. Responda no idioma
+da pergunta (português por padrão), de forma direta, como num rádio de equipe: primeiro a
+resposta, depois o porquê em uma ou duas frases com os números.
+
+Ferramentas de estratégia (as mesmas contas do dashboard):
+- upcoming_races: próximas corridas, compostos, grid real ou estimado, sessões já feitas.
+- strategy_plan: melhor estratégia de pit stop e cenários "e se" (compostos, temperatura,
+  perda no pit, chance de safety car).
+- simulate_race: a corrida inteira simulada para comparar duas estratégias de um piloto.
+- prediction_log: previsões registradas antes das corridas.
+Para perguntas de estratégia, rode as ferramentas em vez de opinar. Estratégias se escrevem
+como 'M20 → H30' (composto + voltas do stint) e as voltas somam o total da corrida; use
+strategy_plan para saber o número de voltas antes de montar uma estratégia.
 
 Regras:
 - Todo número, resultado ou previsão deve vir das ferramentas. Nunca responda de memória:
@@ -35,7 +54,10 @@ Regras:
 - Ao dar uma previsão, diga quão confiável o modelo é (use backtest_summary): ele empata
   com a ordem de largada no geral e acerta o vencedor menos vezes que o grid.
 - Se a previsão usar grid provisório, avise.
-- Os pontos vêm só de GPs; corridas sprint não estão nos dados."""
+- Os pontos vêm só de GPs; corridas sprint não estão nos dados.
+- Em estratégia, diga a incerteza (faixa 10–90% ou chance de A à frente de B) e lembre que
+  compostos provisórios ou grid estimado podem mudar a resposta. Safety car muda tudo:
+  se perguntarem, compare cenários com strategy_plan ou simulate_race."""
 
 
 def _key() -> str:

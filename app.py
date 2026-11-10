@@ -337,6 +337,46 @@ def trace_fig(trace: pd.DataFrame, focus: str, title: str) -> go.Figure:
     return fig
 
 
+# ── Race engineer (LLM agent) ──────────────────────────────────────────────
+
+ENGINEER_EXAMPLES = [
+    "Qual a melhor estratégia para Las Vegas?",
+    "E se a perda no pit for de 30 s e não tiver safety car?",
+    "Para o Hamilton em Las Vegas, M25 → H25 é melhor que o plano recomendado?",
+    "Quais compostos a Pirelli levou para o Catar e o grid já é o real?",
+]
+
+
+def _agent_ready() -> bool:
+    if os.environ.get("GEMINI_API_KEY"):
+        return True
+    env = ROOT / ".env"
+    return env.exists() and "GEMINI_API_KEY=" in env.read_text(encoding="utf-8")
+
+
+def engineer_chat(message, chat, gem_history):
+    """Chat with the agent; yields a 'thinking' line first because a free-tier answer takes ~1 min."""
+    message = (message or "").strip()
+    if not message:
+        yield chat, gem_history, ""
+        return
+    chat = (chat or []) + [{"role": "user", "content": message}]
+    if not _agent_ready():
+        chat.append({"role": "assistant", "content": "The race engineer needs a Gemini API key (free): set "
+                     "`GEMINI_API_KEY` as a secret of this Space or in `.env` when running locally."})
+        yield chat, gem_history, ""
+        return
+    yield chat + [{"role": "assistant", "content": "_Box, box… running the numbers (free API, can take a minute)_"}], \
+        gem_history, ""
+    from f1agent import agent
+
+    t = agent.ask(message, history=gem_history)
+    reply = t.answer or f"Sorry, the model API failed: {t.error}"
+    used = ", ".join(dict.fromkeys(c["name"] for c in t.tool_calls)) or "none"
+    reply += f"\n\n<sub>tools: {used} · {t.seconds:.0f} s</sub>"
+    yield chat + [{"role": "assistant", "content": reply}], getattr(t, "history", gem_history), ""
+
+
 # ── Scoreboard ──────────────────────────────────────────────────────────────
 
 
@@ -499,6 +539,18 @@ def build() -> gr.Blocks:
                             with gr.Column(min_width=320):
                                 gap_plot = gr.Plot(show_label=False)
                         sim_state = gr.State(None)
+                    with gr.Tab("Race engineer"):
+                        gr.Markdown("Ask the strategy engineer: an LLM (Gemma 4 31B) that answers by running the same "
+                                    "tools as this dashboard (strategy plan, whole-field simulation, results, "
+                                    "standings). Every number comes from a tool call.")
+                        chatbot = gr.Chatbot(height=460, show_label=False)
+                        with gr.Row(equal_height=True):
+                            question = gr.Textbox(placeholder="Ask about strategy, a driver, a race…",
+                                                  show_label=False, scale=6, container=False)
+                            ask_btn = gr.Button("Ask", variant="primary", scale=1, min_width=90)
+                        gr.Examples(ENGINEER_EXAMPLES, inputs=question, label="Try")
+                        clear_btn = gr.Button("New conversation", variant="secondary", size="sm")
+                        gem_state = gr.State(None)
                     with gr.Tab("Scoreboard"):
                         order_cards, b26, stop_cards = scoreboard()
                         gr.Markdown("### Finishing order, 2026 races\nSpearman correlation between predicted "
@@ -526,6 +578,9 @@ def build() -> gr.Blocks:
         sim_btn.click(run_scenario, [race, driver, strat_a, strat_b, hard, medium, soft, temp, pit, scp],
                       [kpi_sim, pos_plot, replay, gap_plot, sim_state, source])
         source.input(show_source, [source, sim_state], [replay, gap_plot])
+        ask_btn.click(engineer_chat, [question, chatbot, gem_state], [chatbot, gem_state, question])
+        question.submit(engineer_chat, [question, chatbot, gem_state], [chatbot, gem_state, question])
+        clear_btn.click(lambda: ([], None), None, [chatbot, gem_state])
         demo.load(run_plan, controls, plan_out).then(field_drivers, race, [driver, source])
     return demo
 

@@ -467,3 +467,28 @@ Abu Dhabi S12 → M46, all with estimated grids; second run logged nothing new.
 
 Compound override marks the nomination official and rejects unknown races; sessions seen
 are listed with qualifying; a saved qualifying grid replaces the estimated one.
+
+## 2026-11-10: race engineer (agent in the dashboard)
+
+New agent tools (`f1agent/strategy_tools.py`), the same calculations as the dashboard:
+`upcoming_races`, `strategy_plan` (with what-if compounds, track temperature, pit loss,
+safety-car chance), `simulate_race` (driver on strategy A vs B, whole field),
+`prediction_log`. System prompt rewritten as a strategy engineer; new "Race engineer" chat
+tab (Gemma 4 31B via the Gemini API, default thinking).
+
+Live check (free Gemini tier), each answer right and grounded in one tool call:
+- "Qual a melhor estratégia para Las Vegas?" → strategy_plan → S42 → M8 (63 s, 1 retry).
+- "E se a perda no pit for de 30 s e sem safety car?" → strategy_plan(pit_loss=30,
+  safety_car_chance=0) → M10 → S40 (58 s).
+- "HAM: M25 → H25 é melhor que o recomendado?" → simulate_race → no: expected P4.5 vs P3.4,
+  podium 47% vs 67% (140 s, 1 retry).
+- In the dashboard: "Compostos do Catar e o grid já é o real?" → upcoming_races → C1/C2/C3,
+  provisional, grid estimated (64 s).
+First answer misread the 10–90% loss range as traffic; the tool now explains that it comes
+mostly from the random safety car. Latency (1–2 min) is the free API's.
+
+### Unit tests: 8 passed (65 in total)
+
+Race names resolve ("vegas", "Catar", "Brasil 2026"), strategies parse in several
+spellings and must add up to the race distance, what-if inputs reach the plan, simulation
+errors come back as messages the model can act on; the agent exposes all tools.

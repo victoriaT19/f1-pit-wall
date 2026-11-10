@@ -59,7 +59,8 @@ def test_json_safe():
 def test_gemini_schema_conversion():
     tools = agent.gemini_tools()[0]["functionDeclarations"]
     names = {t["name"] for t in tools}
-    assert names == set(T.TOOLS)
+    assert names == set(agent.TOOLS)
+    assert {"strategy_plan", "simulate_race", "upcoming_races", "prediction_log"} <= names
     pr = next(t for t in tools if t["name"] == "predict_race")
     assert pr["parameters"]["type"] == "OBJECT"
     assert pr["parameters"]["properties"]["grid"]["items"]["properties"]["position"]["type"] == "INTEGER"
