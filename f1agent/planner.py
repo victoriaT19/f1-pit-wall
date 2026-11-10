@@ -335,21 +335,24 @@ def smooth_track(key: str, n: int = 900) -> dict | None:
                         round(float(s1 + s2) / T, 4) if pd.notna(s1) and pd.notna(s2) else None]}
 
 
-def replay_data(key: str, gaps: pd.DataFrame, focus: str, title: str) -> dict | None:
+def replay_data(key: str, gaps: pd.DataFrame, focus: str, title: str, grid: list[str] | None = None) -> dict | None:
     """Everything the on-track replay needs: the smooth track and, per car, the race time at the
     end of every lap (leader at a constant reference lap time plus the car's gap; None after a
-    car stops). Cars start spread by their order on the first lap."""
+    car stops). Cars start in grid order (`grid`, else their order after lap 1), one grid slot
+    (0.25 s) apart; the start shuffle then shows during the first lap."""
     tr = smooth_track(key)
     if tr is None:
         return None
     T = tr["lap_time"]
     laps = np.asarray(gaps.index, dtype=int)
-    first = gaps.iloc[0].rank(method="first")
+    order = [d for d in (grid or []) if d in gaps.columns]
+    order += [d for d in gaps.iloc[0].sort_values().index if d not in order]
+    slot = {d: i for i, d in enumerate(order)}
     colours = store().colours
     cars = []
     for d in gaps.columns:
         g = gaps[d].to_numpy(float)
-        cum = [float((first[d] - 1) * 0.25)] + [None if np.isnan(v) else round(float(l * T + v), 2)
+        cum = [float(slot[d] * 0.25)] + [None if np.isnan(v) else round(float(l * T + v), 2)
                                                   for l, v in zip(laps, g)]
         cars.append({"name": d, "colour": colours.get(d, "#9AA3B2"), "cum": cum})
     return {"title": title, "track": tr, "laps": int(laps.max()), "lap_time": T, "cars": cars, "focus": focus}

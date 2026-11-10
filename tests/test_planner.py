@@ -101,3 +101,11 @@ def test_replay_data_has_lap_times_for_every_car_and_stops_retired_cars():
     T = d["lap_time"]
     assert len(cars["AAA"]) == 4 and cars["AAA"][3] == pytest.approx(3 * T, abs=0.01)
     assert cars["BBB"][2] == pytest.approx(2 * T + 2.0, abs=0.01) and cars["BBB"][3] is None
+
+
+def test_replay_starts_in_grid_order_not_lap_one_order():
+    import pandas as pd
+    gaps = pd.DataFrame({"AAA": [3.0, 3.0], "BBB": [0.0, 0.0]}, index=[1, 2])  # BBB leads after lap 1
+    d = P.replay_data(NEXT, gaps, "AAA", "test", grid=["AAA", "BBB"])     # but AAA starts on pole
+    start = {c["name"]: c["cum"][0] for c in d["cars"]}
+    assert start["AAA"] < start["BBB"]

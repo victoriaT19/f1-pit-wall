@@ -293,7 +293,8 @@ def show_source(source, state):
     else:
         trace = pd.read_json(io.StringIO(state["trace"]), orient="split")
         title, gap_title = f"One simulated race · {driver} on strategy A", f"One simulated race: gap to the leader"
-    data = P.replay_data(key, trace, driver, title)
+    grid = P.field(key)[0]  # starting grid (real, or estimated before qualifying) in the same order the sim uses
+    data = P.replay_data(key, trace, driver, title, grid=grid)
     return (json.dumps(data, separators=(",", ":")) if data else ""), trace_fig(trace, driver, gap_title)
 
 
