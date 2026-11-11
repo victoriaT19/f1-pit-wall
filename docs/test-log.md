@@ -492,3 +492,22 @@ mostly from the random safety car. Latency (1–2 min) is the free API's.
 Race names resolve ("vegas", "Catar", "Brasil 2026"), strategies parse in several
 spellings and must add up to the race distance, what-if inputs reach the plan, simulation
 errors come back as messages the model can act on; the agent exposes all tools.
+
+## 2026-11-10: OpenRouter provider with Gemini fallback
+
+`agent.ask(provider="auto")`: OpenRouter (`google/gemma-4-31b-it:free`, OpenAI-compatible
+tool calling) when `OPENROUTER_API_KEY` is set, falling back to the Gemini API. Chat history
+is now plain text turns (tool results are not carried over), so a conversation can change
+provider. `OPENROUTER_BASE_URL` can route the calls through the tokenprof proxy;
+`agent_eval --provider` picks the provider.
+
+Live check: every call to the free Gemma 4 models on OpenRouter (31B and 26B A4B) answered
+429 "temporarily rate-limited upstream" over several minutes; the upstream provider is
+Google AI Studio's shared free pool. With `auto`, OpenRouter failed in ~4 s and Gemini
+answered correctly ("Las Vegas?" → S42 → M8, uncertainty attributed to the safety car).
+The 16-question eval on OpenRouter and the tokenprof profile wait for the free tier to
+answer.
+
+### Unit tests: 2 passed (67 in total)
+
+Fallback to Gemini with text history kept; a missing provider is reported.

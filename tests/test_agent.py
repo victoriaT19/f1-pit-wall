@@ -106,3 +106,37 @@ def test_answer_checkers():
     assert mentions_number("fez 394 pontos", 394)
     assert mentions_number("média de 4,25", 4.25)
     assert not mentions_number("média de 4,4", 4.25)
+
+
+def test_auto_provider_falls_back_to_gemini_and_keeps_text_history(monkeypatch):
+    monkeypatch.setattr(agent, "available_providers", lambda: ["openrouter", "gemini"])
+
+    def broken(*a, **k):
+        raise RuntimeError("OpenRouter 429: rate-limited upstream")
+
+    def gemini(question, history, trace, *a, **k):
+        assert history == [{"role": "user", "text": "oi"}, {"role": "assistant", "text": "olá"}]
+        trace.answer = "S42 → M8"
+
+    monkeypatch.setattr(agent, "_openrouter_answer", broken)
+    monkeypatch.setattr(agent, "_gemini_answer", gemini)
+    t = agent.ask("estratégia?", history=[{"role": "user", "text": "oi"}, {"role": "assistant", "text": "olá"}])
+    assert t.provider == "gemini" and t.answer == "S42 → M8" and t.error is None
+    assert t.history[-1] == {"role": "assistant", "text": "S42 → M8"}
+
+
+def test_no_provider_is_reported(monkeypatch):
+    monkeypatch.setattr(agent, "available_providers", lambda: [])
+    t = agent.ask("oi")
+    assert t.answer == "" and "no provider" in t.error
+
+
+def test_openrouter_refuses_paid_models_before_any_request(monkeypatch):
+    def no_network(*a, **k):
+        raise AssertionError("no request should be made for a paid model")
+
+    monkeypatch.setattr(agent, "_openrouter_post", no_network)
+    monkeypatch.setattr(agent, "available_providers", lambda: ["openrouter"])
+    t = agent.ask("oi", provider="openrouter", model="google/gemma-4-31b-it")
+    assert t.answer == "" and "non-free" in t.error
+    assert agent.OPENROUTER_MODEL.endswith(":free")

@@ -348,10 +348,9 @@ ENGINEER_EXAMPLES = [
 
 
 def _agent_ready() -> bool:
-    if os.environ.get("GEMINI_API_KEY"):
-        return True
-    env = ROOT / ".env"
-    return env.exists() and "GEMINI_API_KEY=" in env.read_text(encoding="utf-8")
+    from f1agent import agent
+
+    return bool(agent.available_providers())
 
 
 def engineer_chat(message, chat, gem_history):
@@ -362,8 +361,9 @@ def engineer_chat(message, chat, gem_history):
         return
     chat = (chat or []) + [{"role": "user", "content": message}]
     if not _agent_ready():
-        chat.append({"role": "assistant", "content": "The race engineer needs a Gemini API key (free): set "
-                     "`GEMINI_API_KEY` as a secret of this Space or in `.env` when running locally."})
+        chat.append({"role": "assistant", "content": "The race engineer needs a free API key: set "
+                     "`OPENROUTER_API_KEY` and/or `GEMINI_API_KEY` as secrets of this Space (or in `.env` "
+                     "when running locally)."})
         yield chat, gem_history, ""
         return
     yield chat + [{"role": "assistant", "content": "_Box, box… running the numbers (free API, can take a minute)_"}], \
@@ -373,7 +373,7 @@ def engineer_chat(message, chat, gem_history):
     t = agent.ask(message, history=gem_history)
     reply = t.answer or f"Sorry, the model API failed: {t.error}"
     used = ", ".join(dict.fromkeys(c["name"] for c in t.tool_calls)) or "none"
-    reply += f"\n\n<sub>tools: {used} · {t.seconds:.0f} s</sub>"
+    reply += f"\n\n<sub>tools: {used} · {t.provider or 'no provider'} · {t.seconds:.0f} s</sub>"
     yield chat + [{"role": "assistant", "content": reply}], getattr(t, "history", gem_history), ""
 
 
@@ -542,7 +542,8 @@ def build() -> gr.Blocks:
                     with gr.Tab("Race engineer"):
                         gr.Markdown("Ask the strategy engineer: an LLM (Gemma 4 31B) that answers by running the same "
                                     "tools as this dashboard (strategy plan, whole-field simulation, results, "
-                                    "standings). Every number comes from a tool call.")
+                                    "standings). Every number comes from a tool call. Served by OpenRouter's free "
+                                    "tier, falling back to the Gemini API when it is rate-limited.")
                         chatbot = gr.Chatbot(height=460, show_label=False)
                         with gr.Row(equal_height=True):
                             question = gr.Textbox(placeholder="Ask about strategy, a driver, a race…",

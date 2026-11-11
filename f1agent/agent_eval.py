@@ -137,7 +137,8 @@ def _write(out: Path, rows: list[dict], model: str) -> dict:
     return summary
 
 
-def evaluate(out: Path, model: str, only: list[str] | None = None, thinking: str | None = None) -> dict:
+def evaluate(out: Path, model: str | None, only: list[str] | None = None, thinking: str | None = None,
+             provider: str = "gemini") -> dict:
     from .agent import ask
 
     out.mkdir(parents=True, exist_ok=True)
@@ -148,7 +149,7 @@ def evaluate(out: Path, model: str, only: list[str] | None = None, thinking: str
     for c in cases():
         if only and c["id"] not in only:
             continue
-        t = ask(c["q"], model=model, thinking=thinking)
+        t = ask(c["q"], model=model, thinking=thinking, provider=provider, run_id=f"eval-{c['id']}")
         called = [tc["name"] for tc in t.tool_calls]
         ok = bool(t.answer) and bool(c["check"](t.answer))
         tool_ok = (not called) if c["tool"] is None else (c["tool"] in called)
@@ -162,7 +163,8 @@ def evaluate(out: Path, model: str, only: list[str] | None = None, thinking: str
         time.sleep(1)
     order = [c["id"] for c in cases()]
     rows.sort(key=lambda r: order.index(r["id"]))
-    return _write(out, rows, model + (f" (thinking={thinking})" if thinking else " (default thinking)"))
+    label = f"{provider}:{model or 'default'}"
+    return _write(out, rows, label + (f" (thinking={thinking})" if thinking else " (default thinking)"))
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -171,7 +173,8 @@ def main(argv: list[str] | None = None) -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", default="results/agent_eval")
-    p.add_argument("--model", default="gemma-4-31b-it")
+    p.add_argument("--model", default=None, help="default: the provider's Gemma 4 31B")
+    p.add_argument("--provider", default="gemini", choices=["gemini", "openrouter", "auto"])
     p.add_argument("--only", nargs="*", help="re-run only these case ids, keeping the others")
     p.add_argument("--thinking", default=None, help="minimal or high; default: the model's own")
     p.add_argument("--rescore", action="store_true", help="re-check saved answers, no API calls")
@@ -179,7 +182,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.rescore:
         rescore(Path(args.out))
     else:
-        evaluate(Path(args.out), args.model, args.only, args.thinking)
+        evaluate(Path(args.out), args.model, args.only, args.thinking, args.provider)
 
 
 if __name__ == "__main__":
