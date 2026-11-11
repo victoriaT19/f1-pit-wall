@@ -1,0 +1,14 @@
+{
+  "model": "gemini:default (default thinking)",
+  "cases": 16,
+  "correct": 16,
+  "tool_ok": 16,
+  "errors": 0,
+  "mean_llm_calls": 1.94,
+  "mean_prompt_tokens": 4024,
+  "mean_output_tokens": 58,
+  "mean_thought_tokens": 157,
+  "api_retries_total": 21,
+  "questions_with_retries": 11,
+  "median_seconds": 66.19
+}

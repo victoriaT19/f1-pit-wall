@@ -511,3 +511,22 @@ answer.
 ### Unit tests: 2 passed (67 in total)
 
 Fallback to Gemini with text history kept; a missing provider is reported.
+
+## 2026-11-11: agent eval with the current agent (Gemini)
+
+Same 16 questions as before, current agent (race-engineer prompt, 10 tools), Gemma 4 31B
+on the Gemini API with its default thinking (`results/agent_eval_gemini`).
+
+| | first agent (6 tools) | current agent (10 tools) |
+|---|---|---|
+| correct | 15/16 | **16/16** |
+| right tool called | 15/16 | 16/16 |
+| errors | 1 | 0 |
+| mean LLM calls | 1.81 | 1.94 |
+| mean prompt tokens | 2,046 | 4,024 |
+| mean output / thought tokens | 50 / 137 | 58 / 157 |
+| API retries (questions affected) | 37 (12) | 21 (11) |
+| median seconds | – | 66 |
+
+Prompt tokens doubled: the four new tool schemas and the longer system prompt are sent
+with every call. That is the overhead tokenprof should quantify once OpenRouter answers.

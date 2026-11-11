@@ -41,6 +41,9 @@ python app.py        # http://127.0.0.1:7860
 Os long runs dos treinos livres pioraram a estimativa de degradação e a estratégia, então o
 dashboard usa só o modelo ajustado nas corridas anteriores.
 
+O agente (Gemma 4 31B com 10 ferramentas) acertou 16 de 16 perguntas da avaliação automática,
+que checa a resposta e a ferramenta usada (`results/agent_eval_gemini`).
+
 A simulação não acerta o momento da parada melhor que a referência histórica: um quarto
 das primeiras paradas reais acontece sob safety car, que nenhum plano pré-corrida prevê.
 Ela serve para comparar opções, não como previsão. Detalhes e todas as execuções em
