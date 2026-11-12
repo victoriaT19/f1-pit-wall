@@ -1,6 +1,20 @@
 {
   "races": 68,
   "overall": {
+    "ensemble": {
+      "spearman": 0.705,
+      "mae": 3.1828,
+      "winner": 0.4559,
+      "podium": 0.6324,
+      "top10": 0.8059
+    },
+    "pl": {
+      "spearman": 0.7005,
+      "mae": 3.2064,
+      "winner": 0.4853,
+      "podium": 0.6765,
+      "top10": 0.7926
+    },
     "model": {
       "spearman": 0.6907,
       "mae": 3.3063,
@@ -30,15 +44,29 @@
       "top10": 0.7485
     },
     "form": {
-      "spearman": 0.5943,
-      "mae": 3.9546,
-      "winner": 0.2206,
+      "spearman": 0.5893,
+      "mae": 3.9881,
+      "winner": 0.2059,
       "podium": 0.4951,
-      "top10": 0.7324
+      "top10": 0.7309
     }
   },
   "by_year": {
     "2024": {
+      "ensemble": {
+        "spearman": 0.744,
+        "mae": 2.9265,
+        "winner": 0.3333,
+        "podium": 0.6111,
+        "top10": 0.8542
+      },
+      "pl": {
+        "spearman": 0.75,
+        "mae": 2.8507,
+        "winner": 0.375,
+        "podium": 0.6806,
+        "top10": 0.85
+      },
       "model": {
         "spearman": 0.7157,
         "mae": 3.1616,
@@ -68,14 +96,28 @@
         "top10": 0.7917
       },
       "form": {
-        "spearman": 0.6512,
-        "mae": 3.5864,
-        "winner": 0.25,
+        "spearman": 0.6463,
+        "mae": 3.6281,
+        "winner": 0.2083,
         "podium": 0.4861,
         "top10": 0.7708
       }
     },
     "2025": {
+      "ensemble": {
+        "spearman": 0.6652,
+        "mae": 3.3072,
+        "winner": 0.5417,
+        "podium": 0.7083,
+        "top10": 0.7792
+      },
+      "pl": {
+        "spearman": 0.6538,
+        "mae": 3.4083,
+        "winner": 0.5,
+        "podium": 0.7222,
+        "top10": 0.7625
+      },
       "model": {
         "spearman": 0.6693,
         "mae": 3.2895,
@@ -105,14 +147,28 @@
         "top10": 0.6958
       },
       "form": {
-        "spearman": 0.5192,
-        "mae": 4.2129,
+        "spearman": 0.5122,
+        "mae": 4.2588,
         "winner": 0.2917,
         "podium": 0.5972,
-        "top10": 0.6833
+        "top10": 0.6792
       }
     },
     "2026": {
+      "ensemble": {
+        "spearman": 0.7058,
+        "mae": 3.3409,
+        "winner": 0.5,
+        "podium": 0.5667,
+        "top10": 0.78
+      },
+      "pl": {
+        "spearman": 0.697,
+        "mae": 3.3909,
+        "winner": 0.6,
+        "podium": 0.6167,
+        "top10": 0.76
+      },
       "model": {
         "spearman": 0.6864,
         "mae": 3.5,
@@ -142,15 +198,118 @@
         "top10": 0.76
       },
       "form": {
-        "spearman": 0.6161,
-        "mae": 4.0864,
+        "spearman": 0.6134,
+        "mae": 4.0955,
         "winner": 0.1,
         "podium": 0.3833,
         "top10": 0.745
       }
     }
   },
+  "held_out_2025_2026": {
+    "ensemble": {
+      "spearman": 0.6836,
+      "mae": 3.3225,
+      "winner": 0.5227,
+      "podium": 0.6439,
+      "top10": 0.7795
+    },
+    "pl": {
+      "spearman": 0.6734,
+      "mae": 3.4004,
+      "winner": 0.5455,
+      "podium": 0.6742,
+      "top10": 0.7614
+    },
+    "model": {
+      "spearman": 0.6771,
+      "mae": 3.3852,
+      "winner": 0.5455,
+      "podium": 0.6364,
+      "top10": 0.7682
+    },
+    "model_delta": {
+      "spearman": 0.6793,
+      "mae": 3.3757,
+      "winner": 0.5455,
+      "podium": 0.6515,
+      "top10": 0.7682
+    },
+    "grid": {
+      "spearman": 0.6483,
+      "mae": 3.4461,
+      "winner": 0.6818,
+      "podium": 0.6818,
+      "top10": 0.7659
+    },
+    "championship": {
+      "spearman": 0.5763,
+      "mae": 4.0568,
+      "winner": 0.3182,
+      "podium": 0.5985,
+      "top10": 0.725
+    },
+    "form": {
+      "spearman": 0.5582,
+      "mae": 4.1845,
+      "winner": 0.2045,
+      "podium": 0.5,
+      "top10": 0.7091
+    }
+  },
+  "brier": {
+    "ensemble": {
+      "brier_win": 0.0297,
+      "brier_podium": 0.0657,
+      "brier_top10": 0.1451
+    },
+    "pl": {
+      "brier_win": 0.0321,
+      "brier_podium": 0.0698,
+      "brier_top10": 0.1446
+    },
+    "grid": {
+      "brier_win": 0.0292,
+      "brier_podium": 0.0659,
+      "brier_top10": 0.156
+    }
+  },
+  "brier_held_out_2025_2026": {
+    "ensemble": {
+      "brier_win": 0.0267,
+      "brier_podium": 0.0626,
+      "brier_top10": 0.1567
+    },
+    "pl": {
+      "brier_win": 0.0301,
+      "brier_podium": 0.0671,
+      "brier_top10": 0.1574
+    },
+    "grid": {
+      "brier_win": 0.025,
+      "brier_podium": 0.0623,
+      "brier_top10": 0.1648
+    }
+  },
   "model_vs_baselines_spearman": {
+    "ensemble vs grid": {
+      "model_better": 41,
+      "baseline_better": 27,
+      "ties": 0,
+      "sign_test_p": 0.1143
+    },
+    "ensemble vs model": {
+      "model_better": 47,
+      "baseline_better": 21,
+      "ties": 0,
+      "sign_test_p": 0.0022
+    },
+    "pl vs grid": {
+      "model_better": 41,
+      "baseline_better": 27,
+      "ties": 0,
+      "sign_test_p": 0.1143
+    },
     "model vs grid": {
       "model_better": 36,
       "baseline_better": 32,
@@ -170,9 +329,9 @@
       "sign_test_p": 0.0022
     },
     "model vs form": {
-      "model_better": 54,
-      "baseline_better": 13,
-      "ties": 1,
+      "model_better": 56,
+      "baseline_better": 12,
+      "ties": 0,
       "sign_test_p": 0.0
     }
   }

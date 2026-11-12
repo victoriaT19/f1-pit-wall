@@ -50,3 +50,43 @@ def pre_race_pace(table: pd.DataFrame, year: int, date: str, drivers: list[str],
             out.append(float(q))
     m = min(out)
     return [x - m for x in out]
+
+
+def pace_pct_table(laps: pd.DataFrame, fuel: float = FUEL_S_PER_LAP) -> pd.DataFrame:
+    """Like pace_table, but in % of the field's median lap, so circuits of different lengths
+    are comparable and races from earlier seasons can be pooled. One row per driver per race."""
+    r = laps[(laps["session_name"] == "Race") & laps["clean"]].copy()
+    r["y"] = corrected(r, fuel)
+    med = r.groupby(["session_key", "lap_number"])["y"].transform("median")
+    r["rel"] = (r["y"] - med) / med * 100.0
+    out = (r.groupby(["session_key", "session_date_start", "name_acronym"])["rel"]
+           .agg(["median", "size"]).reset_index()
+           .rename(columns={"name_acronym": "driver", "median": "pace_pct", "size": "laps",
+                            "session_date_start": "date"}))
+    out = out[out["laps"] >= 10]
+    out["date"] = out["date"].str[:10]
+    out["pace_pct"] = out["pace_pct"] - out.groupby("session_key")["pace_pct"].transform("min")
+    return out[["date", "driver", "pace_pct"]]
+
+
+def pre_race_pace_decayed(pct_table: pd.DataFrame, date: str, drivers: list[str], quali_gaps: list[float],
+                          lap_s: float, half_life_days: float = 90.0) -> list[float]:
+    """Like pre_race_pace, but the race history pools earlier seasons too (recent races weigh
+    more, see decayed_pace) and is converted from % to s/lap with this race's lap time."""
+    pct = decayed_pace(pct_table, date[:10], drivers, half_life_days)
+    out = [float(q) if np.isnan(p) else float((1 - QUALI_WEIGHT) * p * lap_s / 100.0 + QUALI_WEIGHT * q)
+           for p, q in zip(pct, quali_gaps)]
+    m = min(out)
+    return [x - m for x in out]
+
+
+def decayed_pace(table: pd.DataFrame, date: str, drivers, half_life_days: float = 90.0) -> list[float]:
+    """Each driver's race pace (% off the fastest) before `date`, recent races weighing more;
+    NaN for a driver with no earlier race laps."""
+    past = table[table["date"] < date]
+    age = (pd.Timestamp(date) - pd.to_datetime(past["date"])).dt.days.to_numpy()
+    w = pd.Series(0.5 ** (age / half_life_days), index=past.index)
+    num = (past["pace_pct"] * w).groupby(past["driver"]).sum()
+    den = w.groupby(past["driver"]).sum()
+    pace = num / den
+    return [float(pace[d]) if d in pace.index else np.nan for d in drivers]

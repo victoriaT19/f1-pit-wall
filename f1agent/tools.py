@@ -14,11 +14,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .backtest import make_model, to_order
-from .features import FEATURES, build_features
+from .backtest import predict, to_order
+from .features import add_race_pace, build_features
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "races.csv"
+LAPS = ROOT / "data" / "laps_clean.csv.gz"
 BACKTEST = ROOT / "results" / "backtest"
 
 
@@ -31,8 +32,13 @@ def races() -> pd.DataFrame:
 
 
 @lru_cache(maxsize=1)
+def laps() -> pd.DataFrame:
+    return pd.read_csv(LAPS)
+
+
+@lru_cache(maxsize=1)
 def features() -> pd.DataFrame:
-    return build_features(races())
+    return add_race_pace(build_features(races()), laps())
 
 
 def _norm(s: str) -> str:
@@ -153,17 +159,23 @@ def predict_race(year: int, event: str, grid: dict | list | None = None) -> dict
         race, train, note = _future_race(year, event, grid)
         if isinstance(race, dict):
             return race
-    cols = [f for f in FEATURES if train[f].notna().any()]
-    model = make_model().fit(train[cols], train["position"])
-    pred = to_order(pd.Series(model.predict(race[cols]), index=race.index))
+    out = predict(train, race)
+    pred = to_order(out["scores"]["ensemble"])
+    probs = {o: pd.Series(v, index=race.index) for o, v in out["probs"]["ensemble"].items()}
     rows = []
     for drv in pred.sort_values().index:
-        row = {"predicted": int(pred[drv]), "driver": drv, "grid": int(race.loc[drv, "grid"])}
+        row = {"predicted": int(pred[drv]), "driver": drv, "grid": int(race.loc[drv, "grid"]),
+               "p_win": round(float(probs["win"][drv]), 3), "p_podium": round(float(probs["podium"][drv]), 3),
+               "p_top10": round(float(probs["top10"][drv]), 3)}
         if "position" in race and not pd.isna(race.loc[drv, "position"]):
             row["actual"] = int(race.loc[drv, "position"])
         rows.append(row)
+    acc = backtest_summary()
     return {"year": year, "event": name or event, "note": note,
-            "model_accuracy": backtest_summary()["overall"], "prediction": rows}
+            "model": "ensemble: gradient boosting + Plackett-Luce ranking (probabilities: Plackett-Luce "
+                     "blended with how often each grid slot won)",
+            "model_accuracy": {k: acc.get("overall", {}).get(k) for k in ("ensemble", "grid")},
+            "prediction": rows}
 
 
 def _future_race(year: int, event: str, grid: dict | None):
@@ -181,10 +193,10 @@ def _future_race(year: int, event: str, grid: dict | None):
     if isinstance(grid, list):  # [{"driver": "VER", "position": 1}, ...] from the agent
         grid = {g["driver"]: g["position"] for g in grid}
     grid = {_driver(k): float(v) for k, v in grid.items()}
-    fake = drivers.assign(year=year, round=rnd, event=event, date="", position=np.nan,
+    fake = drivers.assign(year=year, round=rnd, event=event, date=_upcoming_date(event), position=np.nan,
                           status="", points=0.0, laps=np.nan, quali_time_s=np.nan)
     fake["grid"] = fake["driver"].map(grid).fillna(len(fake))
-    feats = build_features(pd.concat([df, fake], ignore_index=True))
+    feats = add_race_pace(build_features(pd.concat([df, fake], ignore_index=True)), laps())
     race = feats[(feats["year"] == year) & (feats["round"] == rnd)].set_index("driver")
     train = feats[~((feats["year"] == year) & (feats["round"] == rnd))]
     train = train[train["position"].notna()]
@@ -192,6 +204,18 @@ def _future_race(year: int, event: str, grid: dict | None):
             "classificação); a previsão vai mudar com o grid real." if provisional
             else "Corrida futura, com o grid informado.")
     return race, train, note
+
+
+def _upcoming_date(event: str) -> str:
+    """Date of an upcoming race from data/upcoming.csv (today if it is not listed)."""
+    path = ROOT / "data" / "upcoming.csv"
+    if path.exists():
+        up = pd.read_csv(path)
+        q = ALIASES.get(_norm(event), _norm(event))
+        for _, r in up.iterrows():
+            if q and q in _norm(r["meeting_name"]):
+                return str(r["date"])[:10]
+    return pd.Timestamp.today().strftime("%Y-%m-%d")
 
 
 @lru_cache(maxsize=1)

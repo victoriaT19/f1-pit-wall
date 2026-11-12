@@ -426,11 +426,13 @@ def _steps_footer(t) -> str:
 def scoreboard():
     bt = pd.read_csv(ROOT / "results/backtest/per_race.csv")
     b26 = bt[bt["year"] == 2026].pivot_table(index=["round", "event"], columns="method", values="spearman").reset_index()
-    cols = [c for c in ("model", "grid", "championship", "form") if c in b26.columns]
+    cols = [c for c in ("ensemble", "pl", "model", "grid") if c in b26.columns]
     b26 = b26[["round", "event"] + cols].round(3)
     means = b26[cols].mean()
     rs = json.loads((ROOT / "results/racesim/summary.json").read_text(encoding="utf-8"))
-    order_cards = cards([(f"Spearman · {c}", f"{means[c]:.3f}", "mean over 2026 races") for c in cols])
+    label = {"ensemble": "ensemble", "pl": "Plackett-Luce", "model": "gradient boosting", "grid": "starting grid"}
+    order_cards = cards([(f"Spearman · {label[c]}", f"{means[c]:.3f}", "mean over 2026 races") for c in cols])
+    b26 = b26.rename(columns=label)
     stop_cards = cards([
         ("Whole-field simulation", f"{rs['multi']['first_stop_error_median']:.1f} laps",
          f"first-stop error · stops right {rs['multi']['stops_match'] * 100:.0f}%"),
@@ -599,7 +601,9 @@ def build() -> gr.Blocks:
                     with gr.Tab("Scoreboard"):
                         order_cards, b26, stop_cards = scoreboard()
                         gr.Markdown("### Finishing order, 2026 races\nSpearman correlation between predicted "
-                                    "and real finishing order (1 = perfect).")
+                                    "and real finishing order (1 = perfect). The ensemble averages the ranks of a "
+                                    "gradient-boosting model and a Plackett-Luce ranking model with driver and team "
+                                    "strengths; every race is predicted from earlier races only.")
                         gr.HTML(order_cards)
                         gr.Dataframe(b26, interactive=False)
                         gr.Markdown("### Pit strategy vs what drivers really did\n2026 races, top 5 on the grid. "

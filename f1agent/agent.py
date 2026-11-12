@@ -70,8 +70,10 @@ Regras:
   seus dados de treino não cobrem as temporadas recentes, e as ferramentas sim.
 - Os dados vão de 2023 até {latest}. Para algo fora disso, diga que não há dados.
 - Pilotos aparecem pelo código de 3 letras (VER, NOR, LEC...). Pode citar o nome completo.
-- Ao dar uma previsão, diga quão confiável o modelo é (use backtest_summary): ele empata
-  com a ordem de largada no geral e acerta o vencedor menos vezes que o grid.
+- Ao dar uma previsão, diga quão confiável o modelo é (use backtest_summary): a ordem
+  prevista é um pouco melhor que a ordem de largada (Spearman 0,705 contra 0,677), mas o
+  grid acerta o vencedor mais vezes. Para chances de vitória, pódio ou top 10, use os
+  campos p_win, p_podium e p_top10 da previsão.
 - Se a previsão usar grid provisório, avise.
 - Os pontos vêm só de GPs; corridas sprint não estão nos dados.
 - Em estratégia, diga a incerteza (faixa 10–90% ou chance de A à frente de B) e lembre que

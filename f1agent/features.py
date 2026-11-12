@@ -26,6 +26,24 @@ FEATURES = [
     "drv_track_hist",   # driver's mean finish at this circuit in earlier editions
 ]
 
+# Used by the Plackett-Luce model (ranking.py), not by the gradient boosting model: adding
+# it there made the 2024 validation worse.
+RACE_PACE_HALF_LIFE = 90.0  # days
+
+
+def add_race_pace(feats: pd.DataFrame, laps: pd.DataFrame) -> pd.DataFrame:
+    """Add race_pace: each driver's long-run race pace before the race, in % off the
+    fastest, from clean race laps of earlier races (recent races weigh more)."""
+    from .racepace import decayed_pace, pace_pct_table
+
+    table = pace_pct_table(laps)
+    feats = feats.copy()
+    feats["race_pace"] = np.nan
+    for _, g in feats.groupby(["year", "round"]):
+        date = str(g["date"].iloc[0]) or pd.Timestamp.today().strftime("%Y-%m-%d")
+        feats.loc[g.index, "race_pace"] = decayed_pace(table, date, g["driver"], RACE_PACE_HALF_LIFE)
+    return feats
+
 
 def race_order(df: pd.DataFrame) -> list[tuple[int, int]]:
     return sorted(set(zip(df["year"], df["round"])))
