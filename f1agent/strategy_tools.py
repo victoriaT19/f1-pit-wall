@@ -167,8 +167,10 @@ def simulate_race(event: str, driver: str, strategy_a: str, strategy_b: str | No
                                        "level": round(float((pa == pb).mean()) * 100, 1),
                                        "a_behind": round(float((pa > pb).mean()) * 100, 1)},
         "rivals": "Rivais usam o melhor plano com as paradas espalhadas em ±3 voltas.",
-        "model_limits": "Ultrapassagem calibrada em 2025 é difícil (a largada mexe mais nas posições que a pista); "
-                        "safety car sorteado pela taxa histórica do circuito.",
+        "model_limits": "Ultrapassagem e largada calibradas em 2025; safety car sorteado pela taxa histórica do "
+                        "circuito; cada carro pode abandonar com a taxa recente de abandonos do piloto (por isso o "
+                        "pior caso, worst_10pct, pode ser bem atrás). A e B usam os mesmos sorteios, inclusive os "
+                        "abandonos, então a comparação A vs B é justa.",
     }
 
 

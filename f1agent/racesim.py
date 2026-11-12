@@ -19,6 +19,10 @@ car); the car rejoins wherever its total time puts it.
 The undercut is not coded as a rule: a car that stops earlier runs on new tyres while its
 rival is on old ones, and if it gains more than the gap it comes out ahead.
 
+Retirements: each car retires with probability dnf_prob (its recent DNF rate) on a lap drawn
+uniformly; a retired car drops to the back, behind every car that retired later. The first
+simulated race, the one shown in the replay, has no retirements.
+
 Everything is vectorised over simulated races: arrays are [sims, cars].
 """
 
@@ -43,6 +47,7 @@ class Car:
     name: str
     base: float          # s/lap relative to the reference car (lower = faster)
     strategy: tuple      # ((compound, laps), ...)
+    dnf_prob: float = 0.0  # chance of retiring during the race
 
 
 @dataclass
@@ -102,6 +107,9 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     T += np.abs(rng.normal(0, track.start_sd, (n_sims, n))) if track.start_sd > 0 else 0.0
     rows = np.arange(n_sims)
     trace = np.zeros((L, n))
+    dnf_p = np.array([car.dnf_prob for car in cars])
+    retire_lap = np.where(rng.random((n_sims, n)) < dnf_p[None, :], rng.integers(0, L, (n_sims, n)), L)
+    retire_lap[0] = L  # the replayed race has no retirements
     for lap in range(L):
         free = base + rng.normal(0, LAP_NOISE, (n_sims, n))
         for j, (comp, age, _) in enumerate(plans):
@@ -135,6 +143,10 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
             if pit[lap]:
                 new[:, j] += np.where(under_sc, track.sc_pit_factor * track.pit_loss, track.pit_loss)
         T = new
+        # Retired cars leave the race: far behind, the earliest retirements last.
+        gone = retire_lap <= lap
+        if gone.any():
+            T[gone] = 1e7 - retire_lap[gone] * 1e3
         trace[lap] = T[0] - T[0].min()
     positions = np.argsort(np.argsort(T, axis=1), axis=1) + 1
     out = {"positions": positions, "names": [c.name for c in cars]}

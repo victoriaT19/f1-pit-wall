@@ -34,7 +34,9 @@ from scipy.stats import spearmanr
 
 from .data import finished
 from .practice import practice_rates
-from .racepace import pace_table, pre_race_pace
+from .backtest import grid_probs
+from .racepace import pace_pct_table, pace_table, pre_race_pace, pre_race_pace_decayed
+from .ranking import dnf_rates
 from .racesim import Car, Track, position_changes, simulate
 from .strategy import simulate as simulate_single
 from .strategy import strategies
@@ -76,7 +78,11 @@ def sessions_for(laps: pd.DataFrame, years: list[int]) -> pd.DataFrame:
     return s
 
 
-def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel):
+# Model choices tested in the backtest (see docs/test-log.md); the defaults are the kept ones.
+VARIANT = {"dnf": True, "pace": "decayed"}
+
+
+def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel, pct=None):
     """Everything needed to simulate one race, or None for wet or incomplete races."""
     res = races[(races["year"] == s["year"]) & (races["event"] == s["meeting_name"])]
     if res.empty:
@@ -90,14 +96,21 @@ def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel):
     single = simulate_single(inp, strategies(inp.laps, max_stops=2, step=2), n_sims=800)
     best = _parse(single.iloc[0]["strategy"])
     drivers, qgaps = quali_gaps(res)
-    base = pre_race_pace(paces, int(s["year"]), s["date"], drivers, qgaps)
-    cars = [Car(d, b, jitter(best, rng)) for d, b in zip(drivers, base)]
+    if VARIANT["pace"] == "decayed" and pct is not None:
+        lap_s = float(res["quali_time_s"].min())
+        base = pre_race_pace_decayed(pct, s["date"], drivers, qgaps, lap_s)
+    else:
+        base = pre_race_pace(paces, int(s["year"]), s["date"], drivers, qgaps)
+    dnf, field_dnf = dnf_rates(races, s["date"][:10]) if VARIANT["dnf"] else ({}, 0.0)
+    cars = [Car(d, b, jitter(best, rng), dnf.get(d, field_dnf)) for d, b in zip(drivers, base)]
     track = Track(laps=inp.laps, rate=inp.rate, rate_sd=inp.rate_sd, offset=inp.offset,
                   offset_sd=inp.offset_sd, pit_loss=inp.pit_loss, sc_lap_prob=inp.sc_lap_prob,
                   pass_threshold=1.5)
     fin = res[res["status"].map(finished)]
     target = float((fin["position"] - fin["grid"]).abs().mean())
+    before = races[races["date"] < s["date"][:10]]
     return {"s": s, "res": res, "actual": actual, "inp": inp, "best": best, "cars": cars, "track": track,
+            "grid_p": grid_probs(before, res.sort_values("grid")),
             "candidates": [_parse(x) for x in single["strategy"].head(N_CANDIDATES)], "target": target}
 
 
@@ -136,7 +149,12 @@ def validate(prepared: list[dict], params: dict, laps, races, model_order: pd.Da
         actual_pos = res.set_index("driver").loc[names, "position"].values
         m = model_order[(model_order["year"] == s["year"]) & (model_order["event"] == s["meeting_name"])
                         & (model_order["method"] == "model")]
-        order_rows.append({"meeting_name": s["meeting_name"],
+        brier = {}
+        act = actual_pos
+        for o, k in (("win", 1), ("podium", 3), ("top10", 10)):
+            brier[f"sim_brier_{o}"] = float(np.mean(((sim["positions"] <= k).mean(0) - (act <= k)) ** 2))
+            brier[f"grid_brier_{o}"] = float(np.mean((p["grid_p"][o] - (act <= k)) ** 2))
+        order_rows.append({"meeting_name": s["meeting_name"], **brier,
                            "sim_spearman": _order_spearman(sim, res),
                            "grid_spearman": float(spearmanr(np.arange(1, len(names) + 1), actual_pos).statistic),
                            "model_spearman": float(m["spearman"].iloc[0]) if len(m) else np.nan,
@@ -184,6 +202,10 @@ def validate(prepared: list[dict], params: dict, laps, races, model_order: pd.Da
         "sim_better_than_grid": int((order["sim_spearman"] > order["grid_spearman"]).sum()),
         "grid_better_than_sim": int((order["sim_spearman"] < order["grid_spearman"]).sum()),
     }
+    summary["probabilities_brier"] = {
+        m: {o: round(float(order[f"{m}_brier_{o}"].mean()), 4) for o in ("win", "podium", "top10")}
+        for m in ("sim", "grid")}
+    summary["variant"] = dict(VARIANT)
     summary["position_changes"] = {"simulated_mean": round(float(order["sim_changes"].mean()), 2),
                                    "real_mean": round(float(order["real_changes"].mean()), 2)}
     return per, order, summary
@@ -209,12 +231,16 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--model-order", default="results/backtest/per_race.csv")
     p.add_argument("--out", default="results/racesim")
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--no-dnf", action="store_true", help="variant without retirements")
+    p.add_argument("--pace", choices=("decayed", "season"), default="decayed")
     args = p.parse_args(argv)
+    VARIANT.update(dnf=not args.no_dnf, pace=args.pace)
 
     laps, races = pd.read_csv(args.laps), pd.read_csv(args.races)
     rates_all, fp, paces = measure(laps, FUEL_S_PER_LAP), practice_rates(laps), pace_table(laps)
+    pct = pace_pct_table(laps)
     rng = np.random.default_rng(args.seed)
-    prep = lambda years: [x for x in (prepare(s, laps, races, rates_all, fp, paces, rng, FUEL_S_PER_LAP)
+    prep = lambda years: [x for x in (prepare(s, laps, races, rates_all, fp, paces, rng, FUEL_S_PER_LAP, pct)
                                       for _, s in sessions_for(laps, years).iterrows()) if x]
     cal_races = prep([2025])
     print(f"calibrating on {len(cal_races)} races of 2025...", flush=True)

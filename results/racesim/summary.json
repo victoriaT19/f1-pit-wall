@@ -3,13 +3,13 @@
   "driver_cases": 78,
   "params": {
     "form_sd": 0.1,
-    "start_sd": 1.5,
-    "pass_threshold": 3.0
+    "start_sd": 0.3,
+    "pass_threshold": 1.5
   },
   "multi": {
-    "first_stop_error_median": 9.5,
-    "first_stop_error_mean": 10.9,
-    "stops_match": 0.5
+    "first_stop_error_median": 9.0,
+    "first_stop_error_mean": 10.7,
+    "stops_match": 0.526
   },
   "single": {
     "first_stop_error_median": 8.0,
@@ -22,30 +22,46 @@
     "stops_match": 0.423
   },
   "multi_vs_single_first_stop": {
-    "multi_closer": 36,
-    "single_closer": 40,
+    "multi_closer": 40,
+    "single_closer": 36,
     "ties": 2
   },
   "finishing_order_spearman": {
-    "simulation": 0.672,
+    "simulation": 0.698,
     "grid": 0.672,
     "finishing_order_model": 0.693,
-    "sim_better_than_grid": 7,
-    "grid_better_than_sim": 9
+    "sim_better_than_grid": 9,
+    "grid_better_than_sim": 8
+  },
+  "probabilities_brier": {
+    "sim": {
+      "win": 0.0195,
+      "podium": 0.0616,
+      "top10": 0.1608
+    },
+    "grid": {
+      "win": 0.0227,
+      "podium": 0.0616,
+      "top10": 0.1587
+    }
+  },
+  "variant": {
+    "dnf": true,
+    "pace": "decayed"
   },
   "position_changes": {
-    "simulated_mean": 2.38,
+    "simulated_mean": 3.09,
     "real_mean": 2.7
   },
   "calibration": {
     "races_2025": 21,
     "best": {
       "form_sd": 0.1,
-      "start_sd": 1.5,
-      "pass_threshold": 3.0,
-      "rmse_changes": 1.1692995635252514,
-      "mean_bias": -0.09587547299621603,
-      "spearman": 0.6443564601717855
+      "start_sd": 0.3,
+      "pass_threshold": 1.5,
+      "rmse_changes": 1.0142444334745633,
+      "mean_bias": 0.14207356626861276,
+      "spearman": 0.6631271649218323
     }
   }
 }

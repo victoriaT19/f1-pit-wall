@@ -21,9 +21,10 @@ import numpy as np
 import pandas as pd
 
 from .practice import practice_rates
-from .racepace import pace_table, pre_race_pace
+from .racepace import decayed_pace, pace_pct_table, pace_table, pre_race_pace_decayed
 from .racesim import Car, Track
 from .racesim import simulate as simulate_field
+from .ranking import dnf_rates
 from .strategy import RaceInputs, describe, pit_laps, simulate, strategies
 from .strategy_backtest import DRY, inputs_for
 from .tyres import FUEL_S_PER_LAP, measure
@@ -46,6 +47,7 @@ class Store:
     rates_all: pd.DataFrame
     fp: pd.DataFrame
     paces: pd.DataFrame
+    pct: pd.DataFrame
     colours: dict
     params: dict
 
@@ -70,7 +72,7 @@ def store(root: str = str(ROOT)) -> Store:
     summ = r / "results/racesim/summary.json"
     params = json.loads(summ.read_text(encoding="utf-8")).get("params", DEFAULT_PARAMS) if summ.exists() else DEFAULT_PARAMS
     return Store(laps, races, upcoming, grids, measure(laps, FUEL_S_PER_LAP), practice_rates(laps), pace_table(laps),
-                 colours, params)
+                 pace_pct_table(laps), colours, params)
 
 
 # ── Races ───────────────────────────────────────────────────────────────────
@@ -208,7 +210,7 @@ def field(key: str) -> tuple[list[str], list[float], bool]:
         pole = r["quali_time_s"].min()
         gaps = (r["quali_time_s"] - pole).fillna((r["quali_time_s"] - pole).max() + 1.0).tolist()
         drivers = r["driver"].tolist()
-        return drivers, pre_race_pace(s.paces, int(row["year"]), row["date"], drivers, gaps), True
+        return drivers, pre_race_pace_decayed(s.pct, row["date"], drivers, gaps, float(pole)), True
     # Upcoming race after qualifying: the real starting grid (update.py saves it).
     g = s.grids[(s.grids["year"] == row["year"]) & (s.grids["meeting_name"] == row["meeting_name"])]
     if len(g):
@@ -216,17 +218,32 @@ def field(key: str) -> tuple[list[str], list[float], bool]:
         pole = g["quali_time_s"].min()
         gaps = (g["quali_time_s"] - pole).fillna((g["quali_time_s"] - pole).max() + 1.0).tolist()
         drivers = g["driver"].tolist()
-        return drivers, pre_race_pace(s.paces, int(row["year"]), row["date"], drivers, gaps), True
+        return drivers, pre_race_pace_decayed(s.pct, row["date"], drivers, gaps, float(pole)), True
     # Upcoming race before qualifying: the field of the latest race, grid ordered by recent race pace.
     last = s.races[s.races["date"] == s.races["date"].max()]
     drivers = last["driver"].tolist()
-    past = s.paces[(s.paces["year"] == row["year"]) & (s.paces["date"] < row["date"])].sort_values("date")
-    recent = past.groupby("driver").tail(3).groupby("driver")["pace"].mean()
-    worst = float(recent.max()) if len(recent) else 1.0
-    base = [float(recent.get(d, worst + 0.3)) for d in drivers]
+    pct = decayed_pace(s.pct, str(row["date"])[:10], drivers)
+    lap_s = _lap_time(row)
+    known = [p for p in pct if not np.isnan(p)]
+    worst = max(known) if known else 1.0
+    base = [(worst + 0.3 if np.isnan(p) else p) * lap_s / 100.0 for p in pct]
     order = np.argsort(base)
     m = min(base)
     return [drivers[i] for i in order], [base[i] - m for i in order], False
+
+
+def _lap_time(row) -> float:
+    """Typical race lap at this circuit (s), from earlier races there; 90 s if none."""
+    l = store().laps
+    l = l[(l["session_name"] == "Race") & l["clean"] & (l["meeting_name"] == row["meeting_name"])]
+    return float(l["lap_duration"].median()) if len(l) else 90.0
+
+
+def dnf_chances(key: str, drivers: list[str]) -> list[float]:
+    """Each driver's chance of retiring, from his recent races (see ranking.dnf_rates)."""
+    row, _, _ = race_row(key)
+    rates, field_rate = dnf_rates(store().races, str(row["date"])[:10])
+    return [float(rates.get(d, field_rate)) for d in drivers]
 
 
 def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 300, seed: int = 0,
@@ -235,6 +252,7 @@ def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 30
     inp, _, res = plan(key, n_sims=800, **plan_kw)
     params = store().params
     drivers, base, real_grid = field(key)
+    dnf = dnf_chances(key, drivers)
     rival = parse_strategy(rival_strategy or res.iloc[0]["strategy"])
     rng = np.random.default_rng(seed)
     rivals = [_jitter(rival, rng, inp.laps) for _ in drivers]
@@ -243,7 +261,8 @@ def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 30
     j = drivers.index(driver)
     out = {"drivers": drivers, "real_grid": real_grid, "grid_pos": j + 1, "laps": inp.laps}
     for tag, desc in (("a", strat_a), ("b", strat_b)):
-        cars = [Car(d, b, parse_strategy(desc) if i == j else rivals[i]) for i, (d, b) in enumerate(zip(drivers, base))]
+        cars = [Car(d, b, parse_strategy(desc) if i == j else rivals[i], dnf[i])
+                for i, (d, b) in enumerate(zip(drivers, base))]
         sim = simulate_field(cars, track, n_sims=n_sims, seed=seed, return_trace=True)
         out[tag] = {"strategy": desc, "positions": sim["positions"][:, j], "trace": sim["trace"],
                     "expected": sim["positions"].mean(axis=0)}
