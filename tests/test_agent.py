@@ -82,7 +82,7 @@ def test_agent_loop_with_fake_model(monkeypatch):
         return next(replies)
 
     monkeypatch.setattr(agent, "_post", fake_post)
-    t = agent.ask("Quem venceu em São Paulo 2026?")
+    t = agent.ask("Quem venceu em São Paulo 2026?", provider="gemini")
     assert t.answer == "Norris venceu."
     assert [c["name"] for c in t.tool_calls] == ["race_result"]
     assert t.llm_calls == 2 and t.prompt_tokens == 400 and t.output_tokens == 15
@@ -95,7 +95,7 @@ def test_agent_stops_after_max_steps(monkeypatch):
     call = {"candidates": [{"content": {"role": "model", "parts": [
         {"functionCall": {"name": "standings", "args": {"year": 2026}}}]}}]}
     monkeypatch.setattr(agent, "_post", lambda *a, **k: call)
-    t = agent.ask("loop", max_steps=3)
+    t = agent.ask("loop", max_steps=3, provider="gemini")
     assert t.error and len(t.tool_calls) == 3
 
 
@@ -125,6 +125,12 @@ def test_auto_provider_falls_back_to_gemini_and_keeps_text_history(monkeypatch):
     assert t.history[-1] == {"role": "assistant", "text": "S42 → M8"}
 
 
+def test_gemini_is_tried_first(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "x")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "y")
+    assert agent.available_providers() == ["gemini", "openrouter"]
+
+
 def test_no_provider_is_reported(monkeypatch):
     monkeypatch.setattr(agent, "available_providers", lambda: [])
     t = agent.ask("oi")
@@ -140,3 +146,94 @@ def test_openrouter_refuses_paid_models_before_any_request(monkeypatch):
     t = agent.ask("oi", provider="openrouter", model="google/gemma-4-31b-it")
     assert t.answer == "" and "non-free" in t.error
     assert agent.OPENROUTER_MODEL.endswith(":free")
+
+
+def test_time_budget_stops_retries_and_falls_back(monkeypatch):
+    """A busy Gemini (503 on every call) ends within the budget and the fallback still runs."""
+    import io
+    import time
+    import urllib.error
+
+    monkeypatch.setattr(agent, "available_providers", lambda: ["gemini", "openrouter"])
+    monkeypatch.setenv("GEMINI_API_KEY", "x")
+
+    def busy(req, timeout=None):
+        raise urllib.error.HTTPError(req.full_url, 503, "busy", {}, io.BytesIO(b"overloaded"))
+
+    monkeypatch.setattr(agent.urllib.request, "urlopen", busy)
+    sleeps = []
+    monkeypatch.setattr(agent.time, "sleep", lambda s: sleeps.append(s))
+
+    def openrouter(question, history, trace, *a, **k):
+        trace.answer = "M25 → H25"
+
+    monkeypatch.setattr(agent, "_openrouter_answer", openrouter)
+    t0 = time.time()
+    t = agent.ask("estratégia?", time_budget=10)
+    assert t.provider == "openrouter" and t.answer == "M25 → H25"
+    assert sum(sleeps) < 10 and time.time() - t0 < 5
+    assert agent._deadline.get() is None
+
+
+def test_time_budget_error_is_reported(monkeypatch):
+    monkeypatch.setattr(agent, "available_providers", lambda: ["gemini"])
+
+    def slow(*a, **k):
+        raise agent.BudgetExceeded("Gemini API still failing ([503]); time budget used up")
+
+    monkeypatch.setattr(agent, "_gemini_answer", slow)
+    t = agent.ask("oi", time_budget=5)
+    assert t.answer == "" and "time budget" in t.error
+
+
+def test_auto_routes_are_free_and_follow_the_keys(monkeypatch):
+    monkeypatch.setattr(agent, "available_providers", lambda: ["gemini", "openrouter"])
+    chain = agent.routes()
+    assert chain == agent.CHAIN
+    assert all(m.endswith(":free") for p, m in chain if p == "openrouter")
+    monkeypatch.setattr(agent, "available_providers", lambda: ["gemini"])
+    assert agent.routes() == [("gemini", agent.DEFAULT_MODEL)]
+    # an explicit provider gives a single route (evals stay reproducible)
+    assert agent.routes("openrouter") == [("openrouter", agent.OPENROUTER_MODEL)]
+
+
+def test_busy_routes_are_skipped_and_events_reported(monkeypatch):
+    monkeypatch.setattr(agent, "available_providers", lambda: ["gemini", "openrouter"])
+    tried = []
+
+    def openrouter(question, history, trace, model, *a, **k):
+        tried.append(model)
+        if "nemotron" not in model:
+            raise RuntimeError("OpenRouter 429: rate-limited upstream")
+        agent._emit("tool", {"name": "standings", "args": {"year": 2026}})
+        trace.answer = "NOR lidera"
+
+    def gemini(*a, **k):
+        tried.append("gemini")
+        raise RuntimeError("Gemini API 503")
+
+    monkeypatch.setattr(agent, "_openrouter_answer", openrouter)
+    monkeypatch.setattr(agent, "_gemini_answer", gemini)
+    events = []
+    t = agent.ask("quem lidera?", on_event=lambda k, d: events.append(k))
+    assert t.answer == "NOR lidera" and t.model.startswith("nvidia/") and t.error is None
+    assert tried[-1].startswith("nvidia/") and events.count("route") == 3 and "tool" in events
+
+
+def test_openrouter_429_is_not_retried(monkeypatch):
+    import io
+    import urllib.error
+
+    calls = []
+
+    def limited(req, timeout=None):
+        calls.append(1)
+        raise urllib.error.HTTPError(req.full_url, 429, "limited", {}, io.BytesIO(b"rate-limited upstream"))
+
+    monkeypatch.setattr(agent.urllib.request, "urlopen", limited)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    try:
+        agent._openrouter_post({"model": "m:free"}, [], {})
+    except RuntimeError as e:
+        assert "429" in str(e)
+    assert len(calls) == 1

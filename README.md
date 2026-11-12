@@ -97,7 +97,11 @@ python -m f1agent.racesim_backtest
 python -m pytest
 ```
 
-O agente usa a API do Gemini (`GEMINI_API_KEY` num arquivo `.env`, fora do git).
+O agente usa só planos gratuitos (`OPENROUTER_API_KEY` e/ou `GEMINI_API_KEY` num arquivo `.env`,
+fora do git). Como as cotas gratuitas oscilam, ele percorre uma cadeia de modelos gratuitos que
+chamam ferramentas (Gemma 4 31B e 26B e Nemotron no OpenRouter, Gemma 4 31B na API do Gemini) e
+troca de modelo assim que um está ocupado. O chat mostra ao vivo o modelo e cada ferramenta
+chamada, e cada resposta termina dizendo qual modelo respondeu.
 
 ---
 

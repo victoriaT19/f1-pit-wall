@@ -12,6 +12,7 @@ import html
 import io
 import json
 import os
+import time
 from pathlib import Path
 
 import gradio as gr
@@ -33,6 +34,7 @@ except ImportError:  # running locally
     pass
 
 ROOT = Path(__file__).resolve().parent
+AGENT_BUDGET = 150  # seconds for one chat answer, across providers
 COMPOUND_COLOUR = {"SOFT": "#E8002D", "MEDIUM": "#FFC906", "HARD": "#E6E8EC",
                    "INTERMEDIATE": "#43B02A", "WET": "#0067AD"}
 A_COLOUR, B_COLOUR = "#3D8BFF", "#FF8A1F"
@@ -368,13 +370,54 @@ def engineer_chat(message, chat, gem_history):
         return
     yield chat + [{"role": "assistant", "content": "_Box, box… running the numbers (free API, can take a minute)_"}], \
         gem_history, ""
+    import threading
+
     from f1agent import agent
 
-    t = agent.ask(message, history=gem_history)
-    reply = t.answer or f"Sorry, the model API failed: {t.error}"
-    used = ", ".join(dict.fromkeys(c["name"] for c in t.tool_calls)) or "none"
-    reply += f"\n\n<sub>tools: {used} · {t.provider or 'no provider'} · {t.seconds:.0f} s</sub>"
-    yield chat + [{"role": "assistant", "content": reply}], getattr(t, "history", gem_history), ""
+    box, events = {}, []
+    worker = threading.Thread(target=lambda: box.update(t=agent.ask(
+        message, history=gem_history, time_budget=AGENT_BUDGET,
+        on_event=lambda kind, data: events.append((kind, data)))), daemon=True)
+    t0 = time.time()
+    worker.start()
+    while worker.is_alive():
+        worker.join(1)
+        if worker.is_alive():
+            yield chat + [{"role": "assistant", "content": _progress(events, time.time() - t0)}], gem_history, ""
+    t = box["t"]
+    reply = t.answer or ("Sorry, every free model is busy right now (rate limits or overload). "
+                         f"Please try again in a few minutes.\n\n<sub>{(t.error or '')[:400]}</sub>")
+    yield chat + [{"role": "assistant", "content": reply + _steps_footer(t)}], getattr(t, "history", gem_history), ""
+
+
+def _short_model(model: str, provider: str = "") -> str:
+    name = model.split("/")[-1].replace(":free", "")
+    return f"{name} ({'Gemini API' if provider == 'gemini' else 'OpenRouter'})" if provider else name
+
+
+def _call_text(name: str, args: dict) -> str:
+    inner = ", ".join(f"{k}={v!r}" if isinstance(v, str) else f"{k}={v}" for k, v in (args or {}).items())
+    return f"`{name}({inner})`"
+
+
+def _progress(events: list, seconds: float) -> str:
+    """The live 'radio' while the agent works: which model is answering, which tools ran."""
+    lines = [f"_Box, box… {seconds:.0f} s_"]
+    for kind, data in list(events):
+        if kind == "route":
+            prefix = "trying" if data["attempt"] == 1 else "busy, switching to"
+            lines.append(f"- {prefix} **{_short_model(data['model'], data['provider'])}**")
+        elif kind == "tool":
+            lines.append(f"- running {_call_text(data['name'], data['args'])}")
+    return "\n".join(lines)
+
+
+def _steps_footer(t) -> str:
+    calls = "".join(f"<li>{html.escape(c['name'])}({html.escape(', '.join(f'{k}={v}' for k, v in (c['args'] or {}).items()))})"
+                    f"{' → error' if c.get('error') else ''}</li>" for c in t.tool_calls) or "<li>no tool calls</li>"
+    model = _short_model(t.model, t.provider) if t.model else "no model"
+    return (f"\n\n<details><summary>{len(t.tool_calls)} tool call(s) · {html.escape(model)} · {t.seconds:.0f} s"
+            f"</summary><ul>{calls}</ul></details>")
 
 
 # ── Scoreboard ──────────────────────────────────────────────────────────────
@@ -542,8 +585,9 @@ def build() -> gr.Blocks:
                     with gr.Tab("Race engineer"):
                         gr.Markdown("Ask the strategy engineer: an LLM (Gemma 4 31B) that answers by running the same "
                                     "tools as this dashboard (strategy plan, whole-field simulation, results, "
-                                    "standings). Every number comes from a tool call. Served by OpenRouter's free "
-                                    "tier, falling back to the Gemini API when it is rate-limited.")
+                                    "standings). Every number comes from a tool call. Free tiers only: Gemma 4 on OpenRouter "
+                                    "and the Gemini API, switching to the next free model when one is busy. The "
+                                    "steps (model, tool calls) show up live while it works.")
                         chatbot = gr.Chatbot(height=460, show_label=False)
                         with gr.Row(equal_height=True):
                             question = gr.Textbox(placeholder="Ask about strategy, a driver, a race…",

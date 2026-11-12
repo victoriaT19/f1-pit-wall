@@ -530,3 +530,76 @@ on the Gemini API with its default thinking (`results/agent_eval_gemini`).
 
 Prompt tokens doubled: the four new tool schemas and the longer system prompt are sent
 with every call. That is the overhead tokenprof should quantify once OpenRouter answers.
+
+## 2026-11-11: agent eval on OpenRouter (free Gemma 4 31B), not usable
+
+The free `google/gemma-4-31b-it:free` answered one probe after Google's daily quota reset,
+so the 16-question eval started through the tokenprof proxy. 15 of 16 questions then got
+429 "temporarily rate-limited upstream" after two retries each (31 retries in total); only
+one question went through, and it was correct. The upstream pool is shared by every free
+user, so this measures availability, not the agent: no comparison with the Gemini run is
+possible, and the result files are not committed. The profile covers only 4 calls (7,213
+prompt tokens), too few to quantify the tool-schema overhead.
+
+In the app the agent tries OpenRouter first and falls back to Gemini within ~4 s, so these
+429s do not reach the user.
+
+## 2026-11-11: Gemini becomes the first provider
+
+After the OpenRouter attempts, `available_providers()` now returns Gemini first and OpenRouter
+as the fallback, so chat answers no longer wait ~4 s for a 429 before reaching Gemini.
+
+### Unit tests: 69 passed
+
+New `test_gemini_is_tried_first`. `test_agent_stops_after_max_steps` is now pinned to Gemini:
+with the new order its failure fell through to a real OpenRouter request.
+
+## 2026-11-11: time budget for chat answers
+
+On the Space a strategy question sat on "Box, box…" for minutes. Locally the same question
+showed why: the Gemini API answered 500/503 and timed out, one request took 169 s with three
+retries, and each tool step could retry for minutes. The simulation tool itself takes ~5 s.
+
+`ask(time_budget=...)` now caps the whole answer (the first provider gets 60% of it, the
+fallback the rest; no new request or retry starts after the deadline). The app uses 150 s,
+shows the elapsed time every 3 s and, when both free APIs fail, says so in plain words.
+
+### Manual run: both free APIs busy, answer in 97 s
+
+Gemini: `[500, 'timeout']`, stopped at its 90 s share; OpenRouter: 429 upstream. The chat
+showed the timer, then the "APIs are busy, try again in a few minutes" message.
+
+### Unit tests: 71 passed
+
+New: a Gemini that answers 503 forever ends within the budget and the fallback still runs;
+a budget error is reported in the trace.
+
+## 2026-11-11: chain of free models and live steps in the chat
+
+The two-provider fallback was not enough: at the same moment the free Gemma 4 31B was
+rate-limited upstream on OpenRouter and the Gemini API answered 500/503 at ~25 s per step.
+A probe of the free OpenRouter models with tool support found four that call tools correctly
+(Gemma 4 31B, Gemma 4 26B, Nemotron 3.5 Super, ERNIE 5.5 Flash); Nemotron 3 Ultra and
+Lightning answered without calling the tool.
+
+`provider="auto"` now walks `CHAIN`: Gemma 4 31B, Gemma 4 26B and Nemotron 3.5 Super on
+OpenRouter, then Gemma 4 31B on the Gemini API (large daily quota, slow when overloaded).
+A 429 is no longer retried, so a busy route costs ~1 s. An explicit provider or model still
+gives a single route, so evals stay reproducible. The chat shows the model being tried and
+each tool call live, and ends with the model that answered.
+
+### Manual runs: "Para o Hamilton em Las Vegas, M25 → H25 é melhor que o plano recomendado?"
+
+| chain order | result |
+|---|---|
+| Gemini before Nemotron | correct, 97 s: Gemini ran 3 tools at ~25 s each, ran out of its share, Nemotron redid it |
+| Nemotron before Gemini (kept) | correct, 27 s: both Gemma routes busy (~1 s), Nemotron ran `strategy_plan` and `simulate_race` |
+
+Both answers: S42 → M8 is better (expected P3.4 vs P4.5, podium 66.7% vs 47.3%), with the
+provisional compounds and estimated grid flagged.
+
+### Unit tests: 74 passed
+
+New: the auto chain is free-only and follows the keys that are set; busy routes are skipped
+and progress events reported; an OpenRouter 429 is not retried. Two older tests called
+`ask()` without a provider and, with OpenRouter first, reached the real API: pinned to Gemini.
