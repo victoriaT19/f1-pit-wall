@@ -211,6 +211,13 @@ retired later. As in Heilmeier et al. (2020, *Application of Monte Carlo methods
 probabilistic effects in a race simulation for circuit motorsport*, Applied Sciences), the
 point is the distribution of outcomes, not one race.
 
+Rivals run the single-car simulator's best plan with each stop moved by up to 3 laps, drawn
+again in every simulated race (so the field does not all pit on the same lap); the driver
+being studied runs exactly the strategy asked for. The first version drew each rival's shift
+once and kept it for all simulated races, so a driver could carry the same early or late stop
+through every race whenever he was a rival: choosing him then changed his expected position by
+up to about 2 places, in either direction.
+
 ### 3.3 Race pace (`racepace.py`)
 
 For each race and driver, pace is the median over clean laps of the fuel-corrected time
@@ -226,18 +233,21 @@ race history.)
 
 $(\sigma_{form}, \sigma_{start}, \theta)$ were chosen on the 2025 races by grid search,
 minimising the error between simulated and real mean $|\text{finish} - \text{grid}|$, then
-frozen for the 2026 test (17 dry races). With retirements and the pooled race pace the
-calibration moved to $\sigma_{start} = 0.3$ s and $\theta = 1.5$ s/lap (less first-lap
-shuffle, easier passing).
+frozen for the 2026 test (17 dry races). With retirements, the pooled race pace and rivals'
+stops drawn in every race, the calibration is $\sigma_{form} = 0.1$ s/lap, $\sigma_{start} = 0.3$ s
+(less first-lap shuffle than before) and $\theta = 3.0$ s/lap.
 
 | 2026 test | Spearman (expected order) | Brier win | Brier podium | Brier top 10 |
 |---|---|---|---|---|
 | first version | 0.671 | 0.0251 | 0.0646 | 0.1634 |
-| + retirements and pooled race pace | **0.698** | **0.0195** | 0.0616 | 0.1608 |
+| + retirements and pooled race pace (rivals' shifts fixed) | 0.698 | 0.0195 | 0.0616 | 0.1608 |
+| + rivals' stops drawn in every race (current) | **0.696** | 0.0227 | 0.0635 | 0.1595 |
 | starting grid | 0.672 | 0.0227 | 0.0616 | 0.1587 |
 
-Either change alone did not help; together the simulated order beats the grid and the win
-probabilities beat the grid-slot frequencies, on 17 races. Pit timing is still no better
+Retirements and the pooled race pace only helped together. With them the simulated order
+beats the grid (in 10 of the 17 races). The win probabilities looked better than the grid's
+until rivals' stops were redrawn in every race; now they tie with the grid-slot frequencies,
+and podium and top-10 probabilities are slightly worse. 17 races is a small sample. Pit timing is still no better
 than the historical baseline: about a quarter of real first stops are triggered by safety
 cars, which a pre-race plan cannot foresee. The simulators are used for what-if comparison,
 not as predictors of the stop lap.

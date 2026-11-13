@@ -705,3 +705,44 @@ One Nemotron answer ("o pole venceu todas as quatro edições") was right but ma
 the checker only read digits. It now also reads number words from two to ten ("um/uma" are
 left out, they are also the article), and both evals were re-scored without new API calls.
 The model-accuracy check accepts the ensemble's or the gradient-boosting winner rate.
+
+## 2026-11-12: rivals' pit stops drawn in every simulated race
+
+In the dashboard, the same race replayed with a different driver selected had four different
+winners, each the driver being studied. Cause: each rival ran the best plan with its stops
+moved by up to 3 laps, but that shift was drawn once per scenario and kept for all simulated
+races. A driver could carry the same early or late stop through every race whenever he was a
+rival; selecting him gave him the exact plan and removed that fixed handicap.
+
+Measured as a driver's mean position when selected minus when he is a rival (top 6 of the grid,
+everyone on the best plan, 200 races):
+
+| race | before: mean (range per driver) | after: mean (range per driver) |
+|---|---|---|
+| a 2026 race (past:11404) | -0.38 (-1.54 to +1.05) | +0.02 (-0.14 to +0.14) |
+| a 2026 race (past:11396) | -0.52 (-1.86 to +0.40) | +0.01 (-0.04 to +0.05) |
+| Las Vegas (next) | -0.05 (-0.56 to +0.46) | +0.07 (-0.03 to +0.21) |
+| Qatar (next) | -0.18 (-1.06 to +0.48) | +0.08 (-0.04 to +0.28) |
+
+Fix: `Car.stop_shift`; the simulator draws every rival's stop laps again in each simulated race
+(never leaving a stint under 6 laps), and the selected driver runs exactly the strategy asked
+for. After the fix the replayed race has the same winner whichever driver is selected. The
+backtest also now keeps the selected car's DNF chance when it tries candidate strategies (it
+was dropped before).
+
+### Backtest, calibrated on 2025, tested on 2026 (17 races)
+
+| | Spearman | sim vs grid | first stop, median error | Brier win | podium | top 10 |
+|---|---|---|---|---|---|---|
+| before (shift fixed per scenario) | 0.698 | 9-8 | 9.0 | 0.0195 | 0.0616 | 0.1608 |
+| after (shift drawn per race) | 0.696 | 10-7 | 9.0 | 0.0227 | 0.0635 | 0.1595 |
+| starting grid | 0.672 | – | – | 0.0227 | 0.0616 | 0.1587 |
+
+Calibration moved to pass threshold 3.0 s/lap (form 0.1, start 0.3). The simulated order still
+beats the grid; the win probabilities that beat the grid before were partly the artefact and
+now tie with it.
+
+### Unit tests: 81 passed
+
+New: rival stops move by every shift from -3 to +3 across races, exactly one stop each time,
+tyre age restarts at the stop, no shift without `stop_shift`, and never a stint under 6 laps.

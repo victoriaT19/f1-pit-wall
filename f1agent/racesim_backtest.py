@@ -5,7 +5,8 @@ Every race is set up with pre-race information only:
     races (racepace.py), blended with its qualifying gap; qualifying alone when there is
     no race history yet
   * track: degradation, offsets, pit loss and safety-car rate as in strategy_backtest
-  * rivals: the single-car simulator's best strategy, stops moved by up to 3 laps
+  * rivals: the single-car simulator's best strategy, stops moved by up to 3 laps, drawn
+    again in every simulated race
 
 Three global parameters are calibrated on the 2025 races: race-day form spread, first-lap
 spread and the overtaking threshold. The target is each race's real position changes among
@@ -26,6 +27,7 @@ from __future__ import annotations
 import argparse
 import itertools
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -49,15 +51,6 @@ TOP_DRIVERS = 5
 GRID = {"form_sd": (0.1, 0.25, 0.4), "start_sd": (0.3, 0.8, 1.5), "pass_threshold": (0.5, 1.5, 3.0)}
 
 
-def jitter(strategy: tuple, rng: np.random.Generator, max_shift: int = 3, min_stint: int = 6) -> tuple:
-    """Move each stop by up to max_shift laps, keeping stints at least min_stint long."""
-    lengths = [n for _, n in strategy]
-    for i in range(len(lengths) - 1):
-        shift = int(rng.integers(-max_shift, max_shift + 1))
-        a, b = lengths[i] + shift, lengths[i + 1] - shift
-        if a >= min_stint and b >= min_stint:
-            lengths[i], lengths[i + 1] = a, b
-    return tuple((c, n) for (c, _), n in zip(strategy, lengths))
 
 
 def quali_gaps(res: pd.DataFrame) -> tuple[list[str], list[float]]:
@@ -102,7 +95,7 @@ def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel, pct=None
     else:
         base = pre_race_pace(paces, int(s["year"]), s["date"], drivers, qgaps)
     dnf, field_dnf = dnf_rates(races, s["date"][:10]) if VARIANT["dnf"] else ({}, 0.0)
-    cars = [Car(d, b, jitter(best, rng), dnf.get(d, field_dnf)) for d, b in zip(drivers, base)]
+    cars = [Car(d, b, best, dnf.get(d, field_dnf), stop_shift=3) for d, b in zip(drivers, base)]
     track = Track(laps=inp.laps, rate=inp.rate, rate_sd=inp.rate_sd, offset=inp.offset,
                   offset_sd=inp.offset_sd, pit_loss=inp.pit_loss, sc_lap_prob=inp.sc_lap_prob,
                   pass_threshold=1.5)
@@ -168,7 +161,7 @@ def validate(prepared: list[dict], params: dict, laps, races, model_order: pd.Da
             scores = []
             for cand in p["candidates"]:
                 trial = list(cars)
-                trial[k] = Car(car.name, car.base, cand)
+                trial[k] = replace(car, strategy=cand, stop_shift=0)  # keeps its DNF chance
                 pos = simulate(trial, track, n_sims=N_SIMS, seed=seed)["positions"][:, k]
                 scores.append((float(pos.mean()), cand))
             scores.sort(key=lambda x: x[0])

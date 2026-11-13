@@ -19,6 +19,10 @@ car); the car rejoins wherever its total time puts it.
 The undercut is not coded as a rule: a car that stops earlier runs on new tyres while its
 rival is on old ones, and if it gains more than the gap it comes out ahead.
 
+Rivals' pit stops: a car with stop_shift > 0 moves each of its stops by up to that many laps,
+drawn again in every simulated race, so no rival carries the same early or late stop through
+all of them (which would give some drivers a permanent handicap).
+
 Retirements: each car retires with probability dnf_prob (its recent DNF rate) on a lap drawn
 uniformly; a retired car drops to the back, behind every car that retired later. The first
 simulated race, the one shown in the replay, has no retirements.
@@ -48,6 +52,7 @@ class Car:
     base: float          # s/lap relative to the reference car (lower = faster)
     strategy: tuple      # ((compound, laps), ...)
     dnf_prob: float = 0.0  # chance of retiring during the race
+    stop_shift: int = 0    # each simulated race moves every stop by up to this many laps
 
 
 @dataclass
@@ -65,19 +70,33 @@ class Track:
     start_sd: float = 0.0      # s: time spread added at the start (first-lap shuffle)
 
 
-def _plan(strategy: tuple, laps: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Per lap: compound index, tyre age, and whether the car pits at the end of the lap."""
-    comp = np.empty(laps, dtype=object)
-    age = np.zeros(laps)
-    pit = np.zeros(laps, dtype=bool)
-    lap = 0
-    for i, (c, n) in enumerate(strategy):
-        comp[lap:lap + n] = c
-        age[lap:lap + n] = np.arange(1, n + 1)
-        lap += n
-        if i < len(strategy) - 1:
-            pit[lap - 1] = True
-    return comp, age, pit
+
+
+MIN_STINT = 6  # laps: a shifted stop never leaves a stint shorter than this
+
+
+def _sim_plans(strategy: tuple, laps: int, comps: list, n_sims: int, shift: int,
+               rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Per simulated race and lap: compound index, tyre age and whether the car pits at the end
+    of the lap ([n_sims, laps] each). Stops move by up to `shift` laps in each race."""
+    lengths = np.array([n for _, n in strategy])
+    codes = np.array([comps.index(c) for c, _ in strategy])
+    planned = np.cumsum(lengths)[:-1]              # laps completed before each stop
+    k = len(planned)
+    cuts = np.tile(planned, (n_sims, 1))
+    if k and shift > 0:
+        moved = np.sort(cuts + rng.integers(-shift, shift + 1, (n_sims, k)), axis=1)
+        bounds = np.concatenate([np.zeros((n_sims, 1), int), moved, np.full((n_sims, 1), laps)], axis=1)
+        ok = (np.diff(bounds, axis=1) >= MIN_STINT).all(axis=1)
+        cuts[ok] = moved[ok]
+    lap = np.arange(laps)
+    stint = (lap[None, None, :] >= cuts[:, :, None]).sum(axis=1)           # [n_sims, laps]
+    starts = np.concatenate([np.zeros((n_sims, 1), int), cuts], axis=1)
+    age = lap[None, :] - np.take_along_axis(starts, stint, axis=1) + 1
+    pit = np.zeros((n_sims, laps), dtype=bool)
+    if k:
+        np.put_along_axis(pit, cuts - 1, True, axis=1)
+    return codes[stint], age.astype(float), pit
 
 
 def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
@@ -89,12 +108,16 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     """
     rng = np.random.default_rng(seed)
     n, L = len(cars), track.laps
+    rows = np.arange(n_sims)
     comps = sorted({c for car in cars for c, _ in car.strategy})
     rate = {c: rng.normal(track.rate[c], track.rate_sd[c], (n_sims, 1)) for c in comps}
     off = {c: rng.normal(track.offset[c], track.offset_sd[c], (n_sims, 1)) for c in comps}
     # Race-day form: one pace shift per driver per simulated race.
     base = np.array([car.base for car in cars])[None, :] + rng.normal(0, track.form_sd, (n_sims, len(cars)))
-    plans = [_plan(car.strategy, L) for car in cars]
+    comp_list = list(comps)
+    plans = [_sim_plans(car.strategy, L, comp_list, n_sims, car.stop_shift, rng) for car in cars]
+    OFF = np.hstack([off[c] for c in comps])      # [n_sims, compounds]
+    RATE = np.hstack([rate[c] for c in comps])
 
     sc_start = rng.random((n_sims, L)) < track.sc_lap_prob
     sc = np.zeros((n_sims, L), dtype=bool)
@@ -105,7 +128,6 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     T = np.tile(np.arange(n) * GRID_SPACING, (n_sims, 1)).astype(float)
     # The start and first lap shuffle positions: a time spread applied before lap 1.
     T += np.abs(rng.normal(0, track.start_sd, (n_sims, n))) if track.start_sd > 0 else 0.0
-    rows = np.arange(n_sims)
     trace = np.zeros((L, n))
     dnf_p = np.array([car.dnf_prob for car in cars])
     retire_lap = np.where(rng.random((n_sims, n)) < dnf_p[None, :], rng.integers(0, L, (n_sims, n)), L)
@@ -113,8 +135,8 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     for lap in range(L):
         free = base + rng.normal(0, LAP_NOISE, (n_sims, n))
         for j, (comp, age, _) in enumerate(plans):
-            c = comp[lap]
-            free[:, j] += off[c][:, 0] + rate[c][:, 0] * age[lap]
+            ci = comp[:, lap]
+            free[:, j] += OFF[rows, ci] + RATE[rows, ci] * age[:, lap]
         under_sc = sc[:, lap]
         # Under a safety car nobody passes and every car laps at the same speed; on its first
         # lap the field closes up behind the safety car (gaps shrink to SC_SPACING).
@@ -140,8 +162,10 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
             new[rows[dirty], car[dirty]] += DIRTY_AIR_LOSS
         # Pit stops at the end of the lap.
         for j, (_, _, pit) in enumerate(plans):
-            if pit[lap]:
-                new[:, j] += np.where(under_sc, track.sc_pit_factor * track.pit_loss, track.pit_loss)
+            stop = pit[:, lap]
+            if stop.any():
+                loss = np.where(under_sc, track.sc_pit_factor * track.pit_loss, track.pit_loss)
+                new[stop, j] += loss[stop]
         T = new
         # Retired cars leave the race: far behind, the earliest retirements last.
         gone = retire_lap <= lap

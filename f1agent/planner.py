@@ -254,14 +254,14 @@ def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 30
     drivers, base, real_grid = field(key)
     dnf = dnf_chances(key, drivers)
     rival = parse_strategy(rival_strategy or res.iloc[0]["strategy"])
-    rng = np.random.default_rng(seed)
-    rivals = [_jitter(rival, rng, inp.laps) for _ in drivers]
     track = Track(laps=inp.laps, rate=inp.rate, rate_sd=inp.rate_sd, offset=inp.offset, offset_sd=inp.offset_sd,
                   pit_loss=inp.pit_loss, sc_lap_prob=inp.sc_lap_prob, **params)
     j = drivers.index(driver)
     out = {"drivers": drivers, "real_grid": real_grid, "grid_pos": j + 1, "laps": inp.laps}
     for tag, desc in (("a", strat_a), ("b", strat_b)):
-        cars = [Car(d, b, parse_strategy(desc) if i == j else rivals[i], dnf[i])
+        # Rivals run the best plan with their stops moved by up to 3 laps, drawn again in every
+        # simulated race; the chosen driver runs exactly the strategy asked for.
+        cars = [Car(d, b, parse_strategy(desc), dnf[i]) if i == j else Car(d, b, rival, dnf[i], RIVAL_SHIFT)
                 for i, (d, b) in enumerate(zip(drivers, base))]
         sim = simulate_field(cars, track, n_sims=n_sims, seed=seed, return_trace=True)
         out[tag] = {"strategy": desc, "positions": sim["positions"][:, j], "trace": sim["trace"],
@@ -269,14 +269,9 @@ def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 30
     return out
 
 
-def _jitter(strategy: tuple, rng: np.random.Generator, laps: int, max_shift: int = 3, min_stint: int = 6) -> tuple:
-    lengths = [n for _, n in strategy]
-    cuts = np.cumsum(lengths)[:-1] + rng.integers(-max_shift, max_shift + 1, len(lengths) - 1)
-    cuts = np.clip(np.sort(cuts), min_stint, laps - min_stint)
-    new = np.diff(np.concatenate([[0], cuts, [laps]]))
-    if new.min() < min_stint:
-        return strategy
-    return tuple((c, int(n)) for (c, _), n in zip(strategy, new))
+RIVAL_SHIFT = 3  # laps: how far rivals' stops move around the best plan
+
+
 
 
 # ── Track map ───────────────────────────────────────────────────────────────

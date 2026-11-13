@@ -90,3 +90,23 @@ def test_pre_race_pace_uses_only_earlier_races_of_the_season():
     c = 0.8  # no race history: qualifying gap
     m = min(a, b, c)
     assert out == pytest.approx([a - m, b - m, c - m])
+
+
+def test_rival_stops_are_redrawn_in_every_simulated_race():
+    import numpy as np
+    from f1agent.racesim import MIN_STINT, _sim_plans
+
+    rng = np.random.default_rng(0)
+    strategy = (("SOFT", 20), ("MEDIUM", 30))
+    comp, age, pit = _sim_plans(strategy, 50, ["MEDIUM", "SOFT"], 400, 3, rng)
+    stop_lap = pit.argmax(axis=1) + 1                 # laps completed before the stop
+    assert pit.sum(axis=1).tolist() == [1] * 400      # always exactly one stop
+    assert set(stop_lap) == set(range(17, 24))        # every shift from -3 to +3 shows up
+    assert (age[np.arange(400), stop_lap - 1] == stop_lap).all()   # first stint ends at the stop
+    assert (comp[:, 0] == 1).all() and (comp[:, -1] == 0).all()    # soft first, medium last
+
+    fixed = _sim_plans(strategy, 50, ["MEDIUM", "SOFT"], 5, 0, rng)[2]
+    assert (fixed.argmax(axis=1) == 19).all()         # no shift: the planned lap every time
+
+    short = _sim_plans((("SOFT", 7), ("MEDIUM", 43)), 50, ["MEDIUM", "SOFT"], 400, 3, rng)[2]
+    assert (short.argmax(axis=1) + 1 >= MIN_STINT).all()          # never a stint under 6 laps
