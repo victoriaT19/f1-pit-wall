@@ -10,7 +10,12 @@ degradation per lap of age, and each pit stop costs the circuit's pit loss (less
 safety car). Fuel burn is the same for every strategy, so it drops out of the comparison.
 
 Uncertainty: each simulated race draws degradation rates and offsets from their estimated
-spread, and safety-car periods from the circuit's history. The output is, per strategy,
+spread, and safety-car periods from the circuit's history.
+
+Reacting to safety cars: with sc_react_laps = R > 0, a strategy is "stop at the planned lap,
+but stop earlier under a safety car that comes at most R laps before it", as teams do. In
+each simulated race a stop moves to the first safety-car lap in that range (never leaving a
+stint under MIN_STINT laps), so plans are valued for the cheap stops they can pick up. The output is, per strategy,
 the distribution of race time relative to the best, and how often it was the fastest.
 
 The inputs are measured from the data (see `race_inputs`):
@@ -42,9 +47,13 @@ class RaceInputs:
     sc_lap_prob: float   # probability that a given lap starts a safety-car period
     sc_pit_factor: float = 0.5  # share of the pit loss paid when stopping under SC
     notes: dict = field(default_factory=dict)
+    sc_react_laps: int = 0      # a stop moves to a safety car up to this many laps before it
 
 
-def strategies(n_laps: int, max_stops: int = 2, step: int = 2, min_stint: int = 8) -> list[tuple]:
+MIN_STINT = 8  # laps: shortest stint a strategy (or a stop moved for a safety car) may leave
+
+
+def strategies(n_laps: int, max_stops: int = 2, step: int = 2, min_stint: int = MIN_STINT) -> list[tuple]:
     """All strategies with 1..max_stops stops using at least two dry compounds.
 
     A strategy is a tuple of (compound, laps) stints; pit laps move in `step`-lap increments.
@@ -82,16 +91,18 @@ def simulate(inputs: RaceInputs, strats: list[tuple], n_sims: int = 2000, seed: 
         sc_window[:, k:] |= sc[:, : inputs.laps - k]
 
     times = np.zeros((len(strats), n_sims))
+    rows = np.arange(n_sims)
     for j, s in enumerate(strats):
-        lap = 0
+        stops = react_stops(pit_laps(s), sc_window, inputs.sc_react_laps)      # [n_sims, n_stops]
+        bounds = np.concatenate([np.zeros((n_sims, 1), int), stops, np.full((n_sims, 1), inputs.laps)], axis=1)
+        lengths = np.diff(bounds, axis=1)
         total = np.zeros(n_sims)
-        for i, (c, length) in enumerate(s):
-            ages_sum = length * (length + 1) / 2
-            total += length * off[c] + rate[c] * ages_sum
-            lap += length
-            if i < len(s) - 1:  # a stop at the end of this stint
-                under_sc = sc_window[:, lap - 1]
-                total += np.where(under_sc, inputs.sc_pit_factor * inputs.pit_loss, inputs.pit_loss)
+        for i, (c, _) in enumerate(s):
+            n = lengths[:, i]
+            total += n * off[c] + rate[c] * n * (n + 1) / 2
+        for k in range(stops.shape[1]):
+            under_sc = sc_window[rows, stops[:, k] - 1]
+            total += np.where(under_sc, inputs.sc_pit_factor * inputs.pit_loss, inputs.pit_loss)
         times[j] = total
     best = times.min(axis=0)
     rel = times - best
@@ -106,6 +117,25 @@ def simulate(inputs: RaceInputs, strats: list[tuple], n_sims: int = 2000, seed: 
         "p_fastest": (rel == 0).mean(axis=1),
     })
     return res.sort_values(["median_gap_s", "p90_gap_s"]).reset_index(drop=True)
+
+
+def react_stops(planned: list[int], sc: np.ndarray, react: int) -> np.ndarray:
+    """Stop laps in each race [n_races, n_stops]: the planned laps, each moved to the first
+    safety-car lap at most `react` laps before it (sc[race, lap - 1] = a stop at the end of
+    that lap is under a safety car), keeping every stint at least MIN_STINT laps."""
+    n = sc.shape[0]
+    stops = np.tile(np.asarray(planned, dtype=int), (n, 1)) if planned else np.zeros((n, 0), int)
+    if react <= 0 or not planned:
+        return stops
+    lap_no = np.arange(1, sc.shape[1] + 1)[None, :]
+    prev = np.zeros(n, dtype=int)
+    for k, p in enumerate(planned):
+        lo = np.maximum(prev + MIN_STINT, p - react)[:, None]
+        hit = sc & (lap_no >= lo) & (lap_no < p)
+        moved = hit.any(axis=1)
+        stops[:, k] = np.where(moved, hit.argmax(axis=1) + 1, p)
+        prev = stops[:, k]
+    return stops
 
 
 def describe(s: tuple) -> str:

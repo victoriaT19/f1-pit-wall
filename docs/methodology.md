@@ -307,6 +307,16 @@ for reasons the simulator does not model: track position on exit, covering a riv
 undercut, waiting for a safety car, and tyres that grain or fall off a cliff instead of
 wearing linearly.
 
+Two of these were tested and left out. *A tyre cliff*: within long stints the slope of the
+fuel-corrected lap time is low in the first ~12 laps (the tyre coming in) and then roughly
+constant (hard 0.041 then 0.040 s/lap per lap up to 40 laps; medium 0.040 then 0.054), with a
+clear positive curvature only for the 2026 soft, so there is no consistent cliff to model. *A
+safety-car rule* (`strategy.react_stops`): plans were valued and executed as "stop at the planned
+lap, or earlier under a safety car at most R laps before it", with the real neutralised laps in
+the backtest. Calibrated on 2025, every R > 0 made the first-stop error worse (R = 0: median 5.5
+laps, mean 8.6; R = 10: 10.0 and 11.9): knowing it could pick up a safety car, the planner moved
+the planned stop later, while real teams do not wait that long. R stays 0 (`SC_REACT_LAPS`).
+
 ## 4. Agent
 
 The agent (`agent.ask`) is a loop around an LLM with function calling. Each turn sends

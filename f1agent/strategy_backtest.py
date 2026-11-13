@@ -33,6 +33,7 @@ from .tyres import FUEL_S_PER_LAP, MIN_RATE_LAPS, fit_predict, measure, race_lap
 
 DRY = ["SOFT", "MEDIUM", "HARD"]
 RATE_SD_PRIOR = 0.033  # walk-forward MAE of the prior (docs/test-log.md)
+SC_REACT_LAPS = 0  # a planned stop moves to a safety car this many laps before it (calibrated on 2025)
 WINDOW_TOLERANCE_S = 3.0
 
 
@@ -98,7 +99,7 @@ def inputs_for(race_row: pd.Series, laps: pd.DataFrame, rates_all: pd.DataFrame,
         n_laps = int(laps.loc[laps["session_key"] == race_row["session_key"], "lap_number"].max())
     inp = RaceInputs(laps=n_laps, rate=rate, rate_sd=sd,
                      offset={c: offs[c][0] for c in DRY}, offset_sd={c: offs[c][1] for c in DRY},
-                     pit_loss=pl, sc_lap_prob=sc_prob)
+                     pit_loss=pl, sc_lap_prob=sc_prob, sc_react_laps=SC_REACT_LAPS)
     info = {"rate_source": source, "pit_loss": round(pl, 1), "sc_lap_prob": round(sc_prob, 3),
             "offsets": {c: round(offs[c][0], 3) for c in DRY}, "rates": {c: round(rate[c], 4) for c in DRY},
             "circuit_history_races": int(same["session_key"].nunique()), "track_temp": round(float(track_temp), 1)}
@@ -115,14 +116,31 @@ def recommend(inp: RaceInputs, n_sims: int = 1500) -> tuple[pd.DataFrame, dict]:
     return res, rec
 
 
-def run(laps: pd.DataFrame, races_csv: pd.DataFrame, fuel: float = FUEL_S_PER_LAP) -> tuple[pd.DataFrame, dict]:
+def real_sc_laps(laps: pd.DataFrame, session_key) -> np.ndarray:
+    """Laps run under a safety car or VSC in the real race (most drivers' lap flagged)."""
+    r = laps[(laps["session_key"] == session_key) & (laps["session_name"] == "Race")]
+    share = r.groupby("lap_number")["neutralised"].mean()
+    return share[share > 0.5].index.to_numpy(dtype=int)
+
+
+def realised_stop(planned: int, sc_laps: np.ndarray, react: int, earliest: int = 8) -> int:
+    """The planned first stop executed in the real race with the safety-car rule: moved to the
+    first neutralised lap at most `react` laps before it, else kept."""
+    if react <= 0:
+        return int(planned)
+    hit = sc_laps[(sc_laps >= max(earliest, planned - react)) & (sc_laps < planned)]
+    return int(hit.min()) if len(hit) else int(planned)
+
+
+def run(laps: pd.DataFrame, races_csv: pd.DataFrame, fuel: float = FUEL_S_PER_LAP,
+        years: tuple = (2026,), variants: tuple = ("prior", "prior+practice")) -> tuple[pd.DataFrame, dict]:
     rates_all = measure(laps, fuel)
     fp = practice_rates(laps, fuel)
     sessions = (laps[laps["session_name"] == "Race"]
                 .drop_duplicates("session_key")[["session_key", "year", "meeting_name", "circuit_short_name",
                                                   "session_date_start", "hard", "medium", "soft"]]
                 .rename(columns={"circuit_short_name": "circuit", "session_date_start": "date"}))
-    sessions = sessions[(sessions["year"] >= 2026) & sessions["soft"].notna()].sort_values("date")
+    sessions = sessions[sessions["year"].isin(years) & sessions["soft"].notna()].sort_values("date")
     for c in DRY:
         sessions[f"c_{c.lower()}"] = sessions[c.lower()].str.lstrip("C").astype(float)
     rows = []
@@ -139,7 +157,10 @@ def run(laps: pd.DataFrame, races_csv: pd.DataFrame, fuel: float = FUEL_S_PER_LA
         firsts = actual["first_stop"].dropna()
         # baseline from earlier races: modal stops and mean first-stop share of distance
         past = rows_baseline(laps, races_csv, s["date"])
+        sc_real = real_sc_laps(laps, s["session_key"])
         for variant, use_fp in (("prior", False), ("prior+practice", True)):
+            if variant not in variants:
+                continue
             inp, info = inputs_for(s, laps, rates_all, fp, use_fp, fuel)
             if any(np.isnan(v) for v in list(inp.offset.values()) + [inp.pit_loss]):
                 continue
@@ -153,6 +174,9 @@ def run(laps: pd.DataFrame, races_csv: pd.DataFrame, fuel: float = FUEL_S_PER_LA
                          "start_match": rec["start_compound"] == common_start[0],
                          "rec_first_stop": rec_first, "actual_first_median": float(firsts.median()) if len(firsts) else np.nan,
                          "first_stop_error": abs(rec_first - firsts.median()) if len(firsts) else np.nan,
+                         "realised_first_stop": realised_stop(rec_first, sc_real, SC_REACT_LAPS),
+                         "first_stop_error_sc_rule": (abs(realised_stop(rec_first, sc_real, SC_REACT_LAPS) - firsts.median())
+                                                      if len(firsts) else np.nan),
                          "window_width": hi - lo + 1,
                          "laps": inp.laps, **{f"info_{k}": json.dumps(v) for k, v in info.items()}})
         if past:
@@ -166,13 +190,18 @@ def run(laps: pd.DataFrame, races_csv: pd.DataFrame, fuel: float = FUEL_S_PER_LA
                          "start_match": np.nan, "rec_first_stop": b_lap,
                          "actual_first_median": float(firsts.median()) if len(firsts) else np.nan,
                          "first_stop_error": abs(b_lap - firsts.median()) if len(firsts) else np.nan,
+                         "realised_first_stop": realised_stop(b_lap, sc_real, SC_REACT_LAPS),
+                         "first_stop_error_sc_rule": (abs(realised_stop(b_lap, sc_real, SC_REACT_LAPS) - firsts.median())
+                                                      if len(firsts) else np.nan),
                          "window_width": 7, "laps": inp.laps})
     per = pd.DataFrame(rows)
-    summary = {"races": int(per["session_key"].nunique())}
+    summary = {"races": int(per["session_key"].nunique()), "sc_react_laps": SC_REACT_LAPS, "years": list(years)}
     for v, g in per.groupby("variant"):
         summary[v] = {"stops_match": round(float(g["stops_match"].mean()), 3),
                       "first_stop_error_laps_median": round(float(g["first_stop_error"].median()), 1),
                       "first_stop_error_laps_mean": round(float(g["first_stop_error"].mean()), 1),
+                      "first_stop_error_sc_rule_median": round(float(g["first_stop_error_sc_rule"].median()), 1),
+                      "first_stop_error_sc_rule_mean": round(float(g["first_stop_error_sc_rule"].mean()), 1),
                       "window_hit_share": round(float(g["window_hit_share"].mean()), 3),
                       "window_width_mean": round(float(g["window_width"].mean()), 1)}
         # Start compound is not reported: the simulator's race time does not depend on the
@@ -205,8 +234,15 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--laps", default="data/laps_clean.csv.gz")
     p.add_argument("--races", default="data/races.csv")
     p.add_argument("--out", default="results/strategy")
+    p.add_argument("--years", type=int, nargs="+", default=[2026])
+    p.add_argument("--react", type=int, default=None, help="override SC_REACT_LAPS (calibration)")
+    p.add_argument("--prior-only", action="store_true", help="skip the practice variant")
     args = p.parse_args(argv)
-    per, summary = run(pd.read_csv(args.laps), pd.read_csv(args.races))
+    global SC_REACT_LAPS
+    if args.react is not None:
+        SC_REACT_LAPS = args.react
+    per, summary = run(pd.read_csv(args.laps), pd.read_csv(args.races), years=tuple(args.years),
+                       variants=("prior",) if args.prior_only else ("prior", "prior+practice"))
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     per.to_csv(out / "per_race.csv", index=False)

@@ -68,3 +68,28 @@ def test_uncertainty_spreads_the_gaps():
 def test_pit_laps():
     assert pit_laps((("MEDIUM", 20), ("HARD", 30))) == [20]
     assert pit_laps((("SOFT", 12), ("MEDIUM", 18), ("HARD", 20))) == [12, 30]
+
+
+def test_stops_move_to_a_safety_car_only_inside_the_reaction_range():
+    import numpy as np
+    from f1agent.strategy import MIN_STINT, react_stops
+
+    sc = np.zeros((4, 50), dtype=bool)
+    sc[0, 24] = True    # race 0: SC on lap 25, 5 laps before the planned lap 30 -> stop on 25
+    sc[1, 9] = True     # race 1: SC on lap 10, 20 laps early -> outside a 10-lap range, keep 30
+    sc[2, 34] = True    # race 2: SC after the planned lap -> keep 30
+    sc[3, 3] = True     # race 3: SC on lap 4, would leave a 4-lap stint -> keep 30
+    stops = react_stops([30], sc, 10)
+    assert stops[:, 0].tolist() == [25, 30, 30, 30]
+    assert (react_stops([30], sc, 0)[:, 0] == 30).all()            # no reaction: the plan
+    assert (react_stops([30], sc, 40)[:, 0] >= MIN_STINT).all()
+
+
+
+def test_realised_stop_uses_the_real_neutralised_laps():
+    import numpy as np
+    from f1agent.strategy_backtest import realised_stop
+
+    assert realised_stop(30, np.array([12, 13, 26, 27]), 10) == 26
+    assert realised_stop(30, np.array([12, 13]), 10) == 30
+    assert realised_stop(30, np.array([26]), 0) == 30

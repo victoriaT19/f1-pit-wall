@@ -850,3 +850,49 @@ make their first stop (about 22% in 2026). What makes teams converge is not mode
 position on exit, covering an undercut, waiting for a safety car, and non-linear wear (graining,
 the cliff at the end of a tyre's life). Documented in `docs/methodology.md` (section 3.4); no
 code change.
+
+## 2026-11-13: tyre cliff and a safety-car rule, both tested and left out
+
+Two things the model lacks, from the analysis of the wide first-stop window.
+
+### Tyre cliff
+
+Within-stint regressions of the fuel-corrected lap time on tyre age (stint fixed effects):
+
+| | linear term | curvature (per age²) |
+|---|---|---|
+| soft, all races | +0.0334 | +0.02e-3 (±0.11e-3) |
+| soft, 2026 | -0.0118 | +0.80e-3 (±0.15e-3) |
+| medium, all | +0.0551 | -0.50e-3 (±0.04e-3) |
+| hard, all | +0.0606 | -0.58e-3 (±0.03e-3) |
+
+Slope by age band in stints of 25+ laps: medium -0.011 (1-12), +0.040 (13-24), +0.054 (25-40);
+hard +0.028, +0.041, +0.040. The early laps are flatter (the tyre coming in), then wear is close
+to linear; only the 2026 soft shows a clear cliff. Long stints are also those of drivers whose
+tyres held, which biases against seeing one. No cliff term was added.
+
+### Safety-car rule
+
+`strategy.react_stops`: a strategy becomes "stop at the planned lap, or earlier under a safety car
+that comes at most R laps before it" (never leaving a stint under 8 laps), valued in every
+simulated race. In the backtest the same rule is executed with the real neutralised laps (laps
+where most drivers were flagged), and the historical baseline gets the same rule. R calibrated on
+the 21 dry races of 2025 (prior only):
+
+| R | first stop, median / mean error: plan + rule | baseline + rule |
+|---|---|---|
+| **0 (kept)** | **5.5 / 8.6** | 6.0 / 6.9 |
+| 5 | 6.0 / 9.3 | 6.5 / 6.9 |
+| 10 | 10.0 / 11.9 | 6.5 / 6.9 |
+| 15 | 12.0 / 14.5 | 6.0 / 6.8 |
+| 20 | 11.5 / 12.2 | 6.5 / 7.1 |
+
+Every R > 0 made it worse: valuing the chance of a cheap stop, the planner moved the planned stop
+later, and in the real races the rule rarely moved it back (teams pit under a safety car earlier
+in the window than a plan that waits for one). `SC_REACT_LAPS` stays 0, so the 2026 results do
+not change; the 2026 strategy backtest was re-run to add the realised-stop columns (same numbers).
+
+### Unit tests
+
+New: stops move only to a safety car inside the reaction range and never leave a stint under 8
+laps, nothing moves with R = 0, and the realised stop uses the real neutralised laps.

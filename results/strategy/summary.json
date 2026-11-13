@@ -1,9 +1,15 @@
 {
   "races": 17,
+  "sc_react_laps": 0,
+  "years": [
+    2026
+  ],
   "baseline": {
     "stops_match": 0.529,
     "first_stop_error_laps_median": 6.5,
     "first_stop_error_laps_mean": 8.1,
+    "first_stop_error_sc_rule_median": 6.5,
+    "first_stop_error_sc_rule_mean": 8.1,
     "window_hit_share": 0.182,
     "window_width_mean": 7.0
   },
@@ -11,6 +17,8 @@
     "stops_match": 0.647,
     "first_stop_error_laps_median": 7.0,
     "first_stop_error_laps_mean": 10.5,
+    "first_stop_error_sc_rule_median": 7.0,
+    "first_stop_error_sc_rule_mean": 10.5,
     "window_hit_share": 0.682,
     "window_width_mean": 27.6
   },
@@ -18,6 +26,8 @@
     "stops_match": 0.529,
     "first_stop_error_laps_median": 8.5,
     "first_stop_error_laps_mean": 13.2,
+    "first_stop_error_sc_rule_median": 8.5,
+    "first_stop_error_sc_rule_mean": 13.2,
     "window_hit_share": 0.618,
     "window_width_mean": 23.6
   }
