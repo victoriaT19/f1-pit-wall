@@ -896,3 +896,48 @@ not change; the 2026 strategy backtest was re-run to add the realised-stop colum
 
 New: stops move only to a safety car inside the reaction range and never leave a stint under 8
 laps, nothing moves with R = 0, and the realised stop uses the real neutralised laps.
+
+## 2026-11-13: rivals covering each other's stops, tested and left out
+
+`racesim.simulate` now keeps a tyre state per car (stint, age) instead of a fixed lap plan, so a
+stop can move during the race. A rival marked `reactive` covers: it pits on the next lap when
+the car just ahead or behind it, within `cover_gap` seconds at the start of the lap, pits, and
+its own next stop is at most `cover_window` laps away (never leaving a stint under 6 laps). With
+`cover_window = 0` the simulation is identical to before (positions and replay checked on a Las
+Vegas scenario). The backtest also reports the spread of the first stops among the top 10
+(interquartile range, % of race distance), simulated and real.
+
+### Calibration year, 21 races of 2025 (base parameters frozen: form 0.1, start 0.3, pass 3.0)
+
+| window W, gap | first stop, median / mean error (multi) | stops right | first-stop spread, simulated / real | Spearman | Brier win |
+|---|---|---|---|---|---|
+| **0 (off, kept)** | 9.0 / 10.6 | 59.6% | 4.8% / 12.9% | 0.669 | 0.0226 |
+| 3, 1 s | 9.0 / 10.5 | 59.6% | 4.4% / 12.9% | 0.672 | 0.0223 |
+| 3, 3 s | 9.0 / 10.6 | 59.6% | 3.6% / 12.9% | 0.670 | 0.0222 |
+| 6, 1 s | 9.0 / 10.6 | 59.6% | 3.1% / 12.9% | 0.672 | 0.0220 |
+| 6, 3 s | 9.0 / 10.7 | 59.6% | 2.5% / 12.9% | 0.673 | 0.0217 |
+| 10, 1 s | 9.0 / 10.6 | 59.6% | 3.1% / 12.9% | 0.672 | 0.0220 |
+| 10, 3 s | 9.0 / 10.7 | 59.6% | 2.5% / 12.9% | 0.673 | 0.0217 |
+
+Covering did not change the recommended stops (the error is the same for every setting) and
+pushed the simulated stops further from reality: they were already more bunched than the real
+ones and covering bunched them more. Order and Brier moved only in the third decimal. The
+selection criterion (first-stop error, then spread) keeps W = 0.
+
+What this says about the wide recommended window: it is not missing coordination between
+teams. The simulated rivals already stop closer together than real teams (all run the best plan
+moved by at most 3 laps); the window is wide because one car's cost of stopping a few laps
+earlier or later is nearly flat with today's durable tyres. More variety between rivals' plans
+(different compounds and stop counts) is the more promising direction.
+
+### 2026, re-run with the final code (cover off)
+
+Same numbers as before up to rounding (the lap-time sum now runs in a different order, which
+flips a few random pass decisions): Spearman 0.703 (grid 0.672), Brier win / podium / top 10
+0.0218 / 0.0621 / 0.1586, first stop median error 10.0 (multi), baseline 8.0. New metric:
+first-stop spread among the top 10, simulated 4.8% vs real 7.2%.
+
+### Unit tests: 88 passed
+
+New: a reactive rival covers a nearby stop on the next lap; no cover when switched off, when its
+own stop is too far, when the neighbour is not close, or when the car is not reactive.

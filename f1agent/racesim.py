@@ -23,6 +23,12 @@ Rivals' pit stops: a car with stop_shift > 0 moves each of its stops by up to th
 drawn again in every simulated race, so no rival carries the same early or late stop through
 all of them (which would give some drivers a permanent handicap).
 
+Reacting to rivals (cover_window W > 0): a car marked `reactive` (the rivals) covers a stop.
+If the car directly ahead of it or behind it, within cover_gap seconds at the start of the lap,
+pits, it pits on the next lap, as long as its own next planned stop was at most W laps away and
+its current and last stints keep at least MIN_STINT laps. Covering stops an undercut from
+working and pulls the field's stops together, as real teams do.
+
 Retirements: each car retires with probability dnf_prob (its recent DNF rate) on a lap drawn
 uniformly; a retired car drops to the back, behind every car that retired later. The first
 simulated race, the one shown in the replay, has no retirements.
@@ -53,6 +59,7 @@ class Car:
     strategy: tuple      # ((compound, laps), ...)
     dnf_prob: float = 0.0  # chance of retiring during the race
     stop_shift: int = 0    # each simulated race moves every stop by up to this many laps
+    reactive: bool = False  # covers the stops of the cars around it (see cover_window)
 
 
 @dataclass
@@ -68,6 +75,8 @@ class Track:
     sc_pit_factor: float = 0.5
     form_sd: float = 0.0       # s/lap: each driver's race-day pace varies by this much
     start_sd: float = 0.0      # s: time spread added at the start (first-lap shuffle)
+    cover_window: int = 0      # laps: a reactive car covers a neighbour's stop if its own is this close
+    cover_gap: float = 2.0     # s: only neighbours this close count
 
 
 
@@ -75,10 +84,10 @@ class Track:
 MIN_STINT = 6  # laps: a shifted stop never leaves a stint shorter than this
 
 
-def _sim_plans(strategy: tuple, laps: int, comps: list, n_sims: int, shift: int,
-               rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Per simulated race and lap: compound index, tyre age and whether the car pits at the end
-    of the lap ([n_sims, laps] each). Stops move by up to `shift` laps in each race."""
+def _sim_cuts(strategy: tuple, laps: int, comps: list, n_sims: int, shift: int,
+              rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+    """Compound index of each stint, and the planned stop laps in each simulated race
+    ([n_sims, stops]); stops move by up to `shift` laps in each race."""
     lengths = np.array([n for _, n in strategy])
     codes = np.array([comps.index(c) for c, _ in strategy])
     planned = np.cumsum(lengths)[:-1]              # laps completed before each stop
@@ -89,6 +98,15 @@ def _sim_plans(strategy: tuple, laps: int, comps: list, n_sims: int, shift: int,
         bounds = np.concatenate([np.zeros((n_sims, 1), int), moved, np.full((n_sims, 1), laps)], axis=1)
         ok = (np.diff(bounds, axis=1) >= MIN_STINT).all(axis=1)
         cuts[ok] = moved[ok]
+    return codes, cuts
+
+
+def _sim_plans(strategy: tuple, laps: int, comps: list, n_sims: int, shift: int,
+               rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Per simulated race and lap: compound index, tyre age and whether the car pits at the end
+    of the lap ([n_sims, laps] each), for the planned stops (no reactions)."""
+    codes, cuts = _sim_cuts(strategy, laps, comps, n_sims, shift, rng)
+    k = cuts.shape[1]
     lap = np.arange(laps)
     stint = (lap[None, None, :] >= cuts[:, :, None]).sum(axis=1)           # [n_sims, laps]
     starts = np.concatenate([np.zeros((n_sims, 1), int), cuts], axis=1)
@@ -115,9 +133,18 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     # Race-day form: one pace shift per driver per simulated race.
     base = np.array([car.base for car in cars])[None, :] + rng.normal(0, track.form_sd, (n_sims, len(cars)))
     comp_list = list(comps)
-    plans = [_sim_plans(car.strategy, L, comp_list, n_sims, car.stop_shift, rng) for car in cars]
+    planned = [_sim_cuts(car.strategy, L, comp_list, n_sims, car.stop_shift, rng) for car in cars]
     OFF = np.hstack([off[c] for c in comps])      # [n_sims, compounds]
     RATE = np.hstack([rate[c] for c in comps])
+    n_stints = np.array([len(codes) for codes, _ in planned])
+    CODES = np.zeros((n, n_stints.max()), dtype=int)
+    CUTS = np.full((n_sims, n, max(int(n_stints.max()) - 1, 1)), L + 1)   # planned stop laps
+    for j, (codes, cuts) in enumerate(planned):
+        CODES[j, :len(codes)] = codes
+        CUTS[:, j, :cuts.shape[1]] = cuts
+    reactive = np.array([car.reactive for car in cars])[None, :]
+    car_idx = np.arange(n)[None, :]
+    rows2 = rows[:, None]
 
     sc_start = rng.random((n_sims, L)) < track.sc_lap_prob
     sc = np.zeros((n_sims, L), dtype=bool)
@@ -132,11 +159,13 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
     dnf_p = np.array([car.dnf_prob for car in cars])
     retire_lap = np.where(rng.random((n_sims, n)) < dnf_p[None, :], rng.integers(0, L, (n_sims, n)), L)
     retire_lap[0] = L  # the replayed race has no retirements
+    stint = np.zeros((n_sims, n), dtype=int)       # current stint of each car
+    age = np.ones((n_sims, n))                      # tyre age on this lap
+    pending = np.zeros((n_sims, n), dtype=bool)     # covers a neighbour's stop at the end of this lap
+    first_stop = np.full((n_sims, n), L + 1)
     for lap in range(L):
-        free = base + rng.normal(0, LAP_NOISE, (n_sims, n))
-        for j, (comp, age, _) in enumerate(plans):
-            ci = comp[:, lap]
-            free[:, j] += OFF[rows, ci] + RATE[rows, ci] * age[:, lap]
+        ci = CODES[car_idx, stint]
+        free = base + rng.normal(0, LAP_NOISE, (n_sims, n)) + OFF[rows2, ci] + RATE[rows2, ci] * age
         under_sc = sc[:, lap]
         # Under a safety car nobody passes and every car laps at the same speed; on its first
         # lap the field closes up behind the safety car (gaps shrink to SC_SPACING).
@@ -160,12 +189,28 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
             new[rows[stuck], car[stuck]] = t_ahead[stuck] + MIN_GAP
             dirty = (~close) & (new[rows, car] - t_ahead < DIRTY_AIR_GAP) & ~under_sc
             new[rows[dirty], car[dirty]] += DIRTY_AIR_LOSS
-        # Pit stops at the end of the lap.
-        for j, (_, _, pit) in enumerate(plans):
-            stop = pit[:, lap]
-            if stop.any():
-                loss = np.where(under_sc, track.sc_pit_factor * track.pit_loss, track.pit_loss)
-                new[stop, j] += loss[stop]
+        # Pit stops at the end of the lap: the planned ones, and covers decided last lap.
+        has_stop = stint < (n_stints[None, :] - 1)
+        next_stop = np.where(has_stop, np.take_along_axis(
+            CUTS, np.minimum(stint, CUTS.shape[2] - 1)[..., None], axis=2)[..., 0], L + 1)
+        can_cover = has_stop & (age >= MIN_STINT) & (L - (lap + 1) >= MIN_STINT)
+        pit = (next_stop == lap + 1) | (pending & can_cover)
+        if pit.any():
+            loss = np.where(under_sc, track.sc_pit_factor * track.pit_loss, track.pit_loss)[:, None]
+            new = new + np.where(pit, loss, 0.0)
+        # Covering: a reactive car whose neighbour (ahead or behind, close at the start of the
+        # lap) has just pitted, and whose own stop is near, pits on the next lap.
+        if track.cover_window > 0:
+            pos = np.argsort(order, axis=1)
+            ahead_of = order[rows2, np.maximum(pos - 1, 0)]
+            behind_of = order[rows2, np.minimum(pos + 1, n - 1)]
+            near_ahead = (pos > 0) & (T - T[rows2, ahead_of] < track.cover_gap) & pit[rows2, ahead_of]
+            near_behind = (pos < n - 1) & (T[rows2, behind_of] - T < track.cover_gap) & pit[rows2, behind_of]
+            soon = next_stop - (lap + 1) <= track.cover_window
+            pending = reactive & ~pit & (near_ahead | near_behind) & soon & has_stop
+        first_stop = np.where(pit & (first_stop > L), lap + 1, first_stop)
+        stint = stint + pit
+        age = np.where(pit, 1.0, age + 1.0)
         T = new
         # Retired cars leave the race: far behind, the earliest retirements last.
         gone = retire_lap <= lap
@@ -173,7 +218,7 @@ def simulate(cars: list[Car], track: Track, n_sims: int = 300, seed: int = 0,
             T[gone] = 1e7 - retire_lap[gone] * 1e3
         trace[lap] = T[0] - T[0].min()
     positions = np.argsort(np.argsort(T, axis=1), axis=1) + 1
-    out = {"positions": positions, "names": [c.name for c in cars]}
+    out = {"positions": positions, "names": [c.name for c in cars], "first_stop": first_stop}
     if return_times:
         out["times"] = T
     if return_trace:

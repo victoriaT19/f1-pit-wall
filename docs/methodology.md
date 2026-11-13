@@ -284,7 +284,7 @@ stops drawn in every race, the calibration is $\sigma_{form} = 0.1$ s/lap, $\sig
 | first version | 0.671 | 0.0251 | 0.0646 | 0.1634 |
 | + retirements and pooled race pace (rivals' shifts fixed) | 0.698 | 0.0195 | 0.0616 | 0.1608 |
 | + rivals' stops drawn in every race | 0.696 | 0.0227 | 0.0635 | 0.1595 |
-| + corrected tyre model (current) | **0.703** | **0.0219** | 0.0620 | 0.1587 |
+| + corrected tyre model (current) | **0.703** | **0.0218** | 0.0621 | 0.1586 |
 | starting grid | 0.672 | 0.0227 | 0.0616 | 0.1587 |
 
 Retirements and the pooled race pace only helped together. With them the simulated order
@@ -316,6 +316,17 @@ lap, or earlier under a safety car at most R laps before it", with the real neut
 the backtest. Calibrated on 2025, every R > 0 made the first-stop error worse (R = 0: median 5.5
 laps, mean 8.6; R = 10: 10.0 and 11.9): knowing it could pick up a safety car, the planner moved
 the planned stop later, while real teams do not wait that long. R stays 0 (`SC_REACT_LAPS`).
+
+A third idea was also tested and left out: *rivals covering each other's stops*
+(`racesim.Track.cover_window`, `cover_gap`). A rival pits on the next lap when the car just
+ahead or behind it, within a few seconds, pits and its own stop is at most W laps away. On the
+2025 races it did not change the first-stop error at all (median 9.0 laps for every W from 0
+to 10), and it made the simulated field's stops even more bunched: among the simulated top 10
+the first stops already span less of the race than the real ones (interquartile range 4.8%
+against 12.9% in 2025, 4.8% against 7.2% in 2026), because every rival runs the same plan moved
+by at most 3 laps, and covering cut that to 2.5%. So the wide recommended window comes from a
+single car's flat cost of stopping a little earlier or later, not from missing coordination;
+what the simulated field lacks, if anything, is variety between the rivals' plans. W stays 0.
 
 ## 4. Agent
 

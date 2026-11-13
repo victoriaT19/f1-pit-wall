@@ -73,6 +73,8 @@ def sessions_for(laps: pd.DataFrame, years: list[int]) -> pd.DataFrame:
 
 # Model choices tested in the backtest (see docs/test-log.md); the defaults are the kept ones.
 VARIANT = {"dnf": True, "pace": "decayed"}
+# Rivals covering each other's stops (racesim.Track.cover_window / cover_gap), chosen on 2025.
+COVER = {"cover_window": 0, "cover_gap": 2.0}
 
 
 def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel, pct=None):
@@ -95,15 +97,18 @@ def prepare(s: pd.Series, laps, races, rates_all, fp, paces, rng, fuel, pct=None
     else:
         base = pre_race_pace(paces, int(s["year"]), s["date"], drivers, qgaps)
     dnf, field_dnf = dnf_rates(races, s["date"][:10]) if VARIANT["dnf"] else ({}, 0.0)
-    cars = [Car(d, b, best, dnf.get(d, field_dnf), stop_shift=3) for d, b in zip(drivers, base)]
+    cars = [Car(d, b, best, dnf.get(d, field_dnf), stop_shift=3, reactive=True) for d, b in zip(drivers, base)]
     track = Track(laps=inp.laps, rate=inp.rate, rate_sd=inp.rate_sd, offset=inp.offset,
                   offset_sd=inp.offset_sd, pit_loss=inp.pit_loss, sc_lap_prob=inp.sc_lap_prob,
                   pass_threshold=1.5)
     fin = res[res["status"].map(finished)]
     target = float((fin["position"] - fin["grid"]).abs().mean())
+    top10 = res.sort_values("position").head(10)["driver"]
+    real_first = actual[actual["driver"].isin(top10)]["first_stop"].dropna() / inp.laps
+    real_iqr = float((real_first.quantile(0.75) - real_first.quantile(0.25)) * 100) if len(real_first) > 3 else np.nan
     before = races[races["date"] < s["date"][:10]]
     return {"s": s, "res": res, "actual": actual, "inp": inp, "best": best, "cars": cars, "track": track,
-            "grid_p": grid_probs(before, res.sort_values("grid")),
+            "grid_p": grid_probs(before, res.sort_values("grid")), "real_first_iqr_pct": real_iqr,
             "candidates": [_parse(x) for x in single["strategy"].head(N_CANDIDATES)], "target": target}
 
 
@@ -147,7 +152,14 @@ def validate(prepared: list[dict], params: dict, laps, races, model_order: pd.Da
         for o, k in (("win", 1), ("podium", 3), ("top10", 10)):
             brier[f"sim_brier_{o}"] = float(np.mean(((sim["positions"] <= k).mean(0) - (act <= k)) ** 2))
             brier[f"grid_brier_{o}"] = float(np.mean((p["grid_p"][o] - (act <= k)) ** 2))
+        # Spread of the first stops among the simulated top 10, as in the real race.
+        fs = sim["first_stop"].astype(float) / inp.laps
+        top_sim = np.argsort(sim["positions"], axis=1)[:, :10]
+        fs_top = np.take_along_axis(fs, top_sim, axis=1)
+        fs_top[fs_top > 1] = np.nan
+        sim_iqr = float(np.nanmedian(np.nanpercentile(fs_top, 75, axis=1) - np.nanpercentile(fs_top, 25, axis=1)) * 100)
         order_rows.append({"meeting_name": s["meeting_name"], **brier,
+                           "sim_first_iqr_pct": sim_iqr, "real_first_iqr_pct": p["real_first_iqr_pct"],
                            "sim_spearman": _order_spearman(sim, res),
                            "grid_spearman": float(spearmanr(np.arange(1, len(names) + 1), actual_pos).statistic),
                            "model_spearman": float(m["spearman"].iloc[0]) if len(m) else np.nan,
@@ -195,6 +207,8 @@ def validate(prepared: list[dict], params: dict, laps, races, model_order: pd.Da
         "sim_better_than_grid": int((order["sim_spearman"] > order["grid_spearman"]).sum()),
         "grid_better_than_sim": int((order["sim_spearman"] < order["grid_spearman"]).sum()),
     }
+    summary["first_stop_spread_iqr_pct"] = {"simulated": round(float(order["sim_first_iqr_pct"].median()), 1),
+                                             "real": round(float(order["real_first_iqr_pct"].median()), 1)}
     summary["probabilities_brier"] = {
         m: {o: round(float(order[f"{m}_brier_{o}"].mean()), 4) for o in ("win", "podium", "top10")}
         for m in ("sim", "grid")}
@@ -226,6 +240,10 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--no-dnf", action="store_true", help="variant without retirements")
     p.add_argument("--pace", choices=("decayed", "season"), default="decayed")
+    p.add_argument("--cover-window", type=int, default=COVER["cover_window"])
+    p.add_argument("--cover-gap", type=float, default=COVER["cover_gap"])
+    p.add_argument("--validate-years", type=int, nargs="+", default=[2026],
+                   help="years to validate on (2025 = the calibration year, for choosing cover settings)")
     args = p.parse_args(argv)
     VARIANT.update(dnf=not args.no_dnf, pace=args.pace)
 
@@ -238,8 +256,9 @@ def main(argv: list[str] | None = None) -> None:
     cal_races = prep([2025])
     print(f"calibrating on {len(cal_races)} races of 2025...", flush=True)
     params, table = calibrate(cal_races, seed=args.seed)
+    params = {**params, "cover_window": args.cover_window, "cover_gap": args.cover_gap}
     print("calibrated:", params, flush=True)
-    val_races = prep([2026])
+    val_races = cal_races if args.validate_years == [2025] else prep(args.validate_years)
     model_order = pd.read_csv(args.model_order)
     per, order, summary = validate(val_races, params, laps, races, model_order, seed=args.seed)
     summary["calibration"] = {"races_2025": len(cal_races), "best": table.iloc[0].to_dict()}

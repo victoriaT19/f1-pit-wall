@@ -281,7 +281,7 @@ def scenario(key: str, driver: str, strat_a: str, strat_b: str, n_sims: int = 30
     for tag, desc in (("a", strat_a), ("b", strat_b)):
         # Rivals run the best plan with their stops moved by up to 3 laps, drawn again in every
         # simulated race; the chosen driver runs exactly the strategy asked for.
-        cars = [Car(d, b, parse_strategy(desc), dnf[i]) if i == j else Car(d, b, rival, dnf[i], RIVAL_SHIFT)
+        cars = [Car(d, b, parse_strategy(desc), dnf[i]) if i == j else Car(d, b, rival, dnf[i], RIVAL_SHIFT, reactive=True)
                 for i, (d, b) in enumerate(zip(drivers, base))]
         sim = simulate_field(cars, track, n_sims=n_sims, seed=seed, return_trace=True)
         out[tag] = {"strategy": desc, "positions": sim["positions"][:, j], "trace": sim["trace"],

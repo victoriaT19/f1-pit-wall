@@ -110,3 +110,28 @@ def test_rival_stops_are_redrawn_in_every_simulated_race():
 
     short = _sim_plans((("SOFT", 7), ("MEDIUM", 43)), 50, ["MEDIUM", "SOFT"], 400, 3, rng)[2]
     assert (short.argmax(axis=1) + 1 >= MIN_STINT).all()          # never a stint under 6 laps
+
+
+def _cover_case(reactive=True, **track_kw):
+    """Two identical cars: one stops on lap 20, the other plans lap 24."""
+    from f1agent.racesim import Car, Track, simulate
+
+    track = Track(laps=50, rate={"MEDIUM": 0.03, "HARD": 0.02}, rate_sd={"MEDIUM": 0.0, "HARD": 0.0},
+                  offset={"MEDIUM": -0.2, "HARD": 0.0}, offset_sd={"MEDIUM": 0.0, "HARD": 0.0},
+                  pit_loss=20.0, sc_lap_prob=0.0, pass_threshold=1.0, **track_kw)
+    cars = [Car("EARLY", 0.0, (("MEDIUM", 20), ("HARD", 30))),
+            Car("RIVAL", 0.0, (("MEDIUM", 24), ("HARD", 26)), reactive=reactive)]
+    return simulate(cars, track, n_sims=40, seed=1)["first_stop"]
+
+
+def test_a_reactive_rival_covers_a_nearby_stop_on_the_next_lap():
+    first = _cover_case(cover_window=5, cover_gap=100.0)
+    assert (first[:, 0] == 20).all()          # the car that stops first, as planned
+    assert (first[:, 1] == 21).all()          # the reactive rival covers on the next lap
+
+
+def test_no_cover_when_switched_off_too_far_not_close_or_not_reactive():
+    assert (_cover_case(cover_window=0, cover_gap=100.0)[:, 1] == 24).all()   # reactions off
+    assert (_cover_case(cover_window=3, cover_gap=100.0)[:, 1] == 24).all()   # own stop 4 laps away
+    assert (_cover_case(cover_window=5, cover_gap=1e-6)[:, 1] == 24).all()    # neighbour not close
+    assert (_cover_case(reactive=False, cover_window=5, cover_gap=100.0)[:, 1] == 24).all()

@@ -4,7 +4,9 @@
   "params": {
     "form_sd": 0.1,
     "start_sd": 0.3,
-    "pass_threshold": 3.0
+    "pass_threshold": 3.0,
+    "cover_window": 0,
+    "cover_gap": 2.0
   },
   "multi": {
     "first_stop_error_median": 10.0,
@@ -31,13 +33,17 @@
     "grid": 0.672,
     "finishing_order_model": 0.693,
     "sim_better_than_grid": 10,
-    "grid_better_than_sim": 7
+    "grid_better_than_sim": 6
+  },
+  "first_stop_spread_iqr_pct": {
+    "simulated": 4.8,
+    "real": 7.2
   },
   "probabilities_brier": {
     "sim": {
-      "win": 0.0219,
-      "podium": 0.062,
-      "top10": 0.1587
+      "win": 0.0218,
+      "podium": 0.0621,
+      "top10": 0.1586
     },
     "grid": {
       "win": 0.0227,
