@@ -296,6 +296,17 @@ than the historical baseline: about a quarter of real first stops are triggered 
 cars, which a pre-race plan cannot foresee. The simulators are used for what-if comparison,
 not as predictors of the stop lap.
 
+**Why the first-stop window is so wide.** The recommended windows are wide (Las Vegas: laps 8
+to 42, ten plans within 2 s of the best). Part of it is real: tyres last longer than they used
+to. The median race wear level fell from 0.056 s/lap per lap of age in 2024 to 0.042 in 2025
+and 0.040 in 2026, and the share of the top 10 on a single stop rose from 30% to 60% and 70%
+(median per race). With little wear, stopping a few laps earlier or later costs little. But
+the real top 10 still stop within a narrower band than the model's window: the first stops
+span about 22% of the race in 2026 (33% in 2025; interquartile range 7-13%). Teams converge
+for reasons the simulator does not model: track position on exit, covering a rival's
+undercut, waiting for a safety car, and tyres that grain or fall off a cliff instead of
+wearing linearly.
+
 ## 4. Agent
 
 The agent (`agent.ask`) is a loop around an LLM with function calling. Each turn sends

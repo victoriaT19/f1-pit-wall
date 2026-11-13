@@ -829,3 +829,24 @@ unaffected. Fix: the override is read as (hard, medium, soft) (`planner.COMPOUND
 
 New test: passing the race's own nomination as (hard, medium, soft) gives the same rates as no
 override, with soft > medium > hard. Unit tests: 84 passed.
+
+## 2026-11-13: why the first-stop window is so wide
+
+After the tyre fixes the recommended first-stop window is very wide (Las Vegas: laps 8-42, ten
+plans within 2 s of the best). F1 commentary says Pirelli's current compounds last a long time;
+checked against the data (dry races, top 10 of the result):
+
+| | 2024 | 2025 | 2026 |
+|---|---|---|---|
+| median race wear level, hard-equivalent (s/lap per lap of age) | 0.056 | 0.042 | 0.040 |
+| share of the top 10 on one stop (median per race) | 30% | 60% | 70% |
+| first stops, interquartile range (% of race distance) | 7.8% | 12.9% | 7.2% |
+| first stops, full range (% of race distance) | 21.9% | 32.9% | 21.6% |
+
+The durable tyres explain why the stop lap matters little to the model: wear fell by about a
+quarter since 2024 and most of the top 10 now stop once. They do not explain all of it: the
+model's window (68% of the Las Vegas race) is much wider than the band in which teams really
+make their first stop (about 22% in 2026). What makes teams converge is not modelled: track
+position on exit, covering an undercut, waiting for a safety car, and non-linear wear (graining,
+the cliff at the end of a tyre's life). Documented in `docs/methodology.md` (section 3.4); no
+code change.
