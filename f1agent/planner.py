@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # stints can be far outside this (e.g. -2.4 s/lap at Mexico 2026).
 MAX_OFFSET = 1.2
 USE_PRACTICE = False  # see the module docstring
+COMPOUND_ORDER = ("HARD", "MEDIUM", "SOFT")  # order of the `compounds` override tuple
 DEFAULT_PARAMS = {"form_sd": 0.1, "start_sd": 1.5, "pass_threshold": 3.0}
 
 
@@ -123,7 +124,9 @@ def _inputs(key: str, compounds: tuple, track_temp: float | None) -> tuple[RaceI
     row, n_laps, info = race_row(key)
     nominated = {c: float(row[f"c_{c.lower()}"]) for c in DRY}
     if compounds:
-        for c, v in zip(DRY, compounds):
+        # (hard, medium, soft), the order every caller uses (dashboard inputs, agent tool). The
+        # first version zipped them with DRY = (SOFT, MEDIUM, HARD) and swapped soft and hard.
+        for c, v in zip(COMPOUND_ORDER, compounds):
             row[f"c_{c.lower()}"] = float(v)
     inp, extra = inputs_for(row, s.laps, s.rates_all, s.fp, USE_PRACTICE, FUEL_S_PER_LAP, n_laps=n_laps,
                             track_temp=track_temp)
@@ -146,7 +149,9 @@ def _wear_per_c_step() -> float:
 
 def plan(key: str, compounds: tuple = (), track_temp: float | None = None, pit_loss: float | None = None,
          sc_lap_prob: float | None = None, n_sims: int = 1500, seed: int = 0) -> tuple[RaceInputs, dict, pd.DataFrame]:
-    """Inputs (with overrides) and the ranked strategy table for a race."""
+    """Inputs (with overrides) and the ranked strategy table for a race.
+
+    `compounds`: optional (hard, medium, soft) C numbers, e.g. (3, 4, 5)."""
     inp, info = _inputs(key, tuple(compounds), track_temp)
     # a negative rate (tyre getting faster with age) is a model artefact on cold tracks: floor at 0
     inp = replace(inp, rate={c: max(float(v), 0.0) for c, v in inp.rate.items()},

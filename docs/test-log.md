@@ -817,3 +817,15 @@ little reason to run the medium longer.
 New: on synthetic races where gentle tracks get softer nominations, the level + step model
 recovers the steps and predicts soft > medium > hard while the first version does not; the wear
 per C step is measured inside races.
+
+## 2026-11-13: dashboard swapped the soft and hard compounds
+
+After the tyre fix the dashboard still recommended S42 → M8 for Las Vegas, while `plan()` without
+arguments gave M8 → H42. The dashboard and the agent's `strategy_plan` pass the compound
+override as (hard, medium, soft); `planner._inputs` zipped it with DRY = (SOFT, MEDIUM, HARD), so
+the soft was planned as a C3 and the hard as a C5. The dashboard always sends the compounds, so
+it was always swapped (also before the tyre fix). The backtests do not use the override and are
+unaffected. Fix: the override is read as (hard, medium, soft) (`planner.COMPOUND_ORDER`).
+
+New test: passing the race's own nomination as (hard, medium, soft) gives the same rates as no
+override, with soft > medium > hard. Unit tests: 84 passed.

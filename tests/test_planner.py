@@ -109,3 +109,14 @@ def test_replay_starts_in_grid_order_not_lap_one_order():
     d = P.replay_data(NEXT, gaps, "AAA", "test", grid=["AAA", "BBB"])     # but AAA starts on pole
     start = {c["name"]: c["cum"][0] for c in d["cars"]}
     assert start["AAA"] < start["BBB"]
+
+
+def test_compound_override_is_hard_medium_soft():
+    """Passing the race's own nomination as (hard, medium, soft) changes nothing; the first
+    version read the tuple as (soft, medium, hard) and swapped soft and hard."""
+    row, _, _ = P.race_row(NEXT)
+    own = (float(row["c_hard"]), float(row["c_medium"]), float(row["c_soft"]))
+    base, _, _ = P.plan(NEXT, n_sims=50)
+    same, _, _ = P.plan(NEXT, compounds=own, n_sims=50)
+    assert same.rate == base.rate
+    assert same.rate["SOFT"] > same.rate["MEDIUM"] > same.rate["HARD"]
