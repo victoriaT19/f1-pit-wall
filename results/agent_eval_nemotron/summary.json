@@ -1,0 +1,14 @@
+{
+  "model": "openrouter:nvidia/nemotron-3.5-super-vl:free (default thinking)",
+  "cases": 16,
+  "correct": 14,
+  "tool_ok": 15,
+  "errors": 2,
+  "mean_llm_calls": 1.75,
+  "mean_prompt_tokens": 4710,
+  "mean_output_tokens": 360,
+  "mean_thought_tokens": 279,
+  "api_retries_total": 2,
+  "questions_with_retries": 2,
+  "median_seconds": 4.59
+}

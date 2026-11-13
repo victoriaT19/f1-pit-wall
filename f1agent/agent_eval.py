@@ -41,8 +41,16 @@ def mentions_driver(answer: str, code: str) -> bool:
     return code.lower() in re.findall(r"[a-z]+", a) or _plain(NAMES.get(code, code)) in a
 
 
+# "um/uma" are left out: they are also the article ("um pódio").
+NUMBER_WORDS = {"dois": 2, "duas": 2, "tres": 3, "quatro": 4, "cinco": 5, "seis": 6,
+                "sete": 7, "oito": 8, "nove": 9, "dez": 10}
+
+
 def mentions_number(answer: str, value: float, tol: float = 0.051) -> bool:
+    """True if the answer states `value`, in digits ("4", "4,25") or, for small whole
+    numbers, in words ("quatro")."""
     nums = [float(n.replace(",", ".")) for n in re.findall(r"\d+(?:[.,]\d+)?", answer)]
+    nums += [float(v) for w, v in NUMBER_WORDS.items() if re.search(r"\b" + w + r"\b", _plain(answer))]
     return any(abs(n - value) < tol for n in nums)
 
 
@@ -96,7 +104,8 @@ def cases() -> list[dict]:
         {"id": "model_accuracy", "q": "Com que frequência o modelo acerta o vencedor, comparado com simplesmente apostar no pole?",
          "tool": "backtest_summary",
          # Percentages: "44%" and "44,12%" are both right, so allow half a point.
-         "check": lambda a: mentions_number(a, bt["model"]["winner"] * 100, tol=0.6)
+         "check": lambda a: any(mentions_number(a, bt[m]["winner"] * 100, tol=0.6)
+                                for m in ("ensemble", "model") if m in bt)
          and mentions_number(a, bt["grid"]["winner"] * 100, tol=0.6)},
         {"id": "predict_vegas", "q": "Quem o modelo prevê como vencedor do GP de Las Vegas de 2026?", "tool": "predict_race",
          "check": lambda a: mentions_driver(a, future) and "provis" in _plain(a)},

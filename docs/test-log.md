@@ -603,3 +603,105 @@ provisional compounds and estimated grid flagged.
 New: the auto chain is free-only and follows the keys that are set; busy routes are skipped
 and progress events reported; an OpenRouter 429 is not retried. Two older tests called
 `ask()` without a provider and, with OpenRouter first, reached the real API: pinned to Gemini.
+
+## 2026-11-12: finishing order, Plackett-Luce ranking model and ensemble
+
+Literature checked: van Kesteren & Bergkamp (2023), a Bayesian rank-ordered logit
+(Plackett-Luce) with driver, driver-season, constructor and constructor-season effects;
+Heilmeier et al. (2020), Monte Carlo race simulation with probabilistic starts, lap times
+and pit stops; Pitwall (Santillana, 2026, arXiv:2607.06495), which scores race-outcome
+probabilities with the Brier score; LambdaRank (LightGBM) as used by student F1 projects.
+
+Tried, walk-forward, hyperparameters chosen on 2024 only (2025-2026 held out):
+
+| 2024 validation | Spearman | Brier win | Brier podium | Brier top 10 |
+|---|---|---|---|---|
+| starting grid | 0.730 | 0.0371 | 0.0726 | 0.1397 |
+| gradient boosting (current) | 0.716 | – | – | – |
+| gradient boosting + race pace | 0.707 | – | – | – |
+| LambdaRank (LightGBM) + race pace | 0.738 | – | – | – |
+| Plackett-Luce, linear grid | 0.748 | 0.0384 | 0.0832 | 0.1204 |
+| Plackett-Luce, + log grid (kept) | 0.750 | 0.0361 | 0.0748 | 0.1211 |
+
+Plackett-Luce was stable across half-lives (120-480 days) and priors (Spearman 0.743-0.753).
+Sharper probabilities (multiplying the strengths by 1.3-2.5) helped the top 10 and hurt
+win and podium, so the fitted scale is kept. Adding log(grid) fixed the win probabilities:
+pole is worth more than a linear grid term allows.
+
+### A leak found on the way
+
+Rows of each race were in finishing order (the feature table is sorted that way) and
+`to_order` broke ties by row order. Summed ranks tie often, so the first ensemble number
+(0.719) used the result. Rows are now put in grid order before predicting. The
+championship-order baseline (drivers on 0 points tie) and recent form were affected the same
+way; continuous scores (gradient boosting, Plackett-Luce) were not.
+
+### Backtest, 68 races (2024-2026), after the fix
+
+| | Spearman | Spearman 2025-26 (held out) | winner | podium | top 10 |
+|---|---|---|---|---|---|
+| ensemble (gradient boosting + Plackett-Luce ranks) | **0.705** | **0.684** | 46% | 63% | 81% |
+| Plackett-Luce | 0.701 | 0.673 | 49% | 68% | 79% |
+| gradient boosting | 0.691 | 0.677 | 44% | 58% | 79% |
+| starting grid | 0.677 | 0.648 | 60% | 68% | 79% |
+
+Ensemble vs gradient boosting: better in 47 races, worse in 21 (sign test p = 0.002).
+Ensemble vs grid: 41 vs 27 (p = 0.11), so better on average but not significant. The grid
+still picks the winner more often. A three-way ensemble with LambdaRank (0.711 before the
+fix) and one with the grid as a third member did not beat the two-model ensemble on the
+held-out years, so neither is used and LightGBM is not a dependency.
+
+Probabilities (Brier, 2025-26 held out): win 0.0267 (grid 0.0250), podium 0.0626 (grid
+0.0623), top 10 0.1567 (grid 0.1648). The ensemble's probabilities are the mean of
+Plackett-Luce and grid-slot frequencies: as good as the grid for the podium, better for the
+top 10, slightly worse for the win.
+
+### Unit tests: 5 new
+
+Plackett-Luce recovers the order of known strengths; the analytic gradient matches finite
+differences; probabilities add up (win 1, podium 3) and a certain DNF finishes last; DNF
+rates are shrunk towards the field; a retired car drops to the back in the simulator, except
+in the replayed race.
+
+## 2026-11-12: whole-field simulation, retirements and pooled race pace
+
+Two changes, tested separately and together, calibrated on 2025 and frozen for the 17 dry
+races of 2026 (`racesim_backtest.py --pace season|decayed [--no-dnf]`):
+
+* retirements: each car retires with its driver's recent DNF rate (shrunk to the field's),
+  on a uniform lap, and drops to the back (`ranking.dnf_rates`);
+* race pace pooled over earlier seasons with a 90-day half-life, in % of the lap, instead of
+  the last three races of the same season.
+
+| variant | calibrated (form, start, pass) | Spearman | sim vs grid | first stop, median error | position changes sim / real | Brier win | podium | top 10 |
+|---|---|---|---|---|---|---|---|---|
+| first version | 0.1, 1.5, 3.0 | 0.671 | 8-9 | 10.0 | 2.38 / 2.70 | 0.0251 | 0.0646 | 0.1634 |
+| retirements | 0.1, 0.3, 3.0 | 0.678 | 9-8 | 10.0 | 3.07 / 2.70 | 0.0201 | 0.0671 | 0.1674 |
+| pooled pace | 0.1, 1.5, 3.0 | 0.670 | 8-9 | 10.0 | 2.53 / 2.70 | 0.0258 | 0.0660 | 0.1639 |
+| **both (kept)** | 0.1, 0.3, 1.5 | **0.698** | 9-8 | 9.0 | 3.09 / 2.70 | **0.0195** | 0.0616 | 0.1608 |
+| starting grid | – | 0.672 | – | – | – | 0.0227 | 0.0616 | 0.1587 |
+
+The first-version row differs slightly from the earlier run (median stop error 10.0 vs 9.5)
+because the retirement draws change the random stream even with zero probability. With both
+changes the simulated order beats the grid and so do the win probabilities; the podium ties
+and the top 10 is a little worse. Position changes now overshoot (3.1 vs 2.7) where they
+undershot before. 17 races is a small sample: a modest gain, not a solved problem. The
+dashboard and the `simulate_race` tool use the kept version; the replay shows a race
+without retirements.
+
+## 2026-11-12: agent eval on Nemotron (the chain's fallback)
+
+Same 16 questions, `nvidia/nemotron-3.5-super-vl:free` on OpenRouter (`results/agent_eval_nemotron`),
+to check that a fallback answer is as good as a Gemma one.
+
+| | Gemma 4 31B (Gemini API) | Nemotron 3.5 Super (OpenRouter) |
+|---|---|---|
+| correct | 16/16 | 14/14 answered |
+| errors | 0 | 2 (OpenRouter's 50 free requests per day ran out) |
+| median seconds | 66 | 4.6 |
+| mean prompt / output tokens | 4,024 / 58 | 4,710 / 360 |
+
+One Nemotron answer ("o pole venceu todas as quatro edições") was right but marked wrong:
+the checker only read digits. It now also reads number words from two to ten ("um/uma" are
+left out, they are also the article), and both evals were re-scored without new API calls.
+The model-accuracy check accepts the ensemble's or the gradient-boosting winner rate.

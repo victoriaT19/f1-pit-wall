@@ -31,6 +31,7 @@ FILES = [
     "data/track_maps.csv.gz",
     "data/openf1/drivers.csv.gz",
     "results/backtest/per_race.csv",
+    "results/backtest/summary.json",  # read by the agent (backtest_summary, predict_race)
     "results/racesim/summary.json",
 ]
 OPTIONAL = ["data/upcoming_grid.csv", "results/live/predictions.jsonl"]  # exist once updates have run

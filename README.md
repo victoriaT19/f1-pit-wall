@@ -34,15 +34,24 @@ python app.py        # http://127.0.0.1:7860
 
 | | resultado |
 |---|---|
-| Ordem de chegada, Spearman médio (68 corridas de 2024 a 2026) | modelo 0,691 vs grid 0,677 |
+| Ordem de chegada, Spearman médio (68 corridas de 2024 a 2026) | ensemble 0,705 vs grid 0,677 (2025–26, fora do ajuste: 0,684 vs 0,648) |
+| Simulação da corrida inteira, ordem esperada (17 corridas de 2026) | 0,698 vs grid 0,672 |
 | Degradação prevista, erro médio (s/volta por volta de idade) | histórico 0,030; long runs dos treinos 0,088 |
 | Primeira parada, erro mediano (17 corridas de 2026, top 5) | simulação 8–9,5 voltas, referência histórica 8 |
+
+A previsão de chegada combina um gradient boosting com um modelo de ranking Plackett-Luce
+(forças de piloto e de equipe por temporada, como em van Kesteren & Bergkamp, 2023) e dá
+chances de vitória, pódio e top 10, avaliadas com o Brier score. A simulação inclui abandonos
+e usa também o ritmo de corrida das temporadas anteriores. O grid ainda acerta o vencedor
+mais vezes que o modelo.
 
 Os long runs dos treinos livres pioraram a estimativa de degradação e a estratégia, então o
 dashboard usa só o modelo ajustado nas corridas anteriores.
 
 O agente (Gemma 4 31B com 10 ferramentas) acertou 16 de 16 perguntas da avaliação automática,
-que checa a resposta e a ferramenta usada (`results/agent_eval_gemini`).
+que checa a resposta e a ferramenta usada (`results/agent_eval_gemini`). O Nemotron, que entra
+na cadeia quando o Gemma gratuito está ocupado, acertou as 14 que respondeu antes do limite
+diário do plano gratuito (`results/agent_eval_nemotron`).
 
 A simulação não acerta o momento da parada melhor que a referência histórica: um quarto
 das primeiras paradas reais acontece sob safety car, que nenhum plano pré-corrida prevê.

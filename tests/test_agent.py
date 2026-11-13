@@ -237,3 +237,9 @@ def test_openrouter_429_is_not_retried(monkeypatch):
     except RuntimeError as e:
         assert "429" in str(e)
     assert len(calls) == 1
+
+
+def test_number_words_count_but_not_inside_other_words():
+    assert mentions_number("o pole venceu todas as quatro edições", 4)
+    assert not mentions_number("quatrocentos pontos", 4)
+    assert not mentions_number("um pódio", 1)  # "um" is an article, not counted
