@@ -121,12 +121,27 @@ def race_row(key: str) -> tuple[pd.Series, int, dict]:
 def _inputs(key: str, compounds: tuple, track_temp: float | None) -> tuple[RaceInputs, dict]:
     s = store()
     row, n_laps, info = race_row(key)
+    nominated = {c: float(row[f"c_{c.lower()}"]) for c in DRY}
     if compounds:
         for c, v in zip(DRY, compounds):
             row[f"c_{c.lower()}"] = float(v)
     inp, extra = inputs_for(row, s.laps, s.rates_all, s.fp, USE_PRACTICE, FUEL_S_PER_LAP, n_laps=n_laps,
                             track_temp=track_temp)
+    if compounds:
+        # What-if compounds: the rate model predicts the race's own nomination; a softer or
+        # harder choice adds the within-race wear of each C step (tyres.wear_per_c_step).
+        k = _wear_per_c_step()
+        rate = {c: inp.rate[c] + k * (float(row[f"c_{c.lower()}"]) - nominated[c]) for c in DRY}
+        inp = replace(inp, rate=rate)
+        extra = {**extra, "rates": {c: round(v, 4) for c, v in rate.items()}, "wear_per_c_step": round(k, 4)}
     return inp, {**info, **extra}
+
+
+@lru_cache(maxsize=1)
+def _wear_per_c_step() -> float:
+    from .tyres import wear_per_c_step
+
+    return wear_per_c_step(store().rates_all)
 
 
 def plan(key: str, compounds: tuple = (), track_temp: float | None = None, pit_loss: float | None = None,

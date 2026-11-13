@@ -746,3 +746,74 @@ now tie with it.
 
 New: rival stops move by every shift from -3 to +3 across races, exactly one stop each time,
 tyre age restarts at the stop, no shift without `stop_shift`, and never a stint under 6 laps.
+
+## 2026-11-13: tyre model ranked the compounds backwards
+
+Every recommended plan had a long soft stint (Las Vegas S42 → M8, Qatar M10 → S47, Abu Dhabi
+M14 → S44). The predicted rates were inverted in every race: Las Vegas soft 0.000, medium 0.004,
+hard 0.010 s/lap per lap of age. The measured rates were not: inside the same race the soft wears
+0.028 faster than the hard on average (44 races with both). The prediction model regressed the
+rate on the compound number (C1-C6), and across races that number is confounded with the track
+(softer nominations go to gentler tracks; mean measured rate by C is flat, C2 lowest), so it
+learned "softer = less wear". The compound pace offsets were then computed with those predicted
+rates applied to other races' laps, and the soft came out slower than the hard (capped to 0).
+
+Fixes:
+
+* rate = race level + compound step (`tyres.levels_and_steps`): the steps come from within-race
+  comparisons (medium +0.010, soft +0.014 over hard on all data); the level of a new race from a
+  ridge regression on track temperature and the 2026 flag. Adding circuit history to the level
+  made it worse (prior weight 1: MAE 0.0394, 3: 0.0350, none: 0.0327), so it is not used.
+* compound offsets: age-corrected with the wear measured in the same laps, pooled over all
+  earlier races (one or two editions of a circuit gave e.g. medium 0.47 s/lap faster than hard),
+  and capped to soft <= medium <= hard (race laps still put the soft slightly behind the medium).
+* what-if compounds: the model predicts the race's nomination; other compounds move each rate
+  by the within-race wear per C step (0.008).
+* the agent's prediction for an upcoming race uses the dashboard's grid (real after qualifying,
+  else estimated from race pace) instead of the championship order.
+
+### Tyre validation, walk-forward, 56 races
+
+| | MAE per rate | MAE 2026 | MAE of the softer-minus-harder difference | softer predicted faster |
+|---|---|---|---|---|
+| level + step (kept) | **0.0327** | 0.0345 | **0.0291** | **100%** |
+| first version (compound number) | 0.0333 | 0.0315 | 0.0300 | 15% |
+| label average | 0.0337 | 0.0376 | 0.0362 | 89% |
+| compound-number average | 0.0349 | 0.0353 | 0.0315 | 51% |
+| circuit history | 0.0413 | 0.0349 | 0.0479 | 60% |
+
+The measured difference is positive in 62% of the 104 pairs (measurement noise). The first
+version's mean error was fine; it was the ranking of compounds, which strategy depends on, that
+was wrong. Practice vs prior on 2026 races: prior 0.033 (was 0.030), practice 0.088; practice is
+still not used.
+
+### Strategy backtest, 17 races of 2026 (top 5 of the grid)
+
+| | first version | corrected |
+|---|---|---|
+| plan uses the compound set most of the top 10 used | 12% | **65%** |
+| share of top-10 drivers on the plan's compound set | 19% | **52%** |
+| start compound matches the most common | 12% | 24% |
+| plans with a soft stint of 30+ laps | 12% | 0% |
+| first stop, median / mean error (laps) | 7.0 / 10.6 | 7.0 / 10.5 |
+| number of stops right | 65% | 65% |
+
+### Whole-field simulation, calibrated on 2025, tested on 2026
+
+| | before | after | grid / baseline |
+|---|---|---|---|
+| Spearman, expected order | 0.696 | **0.703** | 0.672 |
+| Brier win / podium / top 10 | 0.0227 / 0.0635 / 0.1595 | 0.0219 / 0.0620 / 0.1587 | 0.0227 / 0.0616 / 0.1587 |
+| first stop, median error (multi / single) | 9.0 / 8.0 | 10.0 / 10.5 | 8.0 |
+
+Compound choice is now realistic and the finishing order slightly better; the timing of the first
+stop is no better (strategy backtest) or a little worse (simulation backtest) and still does not
+beat the historical baseline. The plans now often put the stop at an extreme of the allowed range
+(e.g. M8 → H42): with the small medium-vs-hard pace gap that race data supports, the model sees
+little reason to run the medium longer.
+
+### Unit tests: 83 passed
+
+New: on synthetic races where gentle tracks get softer nominations, the level + step model
+recovers the steps and predicts soft > medium > hard while the first version does not; the wear
+per C step is measured inside races.

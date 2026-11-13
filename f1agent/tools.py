@@ -186,9 +186,24 @@ def _future_race(year: int, event: str, grid: dict | None):
     rnd = int(last["round"].max()) + 1
     drivers = last[last["round"] == last["round"].max()][["driver", "team"]]
     provisional = grid is None
+    real_grid = False
     if provisional:
-        st = standings(year)["standings"]
-        order = [s["driver"] for s in st if s["driver"] in set(drivers["driver"])]
+        # The same grid as the dashboard: the real one once qualifying is in, otherwise one
+        # estimated from recent race pace (planner.field). Championship order as a last resort.
+        order = None
+        try:
+            from . import planner
+            from .strategy_tools import resolve_race
+
+            key = resolve_race(event, year)
+            if key and key.startswith("next:"):
+                order, _, real_grid = planner.field(key)
+        except Exception:
+            order = None
+        if not order:
+            st = standings(year)["standings"]
+            order = [s["driver"] for s in st]
+        order = [d for d in order if d in set(drivers["driver"])]
         grid = {d: i + 1 for i, d in enumerate(order)}
     if isinstance(grid, list):  # [{"driver": "VER", "position": 1}, ...] from the agent
         grid = {g["driver"]: g["position"] for g in grid}
@@ -200,9 +215,13 @@ def _future_race(year: int, event: str, grid: dict | None):
     race = feats[(feats["year"] == year) & (feats["round"] == rnd)].set_index("driver")
     train = feats[~((feats["year"] == year) & (feats["round"] == rnd))]
     train = train[train["position"].notna()]
-    note = ("Corrida futura. Grid provisório = ordem do campeonato (o grid real só existe após a "
-            "classificação); a previsão vai mudar com o grid real." if provisional
-            else "Corrida futura, com o grid informado.")
+    if not provisional:
+        note = "Corrida futura, com o grid informado."
+    elif real_grid:
+        note = "Corrida futura, com o grid real da classificação."
+    else:
+        note = ("Corrida futura. Grid provisório, estimado pelo ritmo de corrida recente (o mesmo do "
+                "dashboard); o grid real só existe após a classificação e a previsão vai mudar com ele.")
     return race, train, note
 
 

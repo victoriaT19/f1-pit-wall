@@ -10,15 +10,15 @@
   "prior": {
     "stops_match": 0.647,
     "first_stop_error_laps_median": 7.0,
-    "first_stop_error_laps_mean": 10.6,
-    "window_hit_share": 0.694,
-    "window_width_mean": 23.9
+    "first_stop_error_laps_mean": 10.5,
+    "window_hit_share": 0.682,
+    "window_width_mean": 27.6
   },
   "prior+practice": {
-    "stops_match": 0.471,
-    "first_stop_error_laps_median": 8.0,
-    "first_stop_error_laps_mean": 14.4,
-    "window_hit_share": 0.753,
-    "window_width_mean": 29.2
+    "stops_match": 0.529,
+    "first_stop_error_laps_median": 8.5,
+    "first_stop_error_laps_mean": 13.2,
+    "window_hit_share": 0.618,
+    "window_width_mean": 23.6
   }
 }

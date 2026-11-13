@@ -124,11 +124,18 @@ def compound_offsets(race_laps: pd.DataFrame, rates: dict, fuel: float) -> dict:
 
     For each stint, the fuel- and age-corrected lap time at age 0 is the stint's intercept;
     the offset is the median difference between a driver's intercepts on two compounds.
+    The age correction uses the wear *measured in those same laps* (per race and compound).
+    The first version used the rates predicted for the race being planned (`rates`, kept
+    for compatibility and ignored): applied to other races' laps, a wrong rate shifted every
+    intercept, and the soft tyre came out slower than the hard.
     """
-    from .tyres import corrected
+    from .tyres import corrected, within_slope
 
     r = race_laps.copy()
-    r["y"] = corrected(r, fuel) - r["compound"].map(rates).fillna(0) * r["tyre_age"]
+    r["y"] = corrected(r, fuel)
+    slope = {k: within_slope(g)[0] for k, g in r.groupby(["session_key", "compound"])}
+    r["y"] = r["y"] - pd.Series([slope.get(k, 0.0) for k in zip(r["session_key"], r["compound"])],
+                                index=r.index).fillna(0) * r["tyre_age"]
     st = r.groupby(["session_key", "driver_number", "stint", "compound"])["y"].median().reset_index()
     diffs = {c: [] for c in DRY}
     for _, g in st.groupby(["session_key", "driver_number"]):

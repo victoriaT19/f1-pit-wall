@@ -3,14 +3,14 @@
   "races": 19,
   "median_fp_laps": 81.0,
   "mae_s_per_lap": {
-    "prior_only": 0.0296,
+    "prior_only": 0.033,
     "practice_only": 0.0881,
-    "blend_n0_10": 0.0762,
-    "blend_n0_30": 0.063,
-    "blend_n0_100": 0.0447
+    "blend_n0_10": 0.0765,
+    "blend_n0_30": 0.0637,
+    "blend_n0_100": 0.0466
   },
   "blend30_vs_prior_rows": {
-    "blend_better": 10,
-    "prior_better": 33
+    "blend_better": 13,
+    "prior_better": 30
   }
 }

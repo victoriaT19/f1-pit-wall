@@ -4,20 +4,38 @@
     "races_evaluated": 56,
     "rows": 135,
     "rate_mae_s_per_lap": {
-      "model": 0.0333,
+      "model": 0.0327,
+      "first_version": 0.0333,
       "label_average": 0.0337,
       "compound_average": 0.0349,
       "circuit_history": 0.0413
     },
     "rate_mae_2026": {
-      "model": 0.0315,
+      "model": 0.0345,
+      "first_version": 0.0315,
       "label_average": 0.0376,
       "compound_average": 0.0353,
       "circuit_history": 0.0349
     },
     "model_vs_label_average_rows": {
-      "model_better": 64,
-      "label_better": 71
-    }
+      "model_better": 75,
+      "label_better": 60
+    },
+    "pair_diff_mae": {
+      "model": 0.0291,
+      "first_version": 0.03,
+      "label_average": 0.0362,
+      "compound_average": 0.0315,
+      "circuit_history": 0.0479
+    },
+    "pairs_softer_predicted_faster": {
+      "model": 1.0,
+      "first_version": 0.154,
+      "label_average": 0.894,
+      "compound_average": 0.51,
+      "circuit_history": 0.596
+    },
+    "pairs": 104,
+    "measured_softer_faster_share": 0.615
   }
 ]

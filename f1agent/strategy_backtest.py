@@ -81,10 +81,14 @@ def inputs_for(race_row: pd.Series, laps: pd.DataFrame, rates_all: pd.DataFrame,
                 source[c] = f"blend(fp_laps={int(n)})"
     same = past_laps[past_laps["circuit_short_name"] == circuit]
     pool = same if same["session_key"].nunique() >= 1 else past_laps
-    rl = race_laps(pool)
-    offs = compound_offsets(rl, rate, fuel) if len(rl) else {}
-    if any(np.isnan(offs.get(c, (np.nan,))[0]) for c in ("SOFT", "MEDIUM")):
-        offs = compound_offsets(race_laps(past_laps), rate, fuel)
+    # Compound pace from all earlier races: one or two editions of a circuit gave unstable
+    # values (e.g. medium 0.47 s/lap faster than hard at Yas Marina).
+    offs = compound_offsets(race_laps(past_laps), rate, fuel)
+    # A softer tyre is never slower when new. Race laps can say otherwise (softs run early,
+    # in traffic and on full tanks), so estimates that break the order are capped: medium no
+    # slower than hard, soft no slower than medium.
+    med = min(offs["MEDIUM"][0], offs["HARD"][0])
+    offs = {**offs, "MEDIUM": (med, offs["MEDIUM"][1]), "SOFT": (min(offs["SOFT"][0], med), offs["SOFT"][1])}
     pl = pit_loss(pool)
     if np.isnan(pl):
         pl = pit_loss(past_laps)

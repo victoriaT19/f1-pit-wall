@@ -7,13 +7,13 @@
     "pass_threshold": 3.0
   },
   "multi": {
-    "first_stop_error_median": 9.0,
-    "first_stop_error_mean": 10.9,
+    "first_stop_error_median": 10.0,
+    "first_stop_error_mean": 13.0,
     "stops_match": 0.5
   },
   "single": {
-    "first_stop_error_median": 8.0,
-    "first_stop_error_mean": 11.1,
+    "first_stop_error_median": 10.5,
+    "first_stop_error_mean": 14.2,
     "stops_match": 0.526
   },
   "baseline": {
@@ -22,12 +22,12 @@
     "stops_match": 0.423
   },
   "multi_vs_single_first_stop": {
-    "multi_closer": 34,
-    "single_closer": 35,
-    "ties": 9
+    "multi_closer": 49,
+    "single_closer": 22,
+    "ties": 7
   },
   "finishing_order_spearman": {
-    "simulation": 0.696,
+    "simulation": 0.703,
     "grid": 0.672,
     "finishing_order_model": 0.693,
     "sim_better_than_grid": 10,
@@ -35,9 +35,9 @@
   },
   "probabilities_brier": {
     "sim": {
-      "win": 0.0227,
-      "podium": 0.0635,
-      "top10": 0.1595
+      "win": 0.0219,
+      "podium": 0.062,
+      "top10": 0.1587
     },
     "grid": {
       "win": 0.0227,
@@ -50,7 +50,7 @@
     "pace": "decayed"
   },
   "position_changes": {
-    "simulated_mean": 3.2,
+    "simulated_mean": 3.18,
     "real_mean": 2.7
   },
   "calibration": {
@@ -59,9 +59,9 @@
       "form_sd": 0.1,
       "start_sd": 0.3,
       "pass_threshold": 3.0,
-      "rmse_changes": 0.9345866353133142,
-      "mean_bias": 0.06487640670303212,
-      "spearman": 0.6611777116101474
+      "rmse_changes": 0.9731806307078716,
+      "mean_bias": 0.12769177846577234,
+      "spearman": 0.6620405568886567
     }
   }
 }

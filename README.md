@@ -35,8 +35,9 @@ python app.py        # http://127.0.0.1:7860
 | | resultado |
 |---|---|
 | Ordem de chegada, Spearman médio (68 corridas de 2024 a 2026) | ensemble 0,705 vs grid 0,677 (2025–26, fora do ajuste: 0,684 vs 0,648) |
-| Simulação da corrida inteira, ordem esperada (17 corridas de 2026) | 0,696 vs grid 0,672 |
-| Degradação prevista, erro médio (s/volta por volta de idade) | histórico 0,030; long runs dos treinos 0,088 |
+| Simulação da corrida inteira, ordem esperada (17 corridas de 2026) | 0,703 vs grid 0,672 |
+| Degradação prevista, erro médio em 2026 (s/volta por volta de idade) | histórico 0,033; long runs dos treinos 0,088 |
+| Estratégia com os compostos que a maioria do top 10 usou (17 corridas de 2026) | 65% (primeira versão: 12%) |
 | Primeira parada, erro mediano (17 corridas de 2026, top 5) | simulação 8–9,5 voltas, referência histórica 8 |
 
 A previsão de chegada combina um gradient boosting com um modelo de ranking Plackett-Luce

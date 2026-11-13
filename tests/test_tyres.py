@@ -78,3 +78,43 @@ def test_compound_number_and_pirelli_join():
     assert out["soft"].tolist() == ["C4", "C4"]
     assert compound_number(pd.Series({"compound": "MEDIUM", "hard": "C2", "medium": "C3", "soft": "C4"})) == 3.0
     assert np.isnan(compound_number(pd.Series({"compound": "INTERMEDIATE", "hard": "C2", "medium": "C3", "soft": "C4"})))
+
+
+def _confounded_rates(n_races=24, seed=0):
+    """Low-wear tracks get softer nominations (as Pirelli does), and inside every race the
+    softer compound wears faster: +0.01 (medium) and +0.02 (soft) over hard."""
+    import numpy as np
+    import pandas as pd
+
+    rng = np.random.default_rng(seed)
+    rows = []
+    for i in range(n_races):
+        level = rng.uniform(0.0, 0.08)                 # the track's wear, hard-equivalent
+        hard_c = 1 if level > 0.05 else (2 if level > 0.025 else 3)   # gentle tracks get softer tyres
+        for comp, step, dc in (("HARD", 0.0, 0), ("MEDIUM", 0.01, 1), ("SOFT", 0.02, 2)):
+            rows.append({"session_key": i, "year": 2025, "meeting_name": f"R{i}", "circuit": f"C{i}",
+                         "date": f"2025-{1 + i // 4:02d}-{1 + i % 4 * 7:02d}", "compound": comp,
+                         "compound_c": float(hard_c + dc), "rate": level + step + rng.normal(0, 0.002),
+                         "laps": 200, "stints": 10, "track_temp": 35.0})
+    return pd.DataFrame(rows)
+
+
+def test_rate_model_keeps_soft_above_hard_despite_confounding():
+    from f1agent.tyres import fit_predict, fit_predict_cnumber, levels_and_steps
+
+    rates = _confounded_rates()
+    races, step = levels_and_steps(rates)
+    assert abs(step["MEDIUM"] - 0.01) < 0.003 and abs(step["SOFT"] - 0.02) < 0.003
+    test = rates[rates["session_key"] == rates["session_key"].max()]
+    train = rates[rates["session_key"] != rates["session_key"].max()]
+    pred = dict(zip(test["compound"], fit_predict(train, test)))
+    assert pred["SOFT"] > pred["MEDIUM"] > pred["HARD"]
+    old = dict(zip(test["compound"], fit_predict_cnumber(train, test)))
+    assert not (old["SOFT"] > old["MEDIUM"] > old["HARD"])   # the first version's inversion
+
+
+def test_wear_per_c_step_is_measured_inside_races():
+    from f1agent.tyres import wear_per_c_step
+
+    k = wear_per_c_step(_confounded_rates())
+    assert 0.008 < k < 0.012   # steps of 0.01 per C inside races, whatever the tracks do

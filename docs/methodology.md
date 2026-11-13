@@ -67,19 +67,37 @@ Assumptions and limits:
 ### 1.4 Predicting a race that has not happened
 
 For a future race the rates are predicted from earlier races. Each earlier race-compound
-$k$ gives a measured rate $\rho_k$, weighted by its clean laps $L_k$. A ridge regression
-(`tyres.fit_predict`) solves
+$k$ (race $r$, compound $c$) gives a measured rate $\rho_k$, weighted by its clean laps
+$L_k$. The rate is split into the race's wear level and a compound step
+(`tyres.levels_and_steps`, `tyres.fit_predict`):
 
-$$\min_{w,\,b}\ \sum_k L_k \left(\rho_k - b - x_k^\top w\right)^2 + \lambda \lVert w\rVert^2, \qquad \lambda = 1,$$
+$$\rho_{rc} = \ell_r + \delta_c + \varepsilon_{rc}, \qquad \delta_{\text{HARD}} = 0,$$
 
-with $x_k$ = (Pirelli compound number C1-C6, mean track temperature, 1 if 2026 car),
-each standardised to mean 0 and variance 1 so the penalty treats them alike.
+fitted by weighted least squares (alternating between the levels and the steps until they
+converge). Because every race has its own level $\ell_r$, the steps $\delta_c$ come only
+from comparisons inside the same race: how much faster a medium or a soft wears than the
+hard on the same track and day. On all races: $\delta_{\text{MEDIUM}} = 0.010$ and
+$\delta_{\text{SOFT}} = 0.014$ s/lap per lap of age. The level of the new race is predicted
+by a ridge regression on mean track temperature and a 2026-car flag, fitted on the earlier
+races' levels (weights = their clean laps, inputs standardised, $\lambda = 1$):
 
-In practice the penalty does almost nothing: the weights $L_k$ are lap counts, hundreds
-per row, so the squared-error term is thousands of times larger than $\lambda\lVert
-w\rVert^2$ with $\lambda = 1$. The fit is essentially weighted least squares; adding the
-standardisation left every validation number unchanged. What keeps it stable is having
-only three inputs.
+$$\hat\rho_{rc} = \hat\ell(\text{track temperature},\ \text{2026}) + \hat\delta_c .$$
+
+**Why not the Pirelli compound number.** The first version regressed $\rho_k$ directly on
+the compound number (C1-C6), track temperature and the 2026 flag. Across races the compound
+number is confounded with the track: Pirelli brings softer compounds to tracks that are
+easier on tyres, so the races' average rate is flat in C (C2 even lowest) while inside a race
+the softer compound wears faster in most pairs. Fitted across races, the regression learned
+"softer = less wear" and predicted the soft as the most durable tyre of every race; the
+strategy tool then recommended 40-lap soft stints. The split above uses only the within-race
+comparison for the compound effect. Blending in the levels of earlier editions at the same
+circuit made the validation worse (circuit history was already the weakest simple predictor),
+so it is not used.
+
+**What-if compounds.** The model predicts the race's own nomination. When the dashboard or
+the agent asks for other compounds, each rate moves by the within-race wear per C step
+(`tyres.wear_per_c_step`, 0.008 s/lap per lap of age per step softer), estimated from
+deviations around each race's mean so the track's own wear cancels out.
 
 The real compound number comes from Pirelli's nominations for each weekend
 (`data/pirelli_compounds.csv`): the "soft" at one race can be a C5 and at another a C3.
@@ -91,10 +109,34 @@ before it only (at least 10), then the error is
 
 $$\text{MAE} = \frac{\sum_k L_k \left|\hat\rho_k - \rho_k\right|}{\sum_k L_k}.$$
 
-Compared with three predictors that need no model: the average rate of the same label
-(SOFT/MEDIUM/HARD), of the same real compound, and of the same circuit in earlier years.
-Results are in `docs/test-log.md`. Note that $\rho_k$ is itself an estimate with its own
-noise, so even a perfect predictor would not reach zero error.
+Compared with the first version and three predictors that need no model: the average rate of
+the same label (SOFT/MEDIUM/HARD), of the same real compound, and of the same circuit in
+earlier years. Because strategy depends on the difference between compounds more than on any
+single rate, the validation also scores, for every pair of compounds in the same race, the
+error on the difference (softer minus harder) and whether the softer is predicted to wear
+faster.
+
+| walk-forward, 56 races | MAE per rate | MAE 2026 | MAE of the difference | softer predicted faster |
+|---|---|---|---|---|
+| level + step (current) | **0.0327** | 0.0345 | **0.0291** | **100%** |
+| first version (compound number) | 0.0333 | 0.0315 | 0.0300 | 15% |
+| average of the label | 0.0337 | 0.0376 | 0.0362 | 89% |
+| average of the compound number | 0.0349 | 0.0353 | 0.0315 | 51% |
+| circuit history | 0.0413 | 0.0349 | 0.0479 | 60% |
+
+The measured softer-minus-harder difference is positive in 62% of the pairs: $\rho_k$ is itself
+an estimate with its own noise, so even a perfect predictor would not reach zero error.
+
+### 1.6 Compound pace on new tyres
+
+The offset of a compound against the hard (s/lap on a new tyre) is the median, over drivers
+who ran both in a race, of the difference between their stints' intercepts at age 0
+(`strategy.compound_offsets`), pooled over all earlier races. The age correction uses the wear
+measured in those same laps. (The first version used the rates predicted for the race being
+planned, which were wrong, and the soft came out slower than the hard.) Race laps still put
+the soft slightly behind the medium, because softs are run early, in traffic and on full
+tanks, so the estimates are capped to the one thing known for sure: a softer tyre is never
+slower when new (soft $\le$ medium $\le$ hard).
 
 ## 2. Race finishing order
 
@@ -241,13 +283,15 @@ stops drawn in every race, the calibration is $\sigma_{form} = 0.1$ s/lap, $\sig
 |---|---|---|---|---|
 | first version | 0.671 | 0.0251 | 0.0646 | 0.1634 |
 | + retirements and pooled race pace (rivals' shifts fixed) | 0.698 | 0.0195 | 0.0616 | 0.1608 |
-| + rivals' stops drawn in every race (current) | **0.696** | 0.0227 | 0.0635 | 0.1595 |
+| + rivals' stops drawn in every race | 0.696 | 0.0227 | 0.0635 | 0.1595 |
+| + corrected tyre model (current) | **0.703** | **0.0219** | 0.0620 | 0.1587 |
 | starting grid | 0.672 | 0.0227 | 0.0616 | 0.1587 |
 
 Retirements and the pooled race pace only helped together. With them the simulated order
 beats the grid (in 10 of the 17 races). The win probabilities looked better than the grid's
-until rivals' stops were redrawn in every race; now they tie with the grid-slot frequencies,
-and podium and top-10 probabilities are slightly worse. 17 races is a small sample. Pit timing is still no better
+until rivals' stops were redrawn in every race, then tied with the grid-slot frequencies;
+with the corrected tyre model (section 1.4) they beat them again, and podium and top-10
+probabilities tie. 17 races is a small sample. Pit timing is still no better
 than the historical baseline: about a quarter of real first stops are triggered by safety
 cars, which a pre-race plan cannot foresee. The simulators are used for what-if comparison,
 not as predictors of the stop lap.
